@@ -25,6 +25,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import MyCustomUploadAdapterPlugin from 'utils/UploadAdapter';
 import {isEmail} from 'validator';
 
+import baseUrl from '../../api/baseUrl'
+
 const styles = {
   typo: {
     paddingLeft: '25%',
@@ -214,7 +216,7 @@ export default function AddNewEventPage() {
 
     axios({
       method: 'POST',
-      url: 'http://localhost:5000/api/v1/volunteers',
+      url: baseUrl + 'volunteers',
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',

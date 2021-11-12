@@ -31,13 +31,15 @@ import CardFooter from 'components/Card/CardFooter.js';
 
 import {bugs, website, server} from 'variables/general.js';
 
-import {
-  dailySalesChart,
-  emailsSubscriptionChart,
-  completedTasksChart,
-} from 'variables/charts.js';
+// import {
+//   dailySalesChart,
+//   emailsSubscriptionChart,
+//   completedTasksChart,
+// } from 'variables/charts.js';
 
 import styles from 'assets/jss/material-dashboard-react/views/dashboardStyle.js';
+
+import baseUrl from '../../api/baseUrl'
 
 const useStyles = makeStyles(styles);
 
@@ -49,7 +51,7 @@ export default function Dashboard() {
   //   fetch('https://haminepal.herokuapp.com/api/v1/volunteers')
   //     .then((response) => response.json())
   //     .then((datas) => {
-  //       fetch('http://localhost:5000/api/v1/find/totalDonations', {
+  //       fetch(baseUrl + 'find/totalDonations', {
   //         headers: {
   //           'Content-Type': 'application/json',
   //           Authorization: `Bearer ${token}`,

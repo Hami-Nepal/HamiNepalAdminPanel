@@ -12,7 +12,9 @@ import Card from 'components/Card/Card.js';
 import CardHeader from 'components/Card/CardHeader.js';
 import CardBody from 'components/Card/CardBody.js';
 
-import {Link} from 'react-router-dom';
+// import {Link} from 'react-router-dom';
+
+import baseUrl from '../../api/baseUrl'
 
 const styles = {
   cardCategoryWhite: {
@@ -55,7 +57,7 @@ export default function UserList() {
   useEffect(() => {
     const getUsers = async () => {
       try {
-        const {data} = await axios.get('http://localhost:5000/api/v1/users', {
+        const {data} = await axios.get(baseUrl + 'users', {
           headers: {authorization: `Bearer ${token}`},
         });
 
