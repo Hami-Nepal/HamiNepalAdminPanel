@@ -130,7 +130,8 @@ export default function CauseList() {
                     <TableCell align="center">Featured Ranking</TableCell>
                     <TableCell align="center">Image</TableCell>
                     <TableCell align="center">Updated At</TableCell>
-                    <TableCell align="center ">Actions</TableCell>
+                    <TableCell align="center ">Edit</TableCell>
+                    <TableCell align="center ">Delete</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -188,7 +189,9 @@ export default function CauseList() {
                                 </Link>
                               }
                             </TableCell>
-                            <TableCell align="center">
+                            <TableCell
+                              align="center"
+                              style={{cursor: 'pointer'}}>
                               {
                                 <DeleteIcon
                                   color="secondary"
