@@ -7,8 +7,10 @@ import Unarchive from '@material-ui/icons/Unarchive';
 import Language from '@material-ui/icons/Language';
 import EventIcon from '@material-ui/icons/Event';
 import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
-import NewsIcon from "@material-ui/icons/RssFeed"
-import AddNews from './views/AddNews/AddNews'
+import NewsIcon from '@material-ui/icons/RssFeed';
+import KindnessIcon from '@material-ui/icons/Accessibility';
+
+import AddNews from './views/AddNews/AddNews';
 
 // core components/views for Admin layout
 import DashboardPage from 'views/Dashboard/Dashboard.js';
@@ -31,7 +33,7 @@ import AddNewCausePage from './views/AddNewCausePage/index';
 import VolunteersIndexPage from './views/Volunteers';
 import VolunteersCreatePage from './views/Volunteers/create';
 import AddVideo from './views/AddHomeVideo/addVideo';
-import ActOfKindness from './views/ActOfKindness/act-of-kindness'
+import ActOfKindness from './views/ActOfKindness/act-of-kindness';
 
 export const demoRoutes = [
   {
@@ -180,7 +182,7 @@ export const dashboardRoutes = [
   {
     path: '/act-of-kindness',
     name: 'Act of kindness',
-    icon: NewsIcon,
+    icon: KindnessIcon,
     component: ActOfKindness,
     layout: '/admin',
   },
