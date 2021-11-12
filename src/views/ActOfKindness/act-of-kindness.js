@@ -30,7 +30,6 @@ import {Link} from 'react-router-dom';
 import api from 'api';
 import baseURL from 'api/baseUrl';
 
-
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -42,10 +41,10 @@ export default function CauseList() {
   const [deleteKindnessSuccess, setDeleteKindnessSuccess] = useState(false);
   const [deleteKindnessError, setDeleteKindnessError] = useState('');
   const [error, setError] = useState();
-  const [KindnessListSuccess, setKindnessListSuccess] = useState(null)
-  const [KindnessListError, setKindnessListError] = useState(null)
-  const [KindnessListLoading, setKindnessListLoading] = useState(null)
-  const [KindnessList, setKindnessList] = useState([])
+  const [KindnessListSuccess, setKindnessListSuccess] = useState(null);
+  const [KindnessListError, setKindnessListError] = useState(null);
+  const [KindnessListLoading, setKindnessListLoading] = useState(null);
+  const [KindnessList, setKindnessList] = useState([]);
 
   const handleDeleteKindness = async (id) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
@@ -66,26 +65,41 @@ export default function CauseList() {
     }
   };
 
-  const fetchData = async() => {
-    const {data: response} = await axios.get(baseURL + "kindness")
-    setKindnessList(response.data.kindness)
-  }
+  const fetchData = async () => {
+    const {data: response} = await axios.get(baseURL + 'kindness');
+    setKindnessList(response.data.kindness);
+  };
 
   useEffect(fetchData, []);
 
   const addToFeatured = async (id) => {
-    const {featured} =  KindnessList.find(({_id}) => _id == id)
-    const featuredLists = KindnessList.filter(({featured}) => featured)
+    const {featured} = KindnessList.find(({_id}) => _id == id);
+    const featuredLists = KindnessList.filter(({featured}) => featured);
     if (!featured && featuredLists.length >= 5) return;
 
-    const rankings = KindnessList.map(({featured_ranking}) => featured_ranking).filter(Boolean)
-    rankings.push(0)
-    const nextRanking = Math.max(...rankings) + 1;
+    const rankings = KindnessList.map(({featured_ranking}) => featured_ranking);
+    let nextRanking = null;
+
+    for (let i = 1; i <= 5; i++) {
+      if (!rankings.includes(i)) {
+        console.log(i, 'testing I ko value');
+        nextRanking = i;
+        break;
+      }
+    }
+
+    console.log(rankings, nextRanking);
 
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
-    const {data: response} = await axios.put(baseURL + "kindness/"+ id, {featured: !featured, featured_ranking: featured ? null: nextRanking}, {headers: {Authorization: 'Bearer ' + token}})
-    setKindnessList(KindnessList.map((obj) => obj._id === id ? response.data : obj))
-  }
+    const {data: response} = await axios.put(
+      baseURL + 'kindness/' + id,
+      {featured: !featured, featured_ranking: featured ? null : nextRanking},
+      {headers: {Authorization: 'Bearer ' + token}},
+    );
+    setKindnessList(
+      KindnessList.map((obj) => (obj._id === id ? response.data : obj)),
+    );
+  };
 
   return (
     <GridContainer>
@@ -100,7 +114,9 @@ export default function CauseList() {
         <Card plain>
           <CardHeader plain color="primary">
             <h4 className={classes.cardTitleWhite}>Kindnesss List</h4>
-            <p className={classes.cardCategoryWhite}>Showing all the Kindnesss</p>
+            <p className={classes.cardCategoryWhite}>
+              Showing all the Kindnesss
+            </p>
           </CardHeader>
           <CardBody>
             <TableContainer component={Paper}>
@@ -144,26 +160,30 @@ export default function CauseList() {
                             </TableCell> */}
                             <TableCell align="center">{row.title}</TableCell>
                             <TableCell align="center">{row.type}</TableCell>
-                            <TableCell align = "center"
-                          component="th"
-                          scope="row"
-                          onClick={() => addToFeatured(row._id)}
-                          style={{
-                            color: row.featured ? 'green' : 'gray',
-                            cursor: 'pointer',
-                          }}>
-                          <VerifiedUserIcon />
-                        </TableCell>
-                            <TableCell align="center">{row.featured_ranking}</TableCell>
+                            <TableCell
+                              align="center"
+                              component="th"
+                              scope="row"
+                              onClick={() => addToFeatured(row._id)}
+                              style={{
+                                color: row.featured ? 'green' : 'gray',
+                                cursor: 'pointer',
+                              }}>
+                              <VerifiedUserIcon />
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.featured_ranking}
+                            </TableCell>
                             <TableCell align="center">
                               <img src={row.photos[0]} width={50} />
                             </TableCell>
                             <TableCell align="center">
-                              {new Date(row.updatedAt).getUTCFullYear()}    
+                              {new Date(row.updatedAt).getUTCFullYear()}
                             </TableCell>
                             <TableCell align="center">
                               {
-                                <Link to={`/admin/act-of-kindness/edit/${row._id}`}>
+                                <Link
+                                  to={`/admin/act-of-kindness/edit/${row._id}`}>
                                   <EditIcon color="primary" />
                                 </Link>
                               }
