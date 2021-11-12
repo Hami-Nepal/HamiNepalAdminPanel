@@ -58,7 +58,7 @@ export default function CauseList() {
     try {
       const response = await api.delete(`/kindness/${id}`, config);
       setDeleteKindnessSuccess(true);
-      // delete rto be done from array
+      setKindnessList(KindnessList.filter(({_id}) => _id !== id));
     } catch (err) {
       setError(err);
       setDeleteKindnessError(true);
