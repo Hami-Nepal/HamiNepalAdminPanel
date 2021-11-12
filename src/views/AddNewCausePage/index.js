@@ -17,8 +17,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
-import {CKEditor} from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import baseUrl from '../../api/baseUrl'
+
+// import {CKEditor} from '@ckeditor/ckeditor5-react';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const styles = {
   typo: {
@@ -126,7 +128,7 @@ export default function AddNewCausePage() {
 
     axios({
       method: 'POST',
-      url: 'http://localhost:5000/api/v1/causes',
+      url: baseUrl + 'causes',
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',

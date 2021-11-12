@@ -130,7 +130,7 @@ export default function AddNewCausePage({match}) {
 
     axios({
       method: 'PATCH',
-      url: 'http://localhost:5000/api/v1/causes/' + id,
+      url: baseUrl + 'causes/' + id,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',

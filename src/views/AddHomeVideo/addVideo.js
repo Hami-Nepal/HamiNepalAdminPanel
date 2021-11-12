@@ -21,6 +21,8 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import AsyncSelect from 'react-select/async';
 
+import baseUrl from '../../api/baseUrl'
+
 const styles = {
   typo: {
     paddingLeft: '25%',
@@ -111,7 +113,7 @@ export default function TransparencyPage() {
 
     axios({
       method: 'PUT',
-      url: 'http://localhost:5000/api/v1/homepage/613e3067845f7e2e78c5863c',
+      url: baseUrl + 'homepage/613e3067845f7e2e78c5863c',
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
