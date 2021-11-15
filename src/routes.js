@@ -34,6 +34,7 @@ import VolunteersIndexPage from './views/Volunteers';
 import VolunteersCreatePage from './views/Volunteers/create';
 import AddVideo from './views/AddHomeVideo/addVideo';
 import ActOfKindness from './views/ActOfKindness/act-of-kindness';
+import CreateActOfKindness from './views/CreateActOfKindness/CreateActOfKindness';
 
 export const demoRoutes = [
   {
@@ -110,6 +111,13 @@ export const demoRoutes = [
     name: 'Add a new cause',
     icon: Unarchive,
     component: AddNewCausePage,
+    layout: '/admin',
+  },
+  {
+    path: '/act-of-kindness/create',
+    name: 'Add a Act of kindness',
+    icon: Unarchive,
+    component: CreateActOfKindness,
     layout: '/admin',
   },
 ];
