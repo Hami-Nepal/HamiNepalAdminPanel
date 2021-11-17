@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
+import {useHistory} from 'react-router-dom';
 import {useDropzone} from 'react-dropzone';
 import {makeStyles} from '@material-ui/core/styles';
 import GridItem from 'components/Grid/GridItem.js';
@@ -9,6 +10,8 @@ import CardBody from 'components/Card/CardBody.js';
 import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+
+import baseUrl from '../../api/baseUrl';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
@@ -70,6 +73,8 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function CreateActOfKindness() {
+  const history = useHistory();
+
   const onDrop = useCallback((acceptedFiles) => {
     setSelectedFile(acceptedFiles);
     setUploadedUrl(acceptedFiles.map((file) => URL.createObjectURL(file)));
@@ -89,7 +94,6 @@ export default function CreateActOfKindness() {
 
   // input fields state start
   const [results, setResults] = useState('');
-  const [volunteers, setVolunteers] = useState('');
   const [details, setDetails] = useState('');
   const [summary, setSummary] = useState('');
   const [difficulties, setDifficulties] = useState('');
@@ -103,6 +107,14 @@ export default function CreateActOfKindness() {
   const [open, setOpen] = React.useState(false);
   const [severity, setSeverity] = React.useState('info');
   const [message, setMessage] = React.useState('This is a success message!');
+
+  const [volunteersList, setVolunteersList] = useState([]);
+  const [selectedVolunteers, setSelectedVolunteers] = useState([]);
+
+  useEffect(async () => {
+    const {data: res} = await axios.get(baseUrl + 'volunteers');
+    setVolunteersList(res.data.volunteers);
+  }, []);
 
   const handleClose = () => {
     setOpen(false);
@@ -181,11 +193,12 @@ export default function CreateActOfKindness() {
     formData.append('summary', summary);
     formData.append('details', details);
     formData.append('results', results);
-    selectedFile.map((file) => formData.append('photos', file));
+    selectedFile?.map((file) => formData.append('photos', file));
+    selectedVolunteers?.map((user) => formData.append('volunteers', user));
 
     axios({
       method: 'POST',
-      url: 'https://haminepal.herokuapp.com/api/v1/events',
+      url: baseUrl + 'kindness',
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -196,8 +209,9 @@ export default function CreateActOfKindness() {
         //handle success
         alert('file uploaded successfully');
         setSubmissionLoading(false);
+        history.push('/admin/act-of-kindness');
       })
-      .catch(function (response) {
+      .catch(function ({response}) {
         //handle error
         setError(response.message);
         setSubmissionLoading(false);
@@ -236,6 +250,7 @@ export default function CreateActOfKindness() {
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
+              <h5 style={{marginBottom: '-1rem'}}>Challenges</h5>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
@@ -255,6 +270,7 @@ export default function CreateActOfKindness() {
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
+              <h5 style={{marginBottom: '-1rem'}}>Difficulties</h5>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
@@ -274,6 +290,7 @@ export default function CreateActOfKindness() {
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
+              <h5 style={{marginBottom: '-1rem'}}>Summary</h5>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
@@ -293,6 +310,7 @@ export default function CreateActOfKindness() {
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
+              <h5 style={{marginBottom: '-1rem'}}>Act of kindness</h5>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
@@ -312,6 +330,7 @@ export default function CreateActOfKindness() {
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
+              <h5 style={{marginBottom: '-1rem'}}>Event</h5>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
@@ -329,6 +348,62 @@ export default function CreateActOfKindness() {
                   fontFamily: 'Roboto',
                 }}
               />
+            </GridItem>
+            <GridItem xs={12} sm={12} md={12}>
+              <h5>Volunteers</h5>
+              <div
+                style={{
+                  border: '1px solid gray',
+                  padding: '1.5rem',
+                  display: 'flex',
+                  gap: '1rem',
+                  flexWrap: 'wrap',
+                }}>
+                {volunteersList.map((user) => (
+                  <div
+                    key={user._id}
+                    style={{
+                      border: '1px solid rgb(207, 207, 207)',
+                      padding: '.5rem .8rem',
+                      borderRadius: '10px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '.8rem',
+                    }}>
+                    <img
+                      src={user.photo}
+                      alt={user.first_name}
+                      style={{width: '40px', borderRadius: '100rem'}}
+                    />
+                    <p style={{margin: '0'}}>
+                      {user.first_name} {user.last_name}
+                    </p>
+                    {selectedVolunteers.includes(user._id) ? (
+                      <Button
+                        color="danger"
+                        type="button"
+                        onClick={() => {
+                          const index = selectedVolunteers.indexOf(user._id);
+                          setSelectedVolunteers((prev) => [
+                            ...prev.slice(0, index),
+                            ...prev.slice(index + 1),
+                          ]);
+                        }}>
+                        Remove
+                      </Button>
+                    ) : (
+                      <Button
+                        color="primary"
+                        type="button"
+                        onClick={() =>
+                          setSelectedVolunteers((prev) => [...prev, user._id])
+                        }>
+                        Add
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
               <h5>Upload photos of event</h5>
