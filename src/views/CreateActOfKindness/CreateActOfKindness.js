@@ -310,7 +310,7 @@ export default function CreateActOfKindness() {
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
-              <h5 style={{marginBottom: '-1rem'}}>Act of kindness</h5>
+              <h5 style={{marginBottom: '-1rem'}}>Details</h5>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
@@ -330,7 +330,7 @@ export default function CreateActOfKindness() {
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
-              <h5 style={{marginBottom: '-1rem'}}>Event</h5>
+              <h5 style={{marginBottom: '-1rem'}}>Result</h5>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
