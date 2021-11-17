@@ -14,8 +14,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import InputLabel from '@material-ui/core/InputLabel';
-import {CKEditor} from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import {CKEditor} from '@ckeditor/ckeditor5-react';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import baseURL from '../../api/baseUrl';
 
 const styles = {
@@ -109,7 +109,7 @@ export default function AddNewCausePage({match}) {
 
     axios({
       method: 'POST',
-      url: baseURL + 'causes/',
+      url: baseURL + 'causes',
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',

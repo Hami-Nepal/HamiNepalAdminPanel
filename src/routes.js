@@ -8,8 +8,9 @@ import Language from '@material-ui/icons/Language';
 import EventIcon from '@material-ui/icons/Event';
 import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import NewsIcon from '@material-ui/icons/RssFeed';
-import ListNews from './views/News/ListNews';
 import KindnessIcon from '@material-ui/icons/Accessibility';
+
+import AddNews from './views/AddNews/AddNews';
 
 // core components/views for Admin layout
 import DashboardPage from 'views/Dashboard/Dashboard.js';
@@ -36,6 +37,8 @@ import NewsCreatePage from './views/News/AddNews';
 import NewsEditPage from './views/News/NewsEditPage';
 import AddVideo from './views/AddHomeVideo/addVideo';
 import ActOfKindness from './views/ActOfKindness/act-of-kindness';
+import CreateActOfKindness from './views/CreateActOfKindness/CreateActOfKindness';
+import EditActOfKindness from './views/EditActOfKindness/EditActOfKindness';
 
 export const demoRoutes = [
   {
@@ -126,6 +129,20 @@ export const demoRoutes = [
     name: 'Add a new cause',
     icon: Unarchive,
     component: AddNewCausePage,
+    layout: '/admin',
+  },
+  {
+    path: '/act-of-kindness/create',
+    name: 'Add a Act of kindness',
+    icon: Unarchive,
+    component: CreateActOfKindness,
+    layout: '/admin',
+  },
+  {
+    path: '/act-of-kindness/edit/:id',
+    name: 'Edit a Act of kindness',
+    icon: Unarchive,
+    component: EditActOfKindness,
     layout: '/admin',
   },
 ];
