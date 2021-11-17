@@ -26,6 +26,7 @@ import RTLPage from 'views/RTLPage/RTLPage.js';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import EventList from './views/EventList/EventList';
 import CauseList from './views/CauseList/CauseList';
+import CauseEditPage from './views/CauseEditPage/CauseEditPage';
 import EventEditPage from './views/AddNewEventPage/editEventPage';
 import AddNewEventPage from './views/AddNewEventPage/index';
 import AddNewCausePage from './views/AddNewCausePage/index';
@@ -110,7 +111,7 @@ export const demoRoutes = [
     path: '/causes/edit/:id',
     name: 'Edit an event',
     icon: Unarchive,
-    component: EventEditPage,
+    component: CauseEditPage,
     layout: '/admin',
   },
   {

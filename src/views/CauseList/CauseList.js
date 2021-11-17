@@ -133,7 +133,9 @@ export default function CauseList() {
                             </TableCell> */}
                             <TableCell align="right">{row.name}</TableCell>
                             <TableCell align="right">{row.status}</TableCell>
-                            <TableCell align="right">{row.type}</TableCell>
+                            <TableCell align="right">
+                              {row.cause_type}
+                            </TableCell>
                             <TableCell align="right">{row.summary}</TableCell>
                             <TableCell align="right">
                               <img src={row.photos[0]} width={50} />

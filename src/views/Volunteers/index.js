@@ -24,6 +24,8 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {Link} from 'react-router-dom';
+import api from 'api';
+import baseURL from 'api/baseUrl';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {listVolunteers} from './../../store/actions/volunteers.actions';
@@ -38,6 +40,10 @@ export default function Index() {
 
   const dispatch = useDispatch();
 
+  const [deleteVolunteerSuccess, setDeleteVolunteerSuccess] = useState(false);
+  const [deleteVolunteerError, setDeleteVolunteerError] = useState('');
+  const [error, setError] = useState();
+
   const {
     volunteerListSuccess,
     volunteerListError,
@@ -45,8 +51,22 @@ export default function Index() {
     volunteerList,
   } = useSelector((state) => state.volunteers);
 
-  const handleDeleteEvent = (id) => {
-    console.log(id);
+  const deleteVol = async (id) => {
+    const token = JSON.parse(localStorage.getItem('userInfo')).token;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const response = await api.delete(`/volunteers/${id}`, config);
+      setDeleteVolunteerSuccess(true);
+      dispatch(listVolunteers());
+    } catch (err) {
+      setError(err);
+      setDeleteVolunteerError(err);
+    }
   };
 
   useEffect(() => {
@@ -58,12 +78,6 @@ export default function Index() {
   return (
     <GridContainer>
       <GridItem xs={14} sm={12} md={12}>
-        <Link to="/admin/volunteers/create">
-          <Button color="primary" type="submit">
-            Add a new Volunteer
-          </Button>
-        </Link>
-
         <Card plain>
           <CardBody>
             <TableContainer component={Paper}>
@@ -79,9 +93,6 @@ export default function Index() {
                     {/* <TableCell align="center">Academic Qualification</TableCell> */}
                     <TableCell align="center">Country/State/City</TableCell>
                     {/* <TableCell align="center">Created At</TableCell> */}
-                    <TableCell align="center" width={100}>
-                      Edit
-                    </TableCell>
                     <TableCell align="center" width={100}>
                       Delete
                     </TableCell>
@@ -134,21 +145,25 @@ export default function Index() {
                             },
                           )}
                         </TableCell> */}
-                        <TableCell align="center">
-                          <Link to={`/admin/volunteers/edit/${row._id}`}>
-                            <EditIcon color="primary" />
-                          </Link>
-                        </TableCell>
                         <TableCell align="center" style={{cursor: 'pointer'}}>
                           <DeleteIcon
                             color="secondary"
-                            onClick={handleDeleteEvent}
+                            onClick={() => deleteVol(row._id)}
                           />
                         </TableCell>
                       </TableRow>
                     ))
                   ) : (
                     ''
+                  )}
+                  {deleteVolunteerSuccess ? (
+                    <Alert severity="success">
+                      <AlertTitle>Success</AlertTitle>
+                      Volunteer deleted Successfully
+                    </Alert>
+                  ) : null}
+                  {deleteVolunteerError && (
+                    <div style={{color: 'red'}}>deleteVolunteerError</div>
                   )}
                 </TableBody>
               </Table>

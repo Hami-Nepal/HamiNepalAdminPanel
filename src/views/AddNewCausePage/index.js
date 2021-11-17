@@ -9,18 +9,14 @@ import CardBody from 'components/Card/CardBody.js';
 import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-
-import baseUrl from '../../api/baseUrl'
-
-// import {CKEditor} from '@ckeditor/ckeditor5-react';
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import InputLabel from '@material-ui/core/InputLabel';
+import {CKEditor} from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import baseURL from '../../api/baseUrl';
 
 const styles = {
   typo: {
@@ -67,68 +63,53 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function AddNewCausePage() {
+export default function AddNewCausePage({match}) {
+  const id = match.params.id;
+
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
 
     // const reader = new FileReader();
     // reader.readAsArrayBuffer(acceptedFiles[0])
     // console.log(reader,acceptedFiles[0]);
-    setSelectedFile(acceptedFiles[0]);
-    setUploadedUrl(URL.createObjectURL(acceptedFiles[0]));
+    setSelectedFile(acceptedFiles);
+    setUploadedUrl(acceptedFiles.map((file) => URL.createObjectURL(file)));
   }, []);
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
 
   const classes = useStyles();
 
   const [name, setName] = useState('');
-
-  const [cause_type, setCauseType] = useState('');
-
-  const [summary, setSummary] = useState('');
-  const [description, setDescription] = useState('');
-  const [status, setStatus] = useState('');
-  const [balance, setBalance] = useState('');
+  const [type, setType] = useState('');
+  const [balance, setBalance] = useState();
   const [selectedFile, setSelectedFile] = useState(null);
+  const [difficulties, setDifficulties] = useState('');
+  const [challenges, setChallenges] = useState('');
+  const [description, setDescription] = useState('');
+  const [summary, setSummary] = useState('');
+  const [uploadedUrl, setUploadedUrl] = useState([]);
+
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
-  const [uploadedUrl, setUploadedUrl] = useState('');
 
-  const [inputValue, setInputValue] = useState();
-
-  const handleTypeChange = (event) => {
-    setCauseType(event.target.value);
-  };
-  const handleInputChange = (newValue) => {
-    let inputValue = newValue.replace(/\W/g, '');
-    setInputValue({inputValue});
-  };
-
-  const [data, setData] = useState('');
-  const [ckData, setCkData] = useState(0);
-
-  const handleChange = (e, editor) => {
-    const data = editor.getData();
-    setData(data);
-  };
-
-  const handleCauseSubmit = (e) => {
+  const handleCauseAdd = (e) => {
     e.preventDefault();
     setSubmissionLoading(true);
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
 
     const formData = new FormData();
     formData.append('name', name);
-    formData.append('cause_type', cause_type);
-    formData.append('photo', selectedFile);
+    formData.append('cause_type', type);
+    selectedFile?.map((file) => formData.append('photos', file));
     formData.append('summary', summary);
     formData.append('description', description);
-    formData.append('status', status);
+    formData.append('challenges', challenges);
+    formData.append('difficulties', difficulties);
     formData.append('balance', balance);
 
     axios({
       method: 'POST',
-      url: baseUrl + 'causes',
+      url: baseURL + 'causes/',
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -138,7 +119,7 @@ export default function AddNewCausePage() {
     })
       .then(function (response) {
         //handle success
-        alert('File uploaded successfully');
+        alert('cause added successfully');
         setSubmissionLoading(false);
       })
       .catch(function (response) {
@@ -155,16 +136,16 @@ export default function AddNewCausePage() {
       </>
       <Card>
         <CardHeader color="primary">
-          <h4 className={classes.cardTitleWhite}>Add a New Cause Screen</h4>
-          <p className={classes.cardCategoryWhite}>
+          <h4 className={classes.cardTitleWhite}>Edit the Cause</h4>
+          {/* <p className={classes.cardCategoryWhite}>
             For creating and uploading images for new causes
-          </p>
+          </p> */}
           <p className={classes.cardCategoryWhite}>
-            Please check the information properly before submitting .
+            Please check the information properly before updating .
           </p>
         </CardHeader>
         <CardBody>
-          <form onSubmit={handleCauseSubmit}>
+          <form onSubmit={handleCauseAdd}>
             <GridItem xs={12} sm={12} md={4}>
               <TextField
                 id="standard-basic"
@@ -181,9 +162,9 @@ export default function AddNewCausePage() {
               <TextField
                 id="standard-basic"
                 label="Cause Type"
-                value={cause_type}
+                value={type}
                 onChange={(e) => {
-                  setCauseType(e.target.value);
+                  setType(e.target.value);
                 }}
                 required
                 style={{width: '500px', margin: '30px 0'}}
@@ -193,8 +174,8 @@ export default function AddNewCausePage() {
               <TextField
                 id="standard-basic"
                 label="Fund amount for cause"
-                value={balance}
                 type="number"
+                value={balance}
                 onChange={(e) => {
                   setBalance(e.target.value);
                 }}
@@ -202,39 +183,9 @@ export default function AddNewCausePage() {
                 style={{width: '500px', margin: '30px 0'}}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={12}>
-              <FormControl
-                style={{width: '100%'}}
-                className={classes.formControl}>
-                <InputLabel id="demo-simple-select-label">Status</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={status}
-                  onChange={(e) => {
-                    setStatus(e.target.value);
-                  }}>
-                  <MenuItem value={'normal'}>normal</MenuItem>
-                  <MenuItem value={'important'}>important</MenuItem>
-                  <MenuItem value={'super'}>super</MenuItem>
-                </Select>
-              </FormControl>
-            </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
-              {/* <TextField
-              id="standard-basic"
-              label="Fund amount for event"
-              type="number"
-              value={balance}
-              onChange={(e) => {
-                setBalance(e.target.value);
-              }}
-              required
-              style={{width: '500px', margin: '30px 0'}}
-            /> */}
-            </GridItem>
 
             <GridItem xs={12} sm={12} md={4}>
+              <InputLabel id="demo-simple-select-label">Summary</InputLabel>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
@@ -256,10 +207,11 @@ export default function AddNewCausePage() {
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={4}>
+              <InputLabel id="demo-simple-select-label">Description</InputLabel>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
-                placeholder="Enter description about the cause not exceeding 250 character"
+                placeholder="Enter a short description about the cause"
                 value={description}
                 onChange={(e) => {
                   setDescription(e.target.value);
@@ -277,6 +229,52 @@ export default function AddNewCausePage() {
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={4}>
+              <InputLabel id="demo-simple-select-label">Challenges</InputLabel>
+              <TextareaAutosize
+                aria-label="minimum height"
+                rowsMin={5}
+                placeholder="Enter the challenges of the cause"
+                value={challenges}
+                onChange={(e) => {
+                  setChallenges(e.target.value);
+                }}
+                required
+                style={{
+                  width: '500px',
+                  margin: '30px 0',
+                  padding: '20px',
+                  fontSize: '16px',
+                  fontFamily: 'Roboto',
+                  color: '#c0c1c2',
+                  fontWeight: '390',
+                }}
+              />
+            </GridItem>
+            <GridItem xs={12} sm={12} md={4}>
+              <InputLabel id="demo-simple-select-label">
+                Difficulties
+              </InputLabel>
+              <TextareaAutosize
+                aria-label="minimum height"
+                rowsMin={5}
+                placeholder="Enter difficulties about the cause"
+                value={difficulties}
+                onChange={(e) => {
+                  setDifficulties(e.target.value);
+                }}
+                required
+                style={{
+                  width: '500px',
+                  margin: '30px 0',
+                  padding: '20px',
+                  fontSize: '16px',
+                  fontFamily: 'Roboto',
+                  color: '#c0c1c2',
+                  fontWeight: '390',
+                }}
+              />
+            </GridItem>
+            <GridItem xs={12} sm={12} md={12}>
               <h5>Please upload Cause Photo</h5>
               <div
                 {...getRootProps()}
@@ -284,6 +282,7 @@ export default function AddNewCausePage() {
                 style={{
                   cursor: 'pointer',
                   border: '1px solid gray',
+                  minHeight: '200px',
                   padding: '20px',
                   marginBottom: '20px',
                 }}>
@@ -296,9 +295,12 @@ export default function AddNewCausePage() {
                     causes photo
                   </p>
                 )}
-                {uploadedUrl && (
-                  <img src={uploadedUrl} style={{height: '200px'}} />
-                )}
+                <div style={{display: 'flex', gap: '1rem'}}>
+                  {uploadedUrl.length &&
+                    uploadedUrl.map((url) => (
+                      <img src={url} style={{height: '200px'}} />
+                    ))}
+                </div>
               </div>
             </GridItem>
             {error ? (
@@ -315,7 +317,7 @@ export default function AddNewCausePage() {
                 <CircularProgress />
               ) : (
                 <Button color="primary" type="submit">
-                  Submit
+                  Update
                 </Button>
               )}
             </GridItem>

@@ -13,7 +13,7 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-
+import InputLabel from '@material-ui/core/InputLabel';
 import {CKEditor} from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import baseURL from '../../api/baseUrl';
@@ -64,15 +64,7 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function AddNewCausePage({match}) {
-  const [tempdata, setTempData] = React.useState();
   const id = match.params.id;
-  const [summary, setSummary] = useState('');
-  React.useEffect(() => {
-    fetch(baseURL+'causes/' + id)
-      .then((response) => response.json())
-      .then((data) => {
-      });
-  }, []);
 
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
@@ -80,40 +72,39 @@ export default function AddNewCausePage({match}) {
     // const reader = new FileReader();
     // reader.readAsArrayBuffer(acceptedFiles[0])
     // console.log(reader,acceptedFiles[0]);
-    setSelectedFile(acceptedFiles[0]);
-    setUploadedUrl(URL.createObjectURL(acceptedFiles[0]));
+    setSelectedFile(acceptedFiles);
+    setUploadedUrl(acceptedFiles.map((file) => URL.createObjectURL(file)));
   }, []);
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
 
   const classes = useStyles();
 
   const [name, setName] = useState('');
-
   const [type, setType] = useState('');
-
-  const [description, setDescription] = useState('');
+  const [balance, setBalance] = useState();
   const [selectedFile, setSelectedFile] = useState(null);
+  const [difficulties, setDifficulties] = useState('');
+  const [challenges, setChallenges] = useState('');
+  const [description, setDescription] = useState('');
+  const [summary, setSummary] = useState('');
+  const [uploadedUrl, setUploadedUrl] = useState([]);
+
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
-  const [uploadedUrl, setUploadedUrl] = useState('');
 
-  const [inputValue, setInputValue] = useState();
+  useEffect(async () => {
+    let result = await fetch(baseURL + 'causes/' + id);
+    result = await result.json();
 
-  const handleTypeChange = (event) => {
-    setType(event.target.value);
-  };
-  const handleInputChange = (newValue) => {
-    let inputValue = newValue.replace(/\W/g, '');
-    setInputValue({inputValue});
-  };
-
-  const [data, setData] = useState('');
-  const [ckData, setCkData] = useState(0);
-
-  const handleChange = (e, editor) => {
-    const data = editor.getData();
-    setData(data);
-  };
+    setName(result.data.cause.name);
+    setType(result.data.cause.cause_type);
+    setBalance(result.data.cause.balance);
+    setDifficulties(result.data.cause.difficulties);
+    setChallenges(result.data.cause.challenges);
+    setDescription(result.data.cause.description);
+    setSummary(result.data.cause.summary);
+    setUploadedUrl(result.data.cause.photos);
+  }, []);
 
   const handleCauseUpdate = (e) => {
     e.preventDefault();
@@ -122,14 +113,17 @@ export default function AddNewCausePage({match}) {
 
     const formData = new FormData();
     formData.append('name', name);
-    formData.append('type', type);
-    formData.append('photo', selectedFile);
+    formData.append('cause_type', type);
+    selectedFile?.map((file) => formData.append('photos', file));
     formData.append('summary', summary);
     formData.append('description', description);
+    formData.append('challenges', challenges);
+    formData.append('difficulties', difficulties);
+    formData.append('balance', balance);
 
     axios({
       method: 'PATCH',
-      url: baseUrl + 'causes/' + id,
+      url: baseURL + 'causes/' + id,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -170,7 +164,7 @@ export default function AddNewCausePage({match}) {
               <TextField
                 id="standard-basic"
                 label="Cause Name"
-                value={tempdata ? tempdata.cause.name : name}
+                value={name}
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
@@ -182,7 +176,7 @@ export default function AddNewCausePage({match}) {
               <TextField
                 id="standard-basic"
                 label="Cause Type"
-                value={summary}
+                value={type}
                 onChange={(e) => {
                   setType(e.target.value);
                 }}
@@ -191,25 +185,26 @@ export default function AddNewCausePage({match}) {
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={4}>
-              {/* <TextField
-              id="standard-basic"
-              label="Fund amount for event"
-              type="number"
-              value={balance}
-              onChange={(e) => {
-                setBalance(e.target.value);
-              }}
-              required
-              style={{width: '500px', margin: '30px 0'}}
-            /> */}
+              <TextField
+                id="standard-basic"
+                label="Fund amount for cause"
+                type="number"
+                value={balance}
+                onChange={(e) => {
+                  setBalance(e.target.value);
+                }}
+                required
+                style={{width: '500px', margin: '30px 0'}}
+              />
             </GridItem>
 
             <GridItem xs={12} sm={12} md={4}>
+              <InputLabel id="demo-simple-select-label">Summary</InputLabel>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
                 placeholder="Enter a short summary about the cause not exceeding 250 character"
-                value={tempdata ? tempdata.cause.summary : summary}
+                value={summary}
                 onChange={(e) => {
                   setSummary(e.target.value);
                 }}
@@ -225,20 +220,74 @@ export default function AddNewCausePage({match}) {
                 }}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={4}></GridItem>
-            <CKEditor
-              editor={ClassicEditor}
-              data={tempdata ? tempdata.cause.description : description}
-              onReady={(editor) => {
-                // You can store the "editor" and use when it is needed.
-                // console.log('Editor is ready to use!', editor);
-              }}
-              onChange={(event, editor) => {
-                const data = editor.getData();
-
-                setDescription(data);
-              }}
-            />
+            <GridItem xs={12} sm={12} md={4}>
+              <InputLabel id="demo-simple-select-label">Description</InputLabel>
+              <TextareaAutosize
+                aria-label="minimum height"
+                rowsMin={5}
+                placeholder="Enter a short description about the cause"
+                value={description}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+                required
+                style={{
+                  width: '500px',
+                  margin: '30px 0',
+                  padding: '20px',
+                  fontSize: '16px',
+                  fontFamily: 'Roboto',
+                  color: '#c0c1c2',
+                  fontWeight: '390',
+                }}
+              />
+            </GridItem>
+            <GridItem xs={12} sm={12} md={4}>
+              <InputLabel id="demo-simple-select-label">Challenges</InputLabel>
+              <TextareaAutosize
+                aria-label="minimum height"
+                rowsMin={5}
+                placeholder="Enter the challenges of the cause"
+                value={challenges}
+                onChange={(e) => {
+                  setChallenges(e.target.value);
+                }}
+                required
+                style={{
+                  width: '500px',
+                  margin: '30px 0',
+                  padding: '20px',
+                  fontSize: '16px',
+                  fontFamily: 'Roboto',
+                  color: '#c0c1c2',
+                  fontWeight: '390',
+                }}
+              />
+            </GridItem>
+            <GridItem xs={12} sm={12} md={4}>
+              <InputLabel id="demo-simple-select-label">
+                Difficulties
+              </InputLabel>
+              <TextareaAutosize
+                aria-label="minimum height"
+                rowsMin={5}
+                placeholder="Enter difficulties about the cause"
+                value={difficulties}
+                onChange={(e) => {
+                  setDifficulties(e.target.value);
+                }}
+                required
+                style={{
+                  width: '500px',
+                  margin: '30px 0',
+                  padding: '20px',
+                  fontSize: '16px',
+                  fontFamily: 'Roboto',
+                  color: '#c0c1c2',
+                  fontWeight: '390',
+                }}
+              />
+            </GridItem>
             <GridItem xs={12} sm={12} md={4}>
               <h5>Please upload Cause Photo</h5>
               <div
@@ -259,9 +308,12 @@ export default function AddNewCausePage({match}) {
                     causes photo
                   </p>
                 )}
-                {uploadedUrl && (
-                  <img src={uploadedUrl} style={{height: '200px'}} />
-                )}
+                <div style={{display: 'flex', gap: '1rem'}}>
+                  {uploadedUrl.length &&
+                    uploadedUrl.map((url) => (
+                      <img src={url} style={{height: '200px'}} />
+                    ))}
+                </div>
               </div>
             </GridItem>
             {error ? (
