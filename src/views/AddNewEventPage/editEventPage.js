@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useCallback, useRef} from 'react';
+import {useHistory} from 'react-router-dom';
 import {useDropzone} from 'react-dropzone';
 import {makeStyles} from '@material-ui/core/styles';
 import GridItem from 'components/Grid/GridItem.js';
@@ -19,12 +20,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import {CKEditor} from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import MyCustomUploadAdapterPlugin from 'utils/UploadAdapter';
-import baseUrl from 'api/baseUrl';
-import DeleteIcon from '@material-ui/icons/Delete';
+import baseUrl from '../../api/baseUrl';
 
 const styles = {
   typo: {
@@ -71,7 +67,8 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function AddNewEventPage() {
+export default function AddNewEventPage({match}) {
+  const id = match.params.id;
   const onDrop = useCallback((acceptedFiles) => {
     setSelectedFile(acceptedFiles[0]);
     setUploadedUrl(URL.createObjectURL(acceptedFiles[0]));
@@ -84,9 +81,9 @@ export default function AddNewEventPage() {
   const [ckEditor, setCkEditor] = useState(null);
 
   const [name, setName] = useState('');
-
+  const [selectedFile, setSelectedFile] = useState(null);
   const [type, setType] = useState('');
-  const [balance, setBalance] = useState('');
+  const [balance, setBalance] = useState();
   const [summary, setSummary] = useState('');
   const [description, setDescription] = useState('');
   const [country, setCountry] = useState('');
@@ -95,37 +92,32 @@ export default function AddNewEventPage() {
   const [street, setStreet] = useState('');
   const [difficulties, setDifficulties] = useState('');
   const [challenges, setChallenges] = useState('');
-  const [selectedFile, setSelectedFile] = useState(null);
+
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
-
-  const [inputValue, setInputValue] = useState();
 
   const [open, setOpen] = React.useState(false);
   const [severity, setSeverity] = React.useState('info');
   const [message, setMessage] = React.useState('This is a success message!');
-
-  const [addNewEventType, setAddNewEventType] = useState('');
   const [eventTypes, setEventTypes] = useState([]);
 
-  const addNewEventTypeFunc = async () => {
-    const eventType = await axios.post(
-      baseUrl + 'event_type',
-      {
-        event_type: addNewEventType,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${
-            JSON.parse(localStorage.getItem('userInfo')).token
-          }`,
-        },
-      },
-    );
+  useEffect(async () => {
+    let result = await fetch(baseUrl + 'events/' + id);
+    result = await result.json();
 
-    setEventTypes((prev) => [...prev, eventType.data.data.newEvent_type]);
-    setAddNewEventType('');
-  };
+    setName(result.data.name);
+    setType(result.data.type);
+    setBalance(result.data.balance);
+    setSummary(result.data.summary);
+    setDescription(result.data.description);
+    setCountry(result.data.country);
+    setState(result.data.state);
+    setCity(result.data.city);
+    setStreet(result.data.street_address);
+    setDifficulties(result.data.difficulties);
+    setChallenges(result.data.challenges);
+    setUploadedUrl(result.data.photos);
+  }, []);
 
   useEffect(async () => {
     const event_types = await axios.get(baseUrl + 'event_type');
@@ -142,16 +134,12 @@ export default function AddNewEventPage() {
     console.log(event.target.value);
     setType(event.target.value);
   };
-  const handleInputChange = (newValue) => {
-    let inputValue = newValue.replace(/\W/g, '');
-    setInputValue({inputValue});
-  };
+  const history = useHistory();
 
-  const handleEventSubmit = (e) => {
+  const handleEventUpdate = (e) => {
     e.preventDefault();
     setSubmissionLoading(true);
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
-    console.log(token);
 
     const formData = new FormData();
     formData.append('name', name);
@@ -168,8 +156,8 @@ export default function AddNewEventPage() {
     formData.append('street_address', street);
 
     axios({
-      method: 'POST',
-      url: 'https://haminepal.herokuapp.com/api/v1/events',
+      method: 'PUT',
+      url: baseUrl + 'events/' + id,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -179,8 +167,9 @@ export default function AddNewEventPage() {
       .then(function (response) {
         //handle success
         console.log(response);
-        alert('file uploaded successfully');
+        alert('Event updated successfully');
         setSubmissionLoading(false);
+        history.push('/admin/events');
       })
       .catch(function (response) {
         //handle error
@@ -209,7 +198,7 @@ export default function AddNewEventPage() {
           </p>
         </CardHeader>
         <CardBody>
-          <form onSubmit={handleEventSubmit}>
+          <form onSubmit={handleEventUpdate}>
             <GridItem xs={12} sm={12} md={12}>
               <TextField
                 id="standard-basic"
@@ -469,7 +458,7 @@ export default function AddNewEventPage() {
                 <CircularProgress />
               ) : (
                 <Button color="primary" type="submit">
-                  Submit
+                  Update
                 </Button>
               )}
             </GridItem>

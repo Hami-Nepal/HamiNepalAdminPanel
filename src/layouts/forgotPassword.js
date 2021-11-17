@@ -8,8 +8,11 @@ import { useDispatch, useSelector} from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+import baseUrl from 'api/baseUrl';
 
 import './forgotPassword.css';
+import axios from 'axios';
 
 function Copyright() {
     return (
@@ -38,14 +41,29 @@ const forgotPassword = () => {
     const classes = useStyles();
     const [email, setEmail] = useState("")
     const [loading, setLoading] = useState(false)
-    const dispatch = useDispatch();
+    const [error, setError] = useState('');
 
     const resetHandler = (e) => {
         setLoading(true)
-        e.preventDefault();
-        dispatch(userForgotPassword(email));
-        setLoading(false)
-        alert("Email sent")
+        axios({
+            method: 'POST',
+            url: baseUrl+'users/forgotPassword',
+            data: email,
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+          })
+            .then(function (response) {
+              //handle success
+              alert('Email sent successfully');
+              setLoading(false);
+            })
+            .catch(function (response) {
+              //handle error
+              console.log(response.message);
+              setError(response.message);
+              setLoading(false);
+            });
     };
 
     return (
@@ -75,6 +93,15 @@ const forgotPassword = () => {
                     ) : (
                         <button onClick={resetHandler}>Reset password</button>
                     )}
+                              {error ? (
+            <Alert severity="error">
+              <AlertTitle>Error</AlertTitle>
+              Something bad happened — <strong>{error}</strong>
+              <br></br>
+            </Alert>
+          ) : (
+            ''
+          )}
                     
                 </form>
 

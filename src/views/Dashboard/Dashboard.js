@@ -1,17 +1,17 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 // react plugin for creating charts
 import ChartistGraph from 'react-chartist';
 // @material-ui/core
 import {makeStyles} from '@material-ui/core/styles';
 import Icon from '@material-ui/core/Icon';
 // @material-ui/icons
-import Store from '@material-ui/icons/Store';
-import Warning from '@material-ui/icons/Warning';
+// import Store from '@material-ui/icons/Store';
+// import Warning from '@material-ui/icons/Warning';
 import DateRange from '@material-ui/icons/DateRange';
 import LocalOffer from '@material-ui/icons/LocalOffer';
 import Update from '@material-ui/icons/Update';
-import ArrowUpward from '@material-ui/icons/ArrowUpward';
-import AccessTime from '@material-ui/icons/AccessTime';
+// import ArrowUpward from '@material-ui/icons/ArrowUpward';
+// import AccessTime from '@material-ui/icons/AccessTime';
 import Accessibility from '@material-ui/icons/Accessibility';
 import BugReport from '@material-ui/icons/BugReport';
 import Code from '@material-ui/icons/Code';
@@ -22,7 +22,7 @@ import GridContainer from 'components/Grid/GridContainer.js';
 import Table from 'components/Table/Table.js';
 import Tasks from 'components/Tasks/Tasks.js';
 import CustomTabs from 'components/CustomTabs/CustomTabs.js';
-import Danger from 'components/Typography/Danger.js';
+// import Danger from 'components/Typography/Danger.js';
 import Card from 'components/Card/Card.js';
 import CardHeader from 'components/Card/CardHeader.js';
 import CardIcon from 'components/Card/CardIcon.js';
@@ -30,41 +30,62 @@ import CardBody from 'components/Card/CardBody.js';
 import CardFooter from 'components/Card/CardFooter.js';
 
 import {bugs, website, server} from 'variables/general.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {listVolunteers} from './../../store/actions/volunteers.actions';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-import {
-  dailySalesChart,
-  emailsSubscriptionChart,
-  completedTasksChart,
-} from 'variables/charts.js';
+// import {
+//   dailySalesChart,
+//   emailsSubscriptionChart,
+//   completedTasksChart,
+// } from 'variables/charts.js';
 
 import styles from 'assets/jss/material-dashboard-react/views/dashboardStyle.js';
+
+import baseUrl from '../../api/baseUrl';
+import axios from 'axios';
+import {createFalse} from 'typescript';
 
 const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
   const token = JSON.parse(localStorage.getItem('userInfo')).token;
   const classes = useStyles();
-  const [tempdata, setTempData] = React.useState();
-  // React.useEffect(() => {
-  //   fetch('https://haminepal.herokuapp.com/api/v1/volunteers')
-  //     .then((response) => response.json())
-  //     .then((datas) => {
-  //       fetch('http://localhost:5000/api/v1/find/totalDonations', {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           Authorization: `Bearer ${token}`,
-  //           'Access-Control-Allow-Origin': '*',
-  //         },
-  //       })
-  //         .then((response) => response.json())
-  //         .then((result) => {
-  //           setTempData({
-  //             volunteer: 11,
-  //             donation: 20000,
-  //           });
-  //         });
-  //     });
-  // }, []);
+  const [totalDonations, serTotalDonations] = useState(null);
+  const [donationLoading, setDonationLoading] = useState(true);
+  const [totalExpenses, serTotalExpenses] = useState(null);
+  const [totalExpensesLoading, serTotalExpensesLoading] = useState(true);
+
+  const dispatch = useDispatch();
+
+  const {
+    volunteerListSuccess,
+    volunteerListError,
+    volunteerListLoading,
+    volunteerList,
+  } = useSelector((state) => state.volunteers);
+
+  useEffect(() => {
+    if (!volunteerListSuccess) {
+      dispatch(listVolunteers());
+    }
+  }, []);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  useEffect(async () => {
+    const response = await axios.get(baseUrl + 'find/totalDonations', config);
+    serTotalDonations(response.data.data[0].donation);
+    setDonationLoading(false);
+  }, []);
+  useEffect(async () => {
+    const response = await axios.get(baseUrl + 'find/totalExpenses', config);
+    serTotalExpenses(response.data.data[0].total_expenses);
+    serTotalExpensesLoading(false);
+  }, []);
 
   return (
     <div>
@@ -76,12 +97,18 @@ export default function Dashboard() {
                 <Icon>volunteer_activism</Icon>
               </CardIcon>
               <p className={classes.cardCategory}>Total Volunteers</p>
-              <h3 className={classes.cardTitle}>11</h3>
+              <h3 className={classes.cardTitle} style={{fontSize: '20px'}}>
+                {volunteerListLoading ? (
+                  <CircularProgress />
+                ) : (
+                  volunteerList.length
+                )}
+              </h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <DateRange />
-                Last 24 Hours
+                <Update />
+                Just Updated
               </div>
             </CardFooter>
           </Card>
@@ -90,15 +117,17 @@ export default function Dashboard() {
           <Card>
             <CardHeader color="danger" stats icon>
               <CardIcon color="danger">
-                <Icon>account_balance</Icon>
+                <Icon>monetization_on</Icon>
               </CardIcon>
               <p className={classes.cardCategory}>Total donations</p>
-              <h4 className={classes.cardTitle}>1051000</h4>
+              <h4 className={classes.cardTitle}>
+                {donationLoading ? <CircularProgress /> : totalDonations}
+              </h4>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <DateRange />
-                Last 24 Hours
+                <Update />
+                Just Updated
               </div>
             </CardFooter>
           </Card>
@@ -107,15 +136,17 @@ export default function Dashboard() {
           <Card>
             <CardHeader color="danger" stats icon>
               <CardIcon color="danger">
-                <Icon>Outlet</Icon>
+                <Icon>leaderboard</Icon>
               </CardIcon>
-              <p className={classes.cardCategory}>Fixed Issues</p>
-              <h3 className={classes.cardTitle}>75</h3>
+              <p className={classes.cardCategory}>Total Expenditure</p>
+              <h3 className={classes.cardTitle} style={{fontSize: '20px'}}>
+                {totalExpensesLoading ? <CircularProgress /> : totalExpenses}
+              </h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <LocalOffer />
-                Tracked from Github
+                <Update />
+                Just updated
               </div>
             </CardFooter>
           </Card>
@@ -124,10 +155,16 @@ export default function Dashboard() {
           <Card>
             <CardHeader color="danger" stats icon>
               <CardIcon color="danger">
-                <Accessibility />
+                <Icon>savings</Icon>
               </CardIcon>
-              <p className={classes.cardCategory}>Followers</p>
-              <h3 className={classes.cardTitle}>+245</h3>
+              <p className={classes.cardCategory}>Remaining Funds</p>
+              <h3 className={classes.cardTitle} style={{fontSize: '20px'}}>
+                {totalExpensesLoading && donationLoading ? (
+                  <CircularProgress />
+                ) : (
+                  totalDonations - totalExpenses
+                )}
+              </h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
@@ -257,15 +294,13 @@ export default function Dashboard() {
         <GridItem xs={12} sm={12} md={6}>
           <Card>
             <CardHeader color="danger">
-              <h4 className={classes.cardTitleWhite}>Employees Stats</h4>
-              <p className={classes.cardCategoryWhite}>
-                New employees on 15th September, 2016
-              </p>
+              <h4 className={classes.cardTitleWhite}>what to put here???</h4>
+              <p className={classes.cardCategoryWhite}>Any suggestions?</p>
             </CardHeader>
             <CardBody>
               <Table
-                tableHeaderColor="warning"
-                tableHead={['ID', 'Name', 'Salary', 'Country']}
+                tableHeaderColor="danger"
+                tableHead={['1', '2', '3', '4']}
                 tableData={[
                   ['1', 'Dakota Rice', '$36,738', 'Niger'],
                   ['2', 'Minerva Hooper', '$23,789', 'Curaçao'],

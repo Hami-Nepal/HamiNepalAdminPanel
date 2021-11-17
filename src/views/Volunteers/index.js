@@ -26,10 +26,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {Link} from 'react-router-dom';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  listVolunteers,
-  verifyVolunteer,
-} from './../../store/actions/volunteers.actions';
+import {listVolunteers} from './../../store/actions/volunteers.actions';
 
 const useStyles = makeStyles({
   table: {
@@ -58,8 +55,6 @@ export default function Index() {
     }
   }, []);
 
-  const handleVerifyVolunteerClicked = (id) => dispatch(verifyVolunteer(id));
-
   return (
     <GridContainer>
       <GridItem xs={14} sm={12} md={12}>
@@ -75,7 +70,6 @@ export default function Index() {
               <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell> </TableCell>
                     <TableCell align="center">Name</TableCell>
                     <TableCell align="center">Avatar</TableCell>
                     <TableCell align="center">Contact</TableCell>
@@ -86,7 +80,10 @@ export default function Index() {
                     <TableCell align="center">Country/State/City</TableCell>
                     {/* <TableCell align="center">Created At</TableCell> */}
                     <TableCell align="center" width={100}>
-                      Actions
+                      Edit
+                    </TableCell>
+                    <TableCell align="center" width={100}>
+                      Delete
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -109,17 +106,7 @@ export default function Index() {
                   ) : volunteerList ? (
                     volunteerList.map((row) => (
                       <TableRow key={row._id}>
-                        <TableCell
-                          component="th"
-                          scope="row"
-                          onClick={() => handleVerifyVolunteerClicked(row._id)}
-                          style={{
-                            color: row.is_verified ? 'green' : 'gray',
-                            cursor: 'pointer',
-                          }}>
-                          <VerifiedUserIcon />
-                        </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="center">
                           {row.first_name} {row.last_name}
                         </TableCell>
                         <TableCell component="th" scope="row">
@@ -131,15 +118,13 @@ export default function Index() {
                             alt={`${row.first_name} ${row.last_name}'s Avatar`}
                           />
                         </TableCell>
-                        <TableCell align="right">{row.phone}</TableCell>
-                        <TableCell align="right">{row.email}</TableCell>
-                        <TableCell align="right">
-                          {row.bloodGroup}
-                        </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="center">{row.phone}</TableCell>
+                        <TableCell align="center">{row.email}</TableCell>
+                        <TableCell align="center">{row.bloodGroup}</TableCell>
+                        <TableCell align="center">
                           {row.country}, {row.state} {row.city}
                         </TableCell>
-                        {/* <TableCell align="right">
+                        {/* <TableCell align="center">
                           {new Date(row.createdAt).toLocaleDateString(
                             undefined,
                             {
@@ -149,13 +134,12 @@ export default function Index() {
                             },
                           )}
                         </TableCell> */}
-                        <TableCell align="right">
-                          <Link to={`/ admin / volunteers / ${row._id}`}>
-                            <VisibilityIcon color="primary" />
-                          </Link>
-                          <Link to={`/admin/volunteers/${row._id}/edit`}>
+                        <TableCell align="center">
+                          <Link to={`/admin/volunteers/edit/${row._id}`}>
                             <EditIcon color="primary" />
                           </Link>
+                        </TableCell>
+                        <TableCell align="center" style={{cursor: 'pointer'}}>
                           <DeleteIcon
                             color="secondary"
                             onClick={handleDeleteEvent}

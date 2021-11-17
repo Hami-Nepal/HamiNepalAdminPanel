@@ -7,8 +7,9 @@ import Unarchive from '@material-ui/icons/Unarchive';
 import Language from '@material-ui/icons/Language';
 import EventIcon from '@material-ui/icons/Event';
 import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
-import NewsIcon from "@material-ui/icons/RssFeed"
-import AddNews from './views/AddNews/AddNews'
+import NewsIcon from '@material-ui/icons/RssFeed';
+import ListNews from './views/News/ListNews';
+import KindnessIcon from '@material-ui/icons/Accessibility';
 
 // core components/views for Admin layout
 import DashboardPage from 'views/Dashboard/Dashboard.js';
@@ -25,13 +26,15 @@ import RTLPage from 'views/RTLPage/RTLPage.js';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import EventList from './views/EventList/EventList';
 import CauseList from './views/CauseList/CauseList';
-import EventEditPage from './views/CauseEditPage/CauseEditPage';
+import EventEditPage from './views/AddNewEventPage/editEventPage';
 import AddNewEventPage from './views/AddNewEventPage/index';
 import AddNewCausePage from './views/AddNewCausePage/index';
 import VolunteersIndexPage from './views/Volunteers';
 import VolunteersCreatePage from './views/Volunteers/create';
+import NewsCreatePage from './views/News/AddNews';
+import NewsEditPage from './views/News/NewsEditPage';
 import AddVideo from './views/AddHomeVideo/addVideo';
-import ActOfKindness from './views/ActOfKindness/act-of-kindness'
+import ActOfKindness from './views/ActOfKindness/act-of-kindness';
 
 export const demoRoutes = [
   {
@@ -97,10 +100,24 @@ export const demoRoutes = [
     layout: '/admin',
   },
   {
+    path: '/news/create',
+    name: 'Create News',
+    icon: DirectionsBikeIcon,
+    component: NewsCreatePage,
+    layout: '/admin',
+  },
+  {
     path: '/causes/edit/:id',
     name: 'Edit an event',
     icon: Unarchive,
     component: EventEditPage,
+    layout: '/admin',
+  },
+  {
+    path: '/news/edit/:id',
+    name: 'Edit a news',
+    icon: Unarchive,
+    component: NewsEditPage,
     layout: '/admin',
   },
   {
@@ -174,13 +191,13 @@ export const dashboardRoutes = [
     path: '/news',
     name: 'News',
     icon: NewsIcon,
-    component: AddNews,
+    component: ListNews,
     layout: '/admin',
   },
   {
     path: '/act-of-kindness',
     name: 'Act of kindness',
-    icon: NewsIcon,
+    icon: KindnessIcon,
     component: ActOfKindness,
     layout: '/admin',
   },

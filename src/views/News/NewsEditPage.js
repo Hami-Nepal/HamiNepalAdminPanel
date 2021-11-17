@@ -19,6 +19,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import baseUrl from '../../api/baseUrl'
+import ListNews from './ListNews'
 
 import AsyncSelect from 'react-select/async';
 
@@ -65,7 +66,8 @@ const loadOptions = (inputValue, callback) => {
   console.log(inputValue);
 };
 
-export default function Addnews() {
+export default function Editnews({match}) {
+    const id = match.params.id;
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
 
@@ -75,18 +77,29 @@ export default function Addnews() {
     setSelectedFile(acceptedFiles[0]);
     setUploadedUrl(URL.createObjectURL(acceptedFiles[0]));
   }, []);
+
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
 
   const classes = useStyles();
 
-  const [title, setTitle] = useState('');
-
+  const [title, setTitle] = useState("");
   const [summary, setSummary] = useState('');
   const [link, setLink] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState('');
+
+    useEffect(async()=>{
+        let result = await fetch(baseUrl+'news/'+id)
+        result = await result.json()
+
+        setTitle(result.data.title)
+        setSummary(result.data.summary) 
+        setLink(result.data.link)
+        setUploadedUrl(result.data.photo)
+
+    },[])
 
 
   // const handleFile = (e)=>{
@@ -115,8 +128,8 @@ export default function Addnews() {
     formData.append('link', link);
 
     axios({
-      method: 'POST',
-      url: baseUrl+'news',
+      method: 'PUT',
+      url: baseUrl+'news/'+id,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -125,7 +138,7 @@ export default function Addnews() {
     })
       .then(function (response) {
         //handle success
-        alert('News uploaded successfully');
+        alert('News edited successfully');
         setSubmissionLoading(false);
       })
       .catch(function (response) {
@@ -140,9 +153,9 @@ export default function Addnews() {
   return (
     <Card>
       <CardHeader color="primary">
-        <h4 className={classes.cardTitleWhite}>Add News Screen</h4>
+        <h4 className={classes.cardTitleWhite}>Update News Screen</h4>
         <p className={classes.cardCategoryWhite}>
-          For uplaoding Published news of Hami Nepal
+          For editing Published news of Hami Nepal
         </p>
         <p className={classes.cardCategoryWhite}>
           Please check the information properly before submitting as it cannot
@@ -257,10 +270,10 @@ export default function Addnews() {
               <CircularProgress />
             ) : (
               <Button color="primary" type="submit">
-               Upload
+               Update
               </Button>
             )}
-          </GridItem>
+          </GridItem> 
         </form>
       </CardBody>
     </Card>

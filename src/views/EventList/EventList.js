@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-
 import {makeStyles} from '@material-ui/core/styles';
 
 import GridItem from 'components/Grid/GridItem.js';
@@ -21,12 +20,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import DialogueBox from 'components/DialogueBox';
+
 import {Link} from 'react-router-dom';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {listEvents} from 'store/actions/events.actions';
-import {deleteEvent} from './../../store/actions/events.actions';
+
 import api from 'api';
 
 const useStyles = makeStyles({
@@ -74,6 +73,7 @@ export default function EventList() {
       dispatch(listEvents());
     }
   }, []);
+  const handlePageClick = () => {};
 
   return (
     <GridContainer>
@@ -94,7 +94,7 @@ export default function EventList() {
             <TableContainer component={Paper}>
               <Table className={classes.table} aria-label="simple table">
                 <TableHead>
-                  <TableRow style={{backgroundColor:"#8B0000"}}>
+                  <TableRow>
                     {/* <TableCell>id </TableCell> */}
                     <TableCell align="center">Name</TableCell>
                     <TableCell align="right">Status</TableCell>
@@ -144,7 +144,7 @@ export default function EventList() {
                             </Link>
                           }
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="right" style={{cursor: 'pointer'}}>
                           {
                             <DeleteIcon
                               color="secondary"

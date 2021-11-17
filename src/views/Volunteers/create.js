@@ -25,6 +25,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import MyCustomUploadAdapterPlugin from 'utils/UploadAdapter';
 import {isEmail} from 'validator';
 
+import baseUrl from '../../api/baseUrl';
+
 const styles = {
   typo: {
     paddingLeft: '25%',
@@ -123,20 +125,12 @@ export default function AddNewEventPage() {
   const handleState = (e) => {
     setStat(e.target.value);
   };
-  
+
   const handleBlood = (event) => {
     setBloodGroup(event.target.value);
   };
 
   const [imageKeys, setImageKeys] = useState([]);
-
-  const handleTypeChange = (event) => {
-    setType(event.target.value);
-  };
-  const handleInputChange = (newValue) => {
-    let inputValue = newValue.replace(/\W/g, '');
-    setInputValue({inputValue});
-  };
 
   useEffect(() => {
     if (ckEditor) {
@@ -157,16 +151,19 @@ export default function AddNewEventPage() {
           );
           console.log(key);
           axios
-            .get(`https://haminepal.herokuapp.com/api/v1/uploads/image/delete`, {
-              params: {
-                key,
+            .get(
+              `https://haminepal.herokuapp.com/api/v1/uploads/image/delete`,
+              {
+                params: {
+                  key,
+                },
+                headers: {
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem('userInfo')).token
+                  }`,
+                },
               },
-              headers: {
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem('userInfo')).token
-                }`,
-              },
-            })
+            )
             .then((resp) => {
               setSeverity('success');
               setMessage('Successfully deleted the image to the server.');
@@ -214,7 +211,7 @@ export default function AddNewEventPage() {
 
     axios({
       method: 'POST',
-      url: 'http://localhost:5000/api/v1/volunteers',
+      url: baseUrl + 'volunteers',
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -314,7 +311,6 @@ export default function AddNewEventPage() {
                 onChange={(e) => {
                   setAge(e.target.value);
                 }}
-                
                 style={{width: '50%', margin: '30px 0'}}
               />
             </GridItem>
@@ -326,7 +322,6 @@ export default function AddNewEventPage() {
                 onChange={(e) => {
                   setExpertise(e.target.value);
                 }}
-                
                 style={{width: '50%', margin: '30px 0'}}
               />
             </GridItem>
@@ -438,9 +433,7 @@ export default function AddNewEventPage() {
               <FormControl
                 style={{width: '50%'}}
                 className={classes.formControl}>
-                <InputLabel id="demo-simple-select-label">
-                  State
-                </InputLabel>
+                <InputLabel id="demo-simple-select-label">State</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"

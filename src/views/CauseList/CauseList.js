@@ -136,7 +136,7 @@ export default function CauseList() {
                             <TableCell align="right">{row.type}</TableCell>
                             <TableCell align="right">{row.summary}</TableCell>
                             <TableCell align="right">
-                              <img src={row.photo} width={50} />
+                              <img src={row.photos[0]} width={50} />
                             </TableCell>
                             <TableCell align="right">
                               {row.description}
@@ -151,7 +151,9 @@ export default function CauseList() {
                                 </Link>
                               }
                             </TableCell>
-                            <TableCell align="right">
+                            <TableCell
+                              align="right"
+                              style={{cursor: 'pointer'}}>
                               {
                                 <DeleteIcon
                                   color="secondary"

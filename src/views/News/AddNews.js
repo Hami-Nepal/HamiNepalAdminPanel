@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
+import {useHistory} from 'react-router-dom';
 // @material-ui/core components
 
 import {useDropzone} from 'react-dropzone';
@@ -18,10 +19,9 @@ import Select from '@material-ui/core/Select';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
+import baseUrl from '../../api/baseUrl';
 
 import AsyncSelect from 'react-select/async';
-
-import baseUrl from '../../api/baseUrl'
 
 const styles = {
   typo: {
@@ -66,7 +66,7 @@ const loadOptions = (inputValue, callback) => {
   console.log(inputValue);
 };
 
-export default function TransparencyPage() {
+export default function Addnews() {
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
 
@@ -80,11 +80,16 @@ export default function TransparencyPage() {
 
   const classes = useStyles();
 
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState('');
+
+  const [summary, setSummary] = useState('');
+  const [link, setLink] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState('');
+
+  const history = useHistory();
 
   // const handleFile = (e)=>{
   //   console.log(e.target.files)
@@ -106,14 +111,14 @@ export default function TransparencyPage() {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
 
     const formData = new FormData();
-
-    formData.append('video', selectedFile);
-
-    formData.append('description', description);
+    formData.append('title', title);
+    formData.append('photo', selectedFile);
+    formData.append('summary', summary);
+    formData.append('link', link);
 
     axios({
-      method: 'PUT',
-      url: baseUrl + 'homepage/613e3067845f7e2e78c5863c',
+      method: 'POST',
+      url: baseUrl + 'news',
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -122,9 +127,9 @@ export default function TransparencyPage() {
     })
       .then(function (response) {
         //handle success
-        console.log(response);
-        alert('file updated successfully');
+        alert('News uploaded successfully');
         setSubmissionLoading(false);
+        history.push('/admin/news');
       })
       .catch(function (response) {
         //handle error
@@ -138,17 +143,41 @@ export default function TransparencyPage() {
   return (
     <Card>
       <CardHeader color="primary">
-        <h4 className={classes.cardTitleWhite}>Home Video Upload Screen</h4>
+        <h4 className={classes.cardTitleWhite}>Add News Screen</h4>
         <p className={classes.cardCategoryWhite}>
-          For uploading files for Home page
+          For uplaoding Published news of Hami Nepal
         </p>
         <p className={classes.cardCategoryWhite}>
-          Please check the information properly before uploading as it cannot be
-          manipulated again for security reasons !
+          Please check the information properly before submitting as it cannot
+          be manipulated again for security reasons !
         </p>
       </CardHeader>
       <CardBody>
         <form onSubmit={handleUpload}>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="Title"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+              required
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="Link"
+              value={link}
+              onChange={(e) => {
+                setLink(e.target.value);
+              }}
+              required
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
           {/* <GridItem xs={12} sm={12} md={4}>
             <TextField
               id="standard-basic"
@@ -165,10 +194,10 @@ export default function TransparencyPage() {
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
-              placeholder="Enter the Content"
-              value={description}
+              placeholder="Enter the summary"
+              value={summary}
               onChange={(e) => {
-                setDescription(e.target.value);
+                setSummary(e.target.value);
               }}
               required
               style={{
@@ -177,8 +206,8 @@ export default function TransparencyPage() {
                 padding: '20px',
                 fontSize: '16px',
                 fontFamily: 'Roboto',
-                color: '#c0c1c2',
-                fontWeight: '390',
+                color: 'black',
+                fontWeight: '400',
               }}
             />
           </GridItem>
@@ -192,7 +221,7 @@ export default function TransparencyPage() {
             /> */}
           </div>
           <GridItem xs={12} sm={12} md={4}>
-            <h5>Please upload a Home Video</h5>
+            <h5>Please upload the news cover Photo</h5>
             <div
               {...getRootProps()}
               required
@@ -201,20 +230,20 @@ export default function TransparencyPage() {
                 border: '1px solid gray',
                 padding: '20px',
                 marginBottom: '20px',
+                width: '100%',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (
-                <p>Drop the Video here or...</p>
+                <p>Drop the cover photo here or...</p>
               ) : (
-                <p>Drag 'n' drop a Video here, or click to select the video</p>
+                <p>
+                  Drag 'n' drop a cover photo here, or click to select cover
+                  photo
+                </p>
               )}
 
               {uploadedUrl && (
-                <video
-                  src={uploadedUrl}
-                  style={{height: '175px'}}
-                  type="video/mp4"
-                  autoPlay></video>
+                <img src={uploadedUrl} style={{height: '200px'}} />
               )}
             </div>
           </GridItem>
@@ -232,7 +261,7 @@ export default function TransparencyPage() {
               <CircularProgress />
             ) : (
               <Button color="primary" type="submit">
-                Update
+                Upload
               </Button>
             )}
           </GridItem>
