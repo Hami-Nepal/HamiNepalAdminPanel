@@ -10,8 +10,6 @@ import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import NewsIcon from '@material-ui/icons/RssFeed';
 import KindnessIcon from '@material-ui/icons/Accessibility';
 
-import AddNews from './views/AddNews/AddNews';
-
 // core components/views for Admin layout
 import DashboardPage from 'views/Dashboard/Dashboard.js';
 import DonationsPage from 'views/Donations/Donations.js';
