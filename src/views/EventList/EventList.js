@@ -25,8 +25,9 @@ import {Link} from 'react-router-dom';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {listEvents} from 'store/actions/events.actions';
-
+import axios from 'axios';
 import api from 'api';
+import baseUrl from 'api/baseUrl';
 
 const useStyles = makeStyles({
   table: {
@@ -73,20 +74,28 @@ export default function EventList() {
       dispatch(listEvents());
     }
   }, []);
-  const handlePageClick = () => {};
+  const changeStatus = async (id) => {
+    const token = JSON.parse(localStorage.getItem('userInfo')).token;
+    await axios.put(
+      baseUrl + 'events/' + id,
+      {status: 'ongoing' ? 'past' : 'ongoing'},
+      {headers: {Authorization: 'Bearer ' + token}},
+    );
+    dispatch(listEvents());
+  };
 
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Link to="/admin/events/addNewEvent">
-          <Button color="primary" type="submit">
+          <Button color="danger" type="submit">
             Add a new event
           </Button>
         </Link>
 
         {/* <DialogueBox /> */}
         <Card plain>
-          <CardHeader plain color="primary">
+          <CardHeader plain color="danger">
             <h4 className={classes.cardTitleWhite}>Events List</h4>
             <p className={classes.cardCategoryWhite}>Showing all the events</p>
           </CardHeader>
@@ -99,8 +108,8 @@ export default function EventList() {
                     <TableCell align="center">Name</TableCell>
                     <TableCell align="right">Status</TableCell>
                     <TableCell align="center">Type</TableCell>
-                    <TableCell align="center">Summary</TableCell>
-                    <TableCell align="center">Description</TableCell>
+                    <TableCell align="center">City</TableCell>
+                    <TableCell align="center">Fund Amount</TableCell>
                     <TableCell align="center">Updated At</TableCell>
                     <TableCell align="right">Edit</TableCell>
                     <TableCell align="right">Delete</TableCell>
@@ -130,10 +139,19 @@ export default function EventList() {
                           {row._id}
                         </TableCell> */}
                         <TableCell align="center">{row.name}</TableCell>
-                        <TableCell align="right">{row.status}</TableCell>
-                        <TableCell align="right">{row.type}</TableCell>
-                        <TableCell align="center">{row.summary}</TableCell>
-                        <TableCell align="center">{row.description}</TableCell>
+                        <TableCell align="center">
+                          <span
+                            onClick={() => changeStatus(row._id)}
+                            style={{
+                              color: row.status === 'ongoing' ? 'green' : 'red',
+                              cursor: 'pointer',
+                            }}>
+                            {row.status}
+                          </span>
+                        </TableCell>
+                        <TableCell align="center">{row.type}</TableCell>
+                        <TableCell align="center">{row.city}</TableCell>
+                        <TableCell align="center">{row.balance}</TableCell>
                         <TableCell align="center">
                           {row.updatedAt.slice(0, 10)}
                         </TableCell>
@@ -160,7 +178,7 @@ export default function EventList() {
 
                   {deleteEventSuccess ? (
                     <Alert severity="success">
-                      <AlertTitle>Error</AlertTitle>
+                      <AlertTitle>Success</AlertTitle>
                       Event deleted Successfully
                     </Alert>
                   ) : null}

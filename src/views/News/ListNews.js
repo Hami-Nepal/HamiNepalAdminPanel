@@ -76,14 +76,14 @@ export default function NewssList() {
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Link to="/admin/news/create">
-          <Button color="primary" type="submit">
+          <Button color="danger" type="submit">
             Add new News
           </Button>
         </Link>
 
         {/* <DialogueBox /> */}
         <Card plain>
-          <CardHeader plain color="primary">
+          <CardHeader plain color="danger">
             <h4 className={classes.cardTitleWhite}>Published News List</h4>
             <p className={classes.cardCategoryWhite}>Showing all the News</p>
           </CardHeader>

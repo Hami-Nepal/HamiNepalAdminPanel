@@ -215,7 +215,7 @@ export const dashboardRoutes = [
   },
   {
     path: '/CauseEventType',
-    name: 'Create Cause/Event Type',
+    name: 'Cause/Event Type',
     icon: CompareArrowsIcon,
     component: CasueEventType,
     layout: '/admin',

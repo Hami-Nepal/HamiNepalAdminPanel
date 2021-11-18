@@ -188,7 +188,7 @@ export default function AddNewEventPage({match}) {
         </Alert>
       </Snackbar>
       <Card>
-        <CardHeader color="primary">
+        <CardHeader color="danger">
           <h4 className={classes.cardTitleWhite}>Edit Event Screen</h4>
           <p className={classes.cardCategoryWhite}>
             For updating images for events
@@ -457,7 +457,7 @@ export default function AddNewEventPage({match}) {
               {submissionLoading ? (
                 <CircularProgress />
               ) : (
-                <Button color="primary" type="submit">
+                <Button color="danger" type="submit">
                   Update
                 </Button>
               )}

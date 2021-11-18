@@ -7,7 +7,7 @@ import GridContainer from 'components/Grid/GridContainer.js';
 import Card from 'components/Card/Card.js';
 import CardHeader from 'components/Card/CardHeader.js';
 import CardBody from 'components/Card/CardBody.js';
-
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -27,6 +27,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {listCauses} from 'store/actions/causes.actions';
 import {deleteCause} from './../../store/actions/causes.actions';
 import api from 'api';
+import baseURL from 'api/baseUrl';
+import axios from 'axios';
 
 const useStyles = makeStyles({
   table: {
@@ -75,18 +77,28 @@ export default function CauseList() {
     }
   }, []);
 
+  const changeStatus = async (id) => {
+    const token = JSON.parse(localStorage.getItem('userInfo')).token;
+    await axios.put(
+      baseURL + 'causes/' + id,
+      {status: 'ongoing' ? 'past' : 'ongoing'},
+      {headers: {Authorization: 'Bearer ' + token}},
+    );
+    dispatch(listCauses());
+  };
+
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Link to="/admin/causes/addNewCause">
-          <Button color="primary" type="submit">
+          <Button color="danger" type="submit">
             Add a new cause
           </Button>
         </Link>
 
         {/* <DialogueBox /> */}
         <Card plain>
-          <CardHeader plain color="primary">
+          <CardHeader plain color="danger">
             <h4 className={classes.cardTitleWhite}>Causes List</h4>
             <p className={classes.cardCategoryWhite}>Showing all the causes</p>
           </CardHeader>
@@ -96,14 +108,15 @@ export default function CauseList() {
                 <TableHead>
                   <TableRow>
                     {/* <TableCell>id </TableCell> */}
+
                     <TableCell align="center">Name</TableCell>
-                    <TableCell align="right">Status</TableCell>
-                    <TableCell align="right">Type</TableCell>
-                    <TableCell align="right">Summary</TableCell>
-                    <TableCell align="right">Image</TableCell>
-                    <TableCell align="center">Description</TableCell>
-                    <TableCell align="right">Updated At</TableCell>
-                    <TableCell align="right">Actions</TableCell>
+                    <TableCell align="center">Status</TableCell>
+                    <TableCell align="center">Type</TableCell>
+
+                    <TableCell align="center">Image</TableCell>
+                    <TableCell align="center">Fund Amount</TableCell>
+                    <TableCell align="center">Updated At</TableCell>
+                    <TableCell align="center">Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -131,22 +144,30 @@ export default function CauseList() {
                             {/* <TableCell component="th" scope="row">
                               {row._id}
                             </TableCell> */}
-                            <TableCell align="right">{row.name}</TableCell>
-                            <TableCell align="right">{row.status}</TableCell>
-                            <TableCell align="right">
+                            <TableCell align="center">{row.name}</TableCell>
+                            <TableCell align="center">
+                              <span
+                                onClick={() => changeStatus(row._id)}
+                                style={{
+                                  color:
+                                    row.status === 'ongoing' ? 'green' : 'red',
+                                  cursor: 'pointer',
+                                }}>
+                                {row.status}
+                              </span>
+                            </TableCell>
+                            <TableCell align="center">
                               {row.cause_type}
                             </TableCell>
-                            <TableCell align="right">{row.summary}</TableCell>
-                            <TableCell align="right">
+
+                            <TableCell align="center">
                               <img src={row.photos[0]} width={50} />
                             </TableCell>
-                            <TableCell align="right">
-                              {row.description}
-                            </TableCell>
-                            <TableCell align="right">
+                            <TableCell align="center">{row.balance}</TableCell>
+                            <TableCell align="center">
                               {row.updatedAt.slice(0, 10)}
                             </TableCell>
-                            <TableCell align="right">
+                            <TableCell align="center">
                               {
                                 <Link to={`/admin/causes/edit/${row._id}`}>
                                   <EditIcon color="primary" />

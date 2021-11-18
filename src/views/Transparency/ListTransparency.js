@@ -78,14 +78,14 @@ export default function TransparencysList() {
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Link to="/admin/transparency/create">
-          <Button color="primary" type="submit">
+          <Button color="danger" type="submit">
             Add new Transparency
           </Button>
         </Link>
 
         {/* <DialogueBox /> */}
         <Card plain>
-          <CardHeader plain color="primary">
+          <CardHeader plain color="danger">
             <h4 className={classes.cardTitleWhite}>Transparency List</h4>
             <p className={classes.cardCategoryWhite}>
               Showing all the Transparencies

@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
 // @material-ui/core components
-
 import {makeStyles} from '@material-ui/core/styles';
 import GridItem from 'components/Grid/GridItem.js';
 import GridContainer from 'components/Grid/GridContainer.js';
@@ -18,6 +17,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import baseUrl from '../../api/baseUrl';
+import api from 'api';
 
 // list table import
 
@@ -102,7 +102,16 @@ export default function AddCauseEvent() {
           },
         },
       )
-      .catch(({res}) => console.log(res));
+      .then(function (response) {
+        //handle success
+        alert('Cause Type Created Successfully');
+        setSubmissionLoading(false);
+      })
+      .catch(function (response) {
+        //handle error
+        setCauseError(response.message);
+        setSubmissionLoading(false);
+      });
   };
 
   const handleEventUpload = (e) => {
@@ -113,19 +122,21 @@ export default function AddCauseEvent() {
     // const formData = new FormData();
     // formData.append('event_type', eventType);
     // console.log(formData);
-    axios({
-      method: 'POST',
-      url: baseUrl + 'event_type',
-      data: eventType,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        authorization: `Bearer ${token}`,
-      },
-    })
+    axios
+      .post(
+        baseUrl + 'event_type',
+        {event_type: eventType},
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        },
+      )
       .then(function (response) {
         //handle success
         alert('Event Type Created Successfully');
         setSubmissionLoading(false);
+        history.push('/admin/CauseEventType');
       })
       .catch(function (response) {
         //handle error
@@ -165,16 +176,46 @@ export default function AddCauseEvent() {
   useEffect(fetchEventData, []);
 
   const handleDeleteCause = async (id) => {
-    console.log('deleted');
+    const token = JSON.parse(localStorage.getItem('userInfo')).token;
+    const config = {
+      headers: {
+        // 'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const response = await api.delete(`/cause_type/${id}`, config);
+      setDeleteCauseSuccess(true);
+      setCauseList(causeList.filter(({_id}) => _id !== id));
+    } catch (err) {
+      setCauseError(err);
+      setDeleteCauseError(true);
+    }
   };
   const handleDeleteEvent = async (id) => {
-    console.log('deleted');
+    const token = JSON.parse(localStorage.getItem('userInfo')).token;
+    const config = {
+      headers: {
+        // 'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    try {
+      const response = await api.delete(`/event_type/${id}`, config);
+      setDeleteEventSuccess(true);
+      setEventList(eventList.filter(({_id}) => _id !== id));
+    } catch (err) {
+      setEventError(err);
+      setDeleteEventError(true);
+    }
   };
 
   return (
     <>
       <Card>
-        <CardHeader color="primary">
+        <CardHeader color="danger">
           <h4 className={classes.cardTitleWhite}>
             Create Cause and Event Screen
           </h4>
@@ -229,7 +270,7 @@ export default function AddCauseEvent() {
                 {submissionLoading ? (
                   <CircularProgress />
                 ) : (
-                  <Button color="primary" type="submit">
+                  <Button color="danger" type="submit">
                     Create cause Type
                   </Button>
                 )}
@@ -262,7 +303,7 @@ export default function AddCauseEvent() {
                 {submissionLoading ? (
                   <CircularProgress />
                 ) : (
-                  <Button color="primary" type="submit">
+                  <Button color="danger" type="submit">
                     Create Event Type
                   </Button>
                 )}
@@ -275,7 +316,7 @@ export default function AddCauseEvent() {
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card plain>
-              <CardHeader plain color="primary">
+              <CardHeader plain color="danger">
                 <h4 className={classes.cardTitleWhite}>
                   Published Cause Type List
                 </h4>
@@ -355,11 +396,11 @@ export default function AddCauseEvent() {
             </Card>
           </GridItem>
         </GridContainer>
-      ) : (
+      ) : type === 'event' ? (
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card plain>
-              <CardHeader plain color="primary">
+              <CardHeader plain color="danger">
                 <h4 className={classes.cardTitleWhite}>
                   Published Event Type List
                 </h4>
@@ -439,6 +480,14 @@ export default function AddCauseEvent() {
             </Card>
           </GridItem>
         </GridContainer>
+      ) : (
+        <CardHeader plain color="danger">
+          <h4 className={classes.cardTitleWhite}>Select Type</h4>
+          <p className={classes.cardCategoryWhite}>
+            Please choose type cause or event to display existing cause/event
+            type
+          </p>
+        </CardHeader>
       )}
     </>
   );

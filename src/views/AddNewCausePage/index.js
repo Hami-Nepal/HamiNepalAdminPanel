@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
+import {useHistory} from 'react-router-dom';
 import {useDropzone} from 'react-dropzone';
 import {makeStyles} from '@material-ui/core/styles';
 import GridItem from 'components/Grid/GridItem.js';
@@ -101,6 +102,7 @@ export default function AddNewCausePage({match}) {
     setCauseTypes(cause_types.data.data.Cause_type_var);
   }, []);
 
+  const history = useHistory();
   const handleCauseAdd = (e) => {
     e.preventDefault();
     setSubmissionLoading(true);
@@ -130,6 +132,7 @@ export default function AddNewCausePage({match}) {
         //handle success
         alert('cause added successfully');
         setSubmissionLoading(false);
+        history.push('/admin/causes');
       })
       .catch(function (response) {
         //handle error
@@ -144,8 +147,8 @@ export default function AddNewCausePage({match}) {
         <div></div>
       </>
       <Card>
-        <CardHeader color="primary">
-          <h4 className={classes.cardTitleWhite}>Edit the Cause</h4>
+        <CardHeader color="danger">
+          <h4 className={classes.cardTitleWhite}>Add New Cause</h4>
           {/* <p className={classes.cardCategoryWhite}>
             For creating and uploading images for new causes
           </p> */}
@@ -357,8 +360,8 @@ export default function AddNewCausePage({match}) {
               {submissionLoading ? (
                 <CircularProgress />
               ) : (
-                <Button color="primary" type="submit">
-                  Update
+                <Button color="danger" type="submit">
+                  Add cause
                 </Button>
               )}
             </GridItem>

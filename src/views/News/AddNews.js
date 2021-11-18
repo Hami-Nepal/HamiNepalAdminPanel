@@ -142,7 +142,7 @@ export default function Addnews() {
 
   return (
     <Card>
-      <CardHeader color="primary">
+      <CardHeader color="danger">
         <h4 className={classes.cardTitleWhite}>Add News Screen</h4>
         <p className={classes.cardCategoryWhite}>
           For uplaoding Published news of Hami Nepal
@@ -260,7 +260,7 @@ export default function Addnews() {
             {submissionLoading ? (
               <CircularProgress />
             ) : (
-              <Button color="primary" type="submit">
+              <Button color="danger" type="submit">
                 Upload
               </Button>
             )}

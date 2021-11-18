@@ -18,10 +18,12 @@ import Select from '@material-ui/core/Select';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
+import {CKEditor} from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import AsyncSelect from 'react-select/async';
 
-import baseUrl from '../../api/baseUrl'
+import baseUrl from '../../api/baseUrl';
 
 const styles = {
   typo: {
@@ -137,7 +139,7 @@ export default function TransparencyPage() {
 
   return (
     <Card>
-      <CardHeader color="primary">
+      <CardHeader color="danger">
         <h4 className={classes.cardTitleWhite}>Home Video Upload Screen</h4>
         <p className={classes.cardCategoryWhite}>
           For uploading files for Home page
@@ -161,24 +163,19 @@ export default function TransparencyPage() {
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem> */}
-          <GridItem xs={12} sm={12} md={4}>
-            <TextareaAutosize
-              aria-label="minimum height"
-              rowsMin={5}
-              placeholder="Enter the Content"
-              value={description}
-              onChange={(e) => {
-                setDescription(e.target.value);
+          <GridItem xs={12} sm={12} md={8}>
+            <h5>Please add the title</h5>
+            <CKEditor
+              editor={ClassicEditor}
+              data={description}
+              onReady={(editor) => {
+                // You can store the "editor" and use when it is needed.
+                // console.log('Editor is ready to use!', editor);
               }}
-              required
-              style={{
-                width: '500px',
-                margin: '30px 0',
-                padding: '20px',
-                fontSize: '16px',
-                fontFamily: 'Roboto',
-                color: '#c0c1c2',
-                fontWeight: '390',
+              onChange={(event, editor) => {
+                const data = editor.getData();
+
+                setDescription(data);
               }}
             />
           </GridItem>
@@ -231,7 +228,7 @@ export default function TransparencyPage() {
             {submissionLoading ? (
               <CircularProgress />
             ) : (
-              <Button color="primary" type="submit">
+              <Button color="danger" type="submit">
                 Update
               </Button>
             )}

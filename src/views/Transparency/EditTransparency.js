@@ -152,7 +152,7 @@ export default function TransparencyPage({match}) {
 
   return (
     <Card>
-      <CardHeader color="primary">
+      <CardHeader color="danger">
         <h4 className={classes.cardTitleWhite}>Transparency CMS Screen</h4>
         <p className={classes.cardCategoryWhite}>
           For uploading for transparencies
@@ -365,7 +365,7 @@ export default function TransparencyPage({match}) {
             {submissionLoading ? (
               <CircularProgress />
             ) : (
-              <Button color="primary" type="submit">
+              <Button color="danger" type="submit">
                 Submit
               </Button>
             )}

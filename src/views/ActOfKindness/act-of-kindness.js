@@ -82,7 +82,6 @@ export default function CauseList() {
 
     for (let i = 1; i <= 5; i++) {
       if (!rankings.includes(i)) {
-        console.log(i, 'testing I ko value');
         nextRanking = i;
         break;
       }
@@ -105,14 +104,14 @@ export default function CauseList() {
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Link to="/admin/act-of-kindness/create">
-          <Button color="primary" type="submit">
+          <Button color="danger" type="submit">
             Add a new Kindness
           </Button>
         </Link>
 
         {/* <DialogueBox /> */}
         <Card plain>
-          <CardHeader plain color="primary">
+          <CardHeader plain color="danger">
             <h4 className={classes.cardTitleWhite}>Kindnesss List</h4>
             <p className={classes.cardCategoryWhite}>
               Showing all the Kindnesss

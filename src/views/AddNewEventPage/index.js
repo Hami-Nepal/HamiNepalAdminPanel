@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useCallback, useRef} from 'react';
+import {useHistory} from 'react-router-dom';
 import {useDropzone} from 'react-dropzone';
 import {makeStyles} from '@material-ui/core/styles';
 import GridItem from 'components/Grid/GridItem.js';
@@ -147,6 +148,8 @@ export default function AddNewEventPage() {
     setInputValue({inputValue});
   };
 
+  const history = useHistory();
+
   const handleEventSubmit = (e) => {
     e.preventDefault();
     setSubmissionLoading(true);
@@ -169,7 +172,7 @@ export default function AddNewEventPage() {
 
     axios({
       method: 'POST',
-      url: 'https://haminepal.herokuapp.com/api/v1/events',
+      url: baseUrl + 'events',
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -181,6 +184,7 @@ export default function AddNewEventPage() {
         console.log(response);
         alert('file uploaded successfully');
         setSubmissionLoading(false);
+        history.push('/admin/events');
       })
       .catch(function (response) {
         //handle error
@@ -199,7 +203,7 @@ export default function AddNewEventPage() {
         </Alert>
       </Snackbar>
       <Card>
-        <CardHeader color="primary">
+        <CardHeader color="danger">
           <h4 className={classes.cardTitleWhite}>Edit Event Screen</h4>
           <p className={classes.cardCategoryWhite}>
             For updating images for events
@@ -375,18 +379,7 @@ export default function AddNewEventPage() {
                 style={{width: '50%', margin: '30px 0'}}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={12}>
-              <TextField
-                id="standard-basic"
-                label="Country"
-                value={country}
-                onChange={(e) => {
-                  setCountry(e.target.value);
-                }}
-                required
-                style={{width: '50%', margin: '30px 0'}}
-              />
-            </GridItem>
+
             <GridItem xs={12} sm={12} md={12}>
               <InputLabel id="demo-simple-select-label">
                 Difficulties
@@ -415,7 +408,7 @@ export default function AddNewEventPage() {
                 aria-label="minimum height"
                 rowsMin={5}
                 placeholder="Enter the challenges about the event not exceeding 250 character"
-                value={summary}
+                value={challenges}
                 onChange={(e) => {
                   setChallenges(e.target.value);
                 }}
@@ -468,7 +461,7 @@ export default function AddNewEventPage() {
               {submissionLoading ? (
                 <CircularProgress />
               ) : (
-                <Button color="primary" type="submit">
+                <Button color="danger" type="submit">
                   Submit
                 </Button>
               )}

@@ -158,7 +158,7 @@ export default function AddNewCausePage({match}) {
         <div></div>
       </>
       <Card>
-        <CardHeader color="primary">
+        <CardHeader color="danger">
           <h4 className={classes.cardTitleWhite}>Edit the Cause</h4>
           {/* <p className={classes.cardCategoryWhite}>
             For creating and uploading images for new causes
@@ -371,7 +371,7 @@ export default function AddNewCausePage({match}) {
               {submissionLoading ? (
                 <CircularProgress />
               ) : (
-                <Button color="primary" type="submit">
+                <Button color="danger" type="submit">
                   Update
                 </Button>
               )}

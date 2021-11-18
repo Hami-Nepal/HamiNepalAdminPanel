@@ -34,6 +34,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import {listVolunteers} from './../../store/actions/volunteers.actions';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TableBody from '@material-ui/core/TableBody';
+
 // import {
 //   dailySalesChart,
 //   emailsSubscriptionChart,
@@ -45,6 +50,7 @@ import styles from 'assets/jss/material-dashboard-react/views/dashboardStyle.js'
 import baseUrl from '../../api/baseUrl';
 import axios from 'axios';
 import {createFalse} from 'typescript';
+import CauseList from 'views/CauseList/CauseList';
 
 const useStyles = makeStyles(styles);
 
@@ -86,6 +92,51 @@ export default function Dashboard() {
     serTotalExpenses(response.data.data[0].total_expenses);
     serTotalExpensesLoading(false);
   }, []);
+
+  //event States
+  const [eventList, setEventList] = useState([]);
+  const [error, setError] = useState('');
+  const [eventListError, setEventListError] = useState(false);
+  const [eventListLoading, setEventListLoading] = useState(true);
+
+  //cause States
+  const [causeList, setCauseList] = useState([]);
+  const [causeListError, setCauseListError] = useState(false);
+  const [causeListLoading, setCauseListLoading] = useState(true);
+
+  const fetchEventData = async () => {
+    const response = await axios
+      .get(baseUrl + 'events?sort=-balance&limit=5&status=ongoing')
+      .then(function (response) {
+        //handle success
+        setEventList(response.data.data);
+        setEventListLoading(false);
+      })
+      .catch(function (response) {
+        //handle error
+        setError(response.message);
+        setEventListError(true);
+        setEventListLoading(false);
+      });
+  };
+  useEffect(fetchEventData, []);
+
+  const fetchCauseData = async () => {
+    const response = await axios
+      .get(baseUrl + 'causes?sort=-balance&limit=5&status=ongoing')
+      .then(function (response) {
+        //handle success
+        setCauseList(response.data.data.causes);
+        setCauseListLoading(false);
+      })
+      .catch(function (response) {
+        //handle error
+        setError(response.message);
+        setCauseListError(true);
+        setCauseListLoading(false);
+      });
+  };
+  useEffect(fetchCauseData, []);
 
   return (
     <div>
@@ -175,139 +226,118 @@ export default function Dashboard() {
           </Card>
         </GridItem>
       </GridContainer>
-      {/* <GridContainer>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="danger">
-              <ChartistGraph
-                className="ct-chart"
-                data={dailySalesChart.data}
-                type="Line"
-                options={dailySalesChart.options}
-                listener={dailySalesChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Daily Sales</h4>
-              <p className={classes.cardCategory}>
-                <span className={classes.successText}>
-                  <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                </span>{' '}
-                increase in today sales.
-              </p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="danger">
-              <ChartistGraph
-                className="ct-chart"
-                data={emailsSubscriptionChart.data}
-                type="Bar"
-                options={emailsSubscriptionChart.options}
-                responsiveOptions={emailsSubscriptionChart.responsiveOptions}
-                listener={emailsSubscriptionChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="danger">
-              <ChartistGraph
-                className="ct-chart"
-                data={completedTasksChart.data}
-                type="Line"
-                options={completedTasksChart.options}
-                listener={completedTasksChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Completed Tasks</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-      </GridContainer> */}
       <GridContainer>
         <GridItem xs={12} sm={12} md={6}>
-          <CustomTabs
-            title="Tasks:"
-            headerColor="danger"
-            tabs={[
-              {
-                tabName: 'Bugs',
-                tabIcon: BugReport,
-                tabContent: (
-                  <Tasks
-                    checkedIndexes={[0, 3]}
-                    tasksIndexes={[0, 1, 2, 3]}
-                    tasks={bugs}
-                  />
-                ),
-              },
-              {
-                tabName: 'Website',
-                tabIcon: Code,
-                tabContent: (
-                  <Tasks
-                    checkedIndexes={[0]}
-                    tasksIndexes={[0, 1]}
-                    tasks={website}
-                  />
-                ),
-              },
-              {
-                tabName: 'Server',
-                tabIcon: Cloud,
-                tabContent: (
-                  <Tasks
-                    checkedIndexes={[1]}
-                    tasksIndexes={[0, 1, 2]}
-                    tasks={server}
-                  />
-                ),
-              },
-            ]}
-          />
+          <Card>
+            <CardHeader color="success">
+              <h4 className={classes.cardTitleWhite}>Ongoing Events</h4>
+              <p className={classes.cardCategoryWhite}>
+                list of ongoing events based on fund amount
+              </p>
+            </CardHeader>
+            <CardBody>
+              <TableHead>
+                <TableRow>
+                  {/* <TableCell>id </TableCell> */}
+                  <TableCell align="center">Event Title</TableCell>
+                  <TableCell align="center">Event Type</TableCell>
+                  <TableCell align="center">Fund Amount</TableCell>
+                  <TableCell align="center">Created At</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {eventListLoading ? (
+                  <CircularProgress />
+                ) : eventListError ? (
+                  <Alert severity="error">
+                    <AlertTitle>Error</AlertTitle>
+                    Something bad happened —{error}
+                    <strong>Please try again later.</strong>
+                    <br></br>
+                    <br></br>
+                    <Button
+                      onClick={fetchEventData}
+                      variant="outlined"
+                      color="secondary">
+                      Try Again
+                    </Button>
+                  </Alert>
+                ) : (
+                  eventList.length &&
+                  (eventList
+                    ? eventList.map((row) => (
+                        <TableRow key={row._id}>
+                          {/* <TableCell component="th" scope="row">
+                              {row._id}
+                            </TableCell> */}
+                          <TableCell align="center">{row.name}</TableCell>
+                          <TableCell align="center">{row.type}</TableCell>
+                          <TableCell align="center">{row.balance}</TableCell>
+                          <TableCell align="center">
+                            {row.createdAt.slice(0, 10)}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    : '')
+                )}
+              </TableBody>
+            </CardBody>
+          </Card>
         </GridItem>
         <GridItem xs={12} sm={12} md={6}>
           <Card>
-            <CardHeader color="danger">
-              <h4 className={classes.cardTitleWhite}>what to put here???</h4>
-              <p className={classes.cardCategoryWhite}>Any suggestions?</p>
+            <CardHeader color="success">
+              <h4 className={classes.cardTitleWhite}>Ongoing Causes</h4>
+              <p className={classes.cardCategoryWhite}>
+                list of ongoing causes based on fund amount
+              </p>
             </CardHeader>
             <CardBody>
-              <Table
-                tableHeaderColor="danger"
-                tableHead={['1', '2', '3', '4']}
-                tableData={[
-                  ['1', 'Dakota Rice', '$36,738', 'Niger'],
-                  ['2', 'Minerva Hooper', '$23,789', 'Curaçao'],
-                  ['3', 'Sage Rodriguez', '$56,142', 'Netherlands'],
-                  ['4', 'Philip Chaney', '$38,735', 'Korea, South'],
-                ]}
-              />
+              <TableHead>
+                <TableRow>
+                  {/* <TableCell>id </TableCell> */}
+                  <TableCell align="center">Cause Title</TableCell>
+                  <TableCell align="center">Cause Type</TableCell>
+                  <TableCell align="center">Fund Amount</TableCell>
+                  <TableCell align="center">Created At</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {causeListLoading ? (
+                  <CircularProgress />
+                ) : causeListError ? (
+                  <Alert severity="error">
+                    <AlertTitle>Error</AlertTitle>
+                    Something bad happened —{error}
+                    <strong>Please try again later.</strong>
+                    <br></br>
+                    <br></br>
+                    <Button
+                      onClick={fetchCauseData}
+                      variant="outlined"
+                      color="secondary">
+                      Try Again
+                    </Button>
+                  </Alert>
+                ) : (
+                  causeList.length &&
+                  (causeList
+                    ? causeList.map((row) => (
+                        <TableRow key={row._id}>
+                          {/* <TableCell component="th" scope="row">
+                              {row._id}
+                            </TableCell> */}
+                          <TableCell align="center">{row.name}</TableCell>
+                          <TableCell align="center">{row.cause_type}</TableCell>
+                          <TableCell align="center">{row.balance}</TableCell>
+                          <TableCell align="center">
+                            {row.createdAt.slice(0, 10)}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    : '')
+                )}
+              </TableBody>
             </CardBody>
           </Card>
         </GridItem>

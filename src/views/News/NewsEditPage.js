@@ -18,8 +18,8 @@ import Select from '@material-ui/core/Select';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-import baseUrl from '../../api/baseUrl'
-import ListNews from './ListNews'
+import baseUrl from '../../api/baseUrl';
+import ListNews from './ListNews';
 
 import AsyncSelect from 'react-select/async';
 
@@ -67,7 +67,7 @@ const loadOptions = (inputValue, callback) => {
 };
 
 export default function Editnews({match}) {
-    const id = match.params.id;
+  const id = match.params.id;
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
 
@@ -82,7 +82,7 @@ export default function Editnews({match}) {
 
   const classes = useStyles();
 
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
   const [link, setLink] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
@@ -90,17 +90,15 @@ export default function Editnews({match}) {
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState('');
 
-    useEffect(async()=>{
-        let result = await fetch(baseUrl+'news/'+id)
-        result = await result.json()
+  useEffect(async () => {
+    let result = await fetch(baseUrl + 'news/' + id);
+    result = await result.json();
 
-        setTitle(result.data.title)
-        setSummary(result.data.summary) 
-        setLink(result.data.link)
-        setUploadedUrl(result.data.photo)
-
-    },[])
-
+    setTitle(result.data.title);
+    setSummary(result.data.summary);
+    setLink(result.data.link);
+    setUploadedUrl(result.data.photo);
+  }, []);
 
   // const handleFile = (e)=>{
   //   console.log(e.target.files)
@@ -129,7 +127,7 @@ export default function Editnews({match}) {
 
     axios({
       method: 'PUT',
-      url: baseUrl+'news/'+id,
+      url: baseUrl + 'news/' + id,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -152,7 +150,7 @@ export default function Editnews({match}) {
 
   return (
     <Card>
-      <CardHeader color="primary">
+      <CardHeader color="danger">
         <h4 className={classes.cardTitleWhite}>Update News Screen</h4>
         <p className={classes.cardCategoryWhite}>
           For editing Published news of Hami Nepal
@@ -240,14 +238,15 @@ export default function Editnews({match}) {
                 border: '1px solid gray',
                 padding: '20px',
                 marginBottom: '20px',
-                width:'100%'
+                width: '100%',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (
                 <p>Drop the cover photo here or...</p>
               ) : (
                 <p>
-                  Drag 'n' drop a cover photo here, or click to select cover photo
+                  Drag 'n' drop a cover photo here, or click to select cover
+                  photo
                 </p>
               )}
 
@@ -269,11 +268,11 @@ export default function Editnews({match}) {
             {submissionLoading ? (
               <CircularProgress />
             ) : (
-              <Button color="primary" type="submit">
-               Update
+              <Button color="danger" type="submit">
+                Update
               </Button>
             )}
-          </GridItem> 
+          </GridItem>
         </form>
       </CardBody>
     </Card>
