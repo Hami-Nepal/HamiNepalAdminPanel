@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 
+import axios from 'axios';
 import {makeStyles} from '@material-ui/core/styles';
 
 import GridItem from 'components/Grid/GridItem.js';
@@ -9,6 +10,8 @@ import CardHeader from 'components/Card/CardHeader.js';
 import CardBody from 'components/Card/CardBody.js';
 
 import Table from '@material-ui/core/Table';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -22,73 +25,71 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DialogueBox from 'components/DialogueBox';
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import {Link} from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
-import {listCauses} from 'store/actions/causes.actions';
-import {deleteCause} from './../../store/actions/causes.actions';
 import api from 'api';
+import baseURL from 'api/baseUrl';
 
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
 });
-export default function CauseList() {
+export default function TransparencysList() {
   const classes = useStyles();
 
-  const dispatch = useDispatch();
-
-  const [deleteCauseSuccess, setDeleteCauseSuccess] = useState(false);
-  const [deleteCauseError, setDeleteCauseError] = useState('');
+  const [deleteTransparencySuccess, setDeleteTransparencySuccess] = useState(
+    false,
+  );
+  const [deleteTransparencyError, setDeleteTransparencyError] = useState('');
   const [error, setError] = useState();
+  const [transparencyListSuccess, setTransparencyListSuccess] = useState(null);
+  const [transparencyListError, setTransparencyListError] = useState(null);
+  const [transparencyListLoading, setTransparencyListLoading] = useState(true);
+  const [transparencyList, setTransparencyList] = useState([]);
 
-  const {
-    causeListSuccess,
-    causeListError,
-    causeListLoading,
-    causeList,
-  } = useSelector((state) => state.causes);
-
-  const handleDeleteCause = async (id) => {
+  const handleDeleteTransparency = async (id) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
     const config = {
       headers: {
-        // 'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
     };
 
     try {
-      const response = await api.delete(`/causes/${id}`, config);
-      setDeleteCauseSuccess(true);
-      dispatch(listCauses());
+      const response = await api.delete(`/transparency/${id}`, config);
+      setDeleteTransparencySuccess(true);
+      setTransparencyList(transparencyList.filter(({_id}) => _id !== id));
     } catch (err) {
       setError(err);
-      setDeleteCauseError(true);
+      setDeleteTransparencyError(true);
     }
   };
 
-  useEffect(() => {
-    if (!causeListSuccess) {
-      dispatch(listCauses());
-      console.log(causeList);
-    }
-  }, []);
+  const fetchData = async () => {
+    const {data: response} = await axios.get(baseURL + 'transparency');
+    setTransparencyList(response.data.transparencies);
+    setTransparencyListLoading(false);
+  };
+
+  useEffect(fetchData, []);
 
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
-        <Link to="/admin/causes/addNewCause">
+        <Link to="/admin/transparency/create">
           <Button color="primary" type="submit">
-            Add a new cause
+            Add new Transparency
           </Button>
         </Link>
 
         {/* <DialogueBox /> */}
         <Card plain>
           <CardHeader plain color="primary">
-            <h4 className={classes.cardTitleWhite}>Causes List</h4>
-            <p className={classes.cardCategoryWhite}>Showing all the causes</p>
+            <h4 className={classes.cardTitleWhite}>Transparency List</h4>
+            <p className={classes.cardCategoryWhite}>
+              Showing all the Transparencies
+            </p>
           </CardHeader>
           <CardBody>
             <TableContainer component={Paper}>
@@ -97,19 +98,18 @@ export default function CauseList() {
                   <TableRow>
                     {/* <TableCell>id </TableCell> */}
                     <TableCell align="center">Name</TableCell>
-                    <TableCell align="right">Status</TableCell>
-                    <TableCell align="right">Type</TableCell>
-                    <TableCell align="right">Summary</TableCell>
-                    <TableCell align="right">Image</TableCell>
-                    <TableCell align="center">Description</TableCell>
-                    <TableCell align="right">Updated At</TableCell>
-                    <TableCell align="right">Actions</TableCell>
+                    <TableCell align="center">Type</TableCell>
+                    <TableCell align="center">Amount</TableCell>
+                    <TableCell align="center">Photo</TableCell>
+                    <TableCell align="center">Updated At</TableCell>
+                    <TableCell align="center ">Edit</TableCell>
+                    <TableCell align="center ">Delete</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {causeListLoading ? (
+                  {transparencyListLoading ? (
                     <CircularProgress />
-                  ) : causeListError ? (
+                  ) : transparencyListError ? (
                     <Alert severity="error">
                       <AlertTitle>Error</AlertTitle>
                       Something bad happened —{' '}
@@ -117,49 +117,44 @@ export default function CauseList() {
                       <br></br>
                       <br></br>
                       <Button
-                        onClick={(e) => dispatch(listCauses())}
+                        onClick={fetchData}
                         variant="outlined"
                         color="secondary">
                         Try Again
                       </Button>
                     </Alert>
                   ) : (
-                    causeList &&
-                    (causeList.data
-                      ? causeList.data.causes.map((row) => (
+                    transparencyList.length &&
+                    (transparencyList
+                      ? transparencyList.map((row) => (
                           <TableRow key={row._id}>
                             {/* <TableCell component="th" scope="row">
                               {row._id}
                             </TableCell> */}
-                            <TableCell align="right">{row.name}</TableCell>
-                            <TableCell align="right">{row.status}</TableCell>
-                            <TableCell align="right">
-                              {row.cause_type}
+                            <TableCell align="center">{row.name}</TableCell>
+                            <TableCell align="center">{row.type}</TableCell>
+                            <TableCell align="center">{row.amount}</TableCell>
+                            <TableCell align="center">
+                              <img src={row.photo} width={50} />
                             </TableCell>
-                            <TableCell align="right">{row.summary}</TableCell>
-                            <TableCell align="right">
-                              <img src={row.photos[0]} width={50} />
-                            </TableCell>
-                            <TableCell align="right">
-                              {row.description}
-                            </TableCell>
-                            <TableCell align="right">
+                            <TableCell align="center">
                               {row.updatedAt.slice(0, 10)}
                             </TableCell>
-                            <TableCell align="right">
+                            <TableCell align="left">
                               {
-                                <Link to={`/admin/causes/edit/${row._id}`}>
+                                <Link
+                                  to={`/admin/transparency/edit/${row._id}`}>
                                   <EditIcon color="primary" />
                                 </Link>
                               }
                             </TableCell>
-                            <TableCell
-                              align="right"
-                              style={{cursor: 'pointer'}}>
+                            <TableCell align="left" style={{cursor: 'pointer'}}>
                               {
                                 <DeleteIcon
                                   color="secondary"
-                                  onClick={() => handleDeleteCause(row._id)}
+                                  onClick={() =>
+                                    handleDeleteTransparency(row._id)
+                                  }
                                 />
                               }
                             </TableCell>
@@ -167,14 +162,14 @@ export default function CauseList() {
                         ))
                       : '')
                   )}
-                  {deleteCauseSuccess ? (
+                  {deleteTransparencySuccess ? (
                     <Alert severity="success">
                       <AlertTitle>Success</AlertTitle>
-                      Cause deleted Successfully
+                      Transparency deleted Successfully
                     </Alert>
                   ) : null}
-                  {deleteCauseError && (
-                    <div style={{color: 'red'}}>deleteCauseError</div>
+                  {deleteTransparencyError && (
+                    <div style={{color: 'red'}}>deleteTransparencyError</div>
                   )}
                 </TableBody>
               </Table>

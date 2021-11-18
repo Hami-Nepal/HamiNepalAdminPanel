@@ -135,7 +135,7 @@ export default function EventList() {
                         <TableCell align="center">{row.summary}</TableCell>
                         <TableCell align="center">{row.description}</TableCell>
                         <TableCell align="center">
-                          {new Date(row.updatedAt).getUTCFullYear()}
+                          {row.updatedAt.slice(0, 10)}
                         </TableCell>
                         <TableCell align="right">
                           {

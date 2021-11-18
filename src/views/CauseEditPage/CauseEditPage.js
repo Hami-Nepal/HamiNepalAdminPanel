@@ -9,13 +9,15 @@ import CardBody from 'components/Card/CardBody.js';
 import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-
+import FormControl from '@material-ui/core/FormControl';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import InputLabel from '@material-ui/core/InputLabel';
-import {CKEditor} from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+// import {CKEditor} from '@ckeditor/ckeditor5-react';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import baseURL from '../../api/baseUrl';
 
 const styles = {
@@ -91,6 +93,13 @@ export default function AddNewCausePage({match}) {
 
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
+  const [causeTypes, setCauseTypes] = useState([]);
+
+  useEffect(async () => {
+    const cause_types = await axios.get(baseURL + 'cause_type');
+    console.log(cause_types.data.Cause_type_var);
+    setCauseTypes(cause_types.data.data.Cause_type_var);
+  }, []);
 
   useEffect(async () => {
     let result = await fetch(baseURL + 'causes/' + id);
@@ -106,7 +115,7 @@ export default function AddNewCausePage({match}) {
     setUploadedUrl(result.data.cause.photos);
   }, []);
 
-  const handleCauseUpdate = (e) => {
+  const handleCauseAdd = (e) => {
     e.preventDefault();
     setSubmissionLoading(true);
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
@@ -122,8 +131,8 @@ export default function AddNewCausePage({match}) {
     formData.append('balance', balance);
 
     axios({
-      method: 'PATCH',
-      url: baseURL + 'causes/' + id,
+      method: 'POST',
+      url: baseURL + 'causes',
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -133,7 +142,7 @@ export default function AddNewCausePage({match}) {
     })
       .then(function (response) {
         //handle success
-        alert('Updated successfully');
+        alert('cause added successfully');
         setSubmissionLoading(false);
       })
       .catch(function (response) {
@@ -159,7 +168,7 @@ export default function AddNewCausePage({match}) {
           </p>
         </CardHeader>
         <CardBody>
-          <form onSubmit={handleCauseUpdate}>
+          <form onSubmit={handleCauseAdd}>
             <GridItem xs={12} sm={12} md={4}>
               <TextField
                 id="standard-basic"
@@ -172,17 +181,49 @@ export default function AddNewCausePage({match}) {
                 style={{width: '500px', margin: '30px 0'}}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
-              <TextField
-                id="standard-basic"
-                label="Cause Type"
-                value={type}
-                onChange={(e) => {
-                  setType(e.target.value);
+            <GridItem xs={12} sm={12} md={12}>
+              <FormControl
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '4rem',
                 }}
-                required
-                style={{width: '500px', margin: '30px 0'}}
-              />
+                className={classes.formControl}>
+                <div style={{width: '100%'}}>
+                  <InputLabel id="demo-simple-select-label">
+                    Cause Type
+                  </InputLabel>
+                  <Select
+                    style={{width: '100%'}}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={type}
+                    onChange={(e) => {
+                      setType(e.target.value);
+                    }}>
+                    {causeTypes.map((obj) => (
+                      <MenuItem
+                        key={obj.cause_type}
+                        value={obj.cause_type}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        }}>
+                        {obj.cause_type}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                  }}></div>
+              </FormControl>
             </GridItem>
             <GridItem xs={12} sm={12} md={4}>
               <TextField
@@ -288,7 +329,7 @@ export default function AddNewCausePage({match}) {
                 }}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
+            <GridItem xs={12} sm={12} md={12}>
               <h5>Please upload Cause Photo</h5>
               <div
                 {...getRootProps()}
@@ -296,6 +337,7 @@ export default function AddNewCausePage({match}) {
                 style={{
                   cursor: 'pointer',
                   border: '1px solid gray',
+                  minHeight: '200px',
                   padding: '20px',
                   marginBottom: '20px',
                 }}>

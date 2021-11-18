@@ -30,7 +30,6 @@ import {Link} from 'react-router-dom';
 import api from 'api';
 import baseURL from 'api/baseUrl';
 
-
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -42,10 +41,10 @@ export default function NewssList() {
   const [deleteNewsSuccess, setDeleteNewsSuccess] = useState(false);
   const [deleteNewsError, setDeleteNewsError] = useState('');
   const [error, setError] = useState();
-  const [newsListSuccess, setNewsListSuccess] = useState(null)
-  const [newsListError, setNewsListError] = useState(null)
-  const [newsListLoading, setNewsListLoading] = useState(null)
-  const [newsList, setNewsList] = useState([])
+  const [newsListSuccess, setNewsListSuccess] = useState(null);
+  const [newsListError, setNewsListError] = useState(null);
+  const [newsListLoading, setNewsListLoading] = useState(null);
+  const [newsList, setNewsList] = useState([]);
 
   const handleDeleteNews = async (id) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
@@ -66,10 +65,10 @@ export default function NewssList() {
     }
   };
 
-  const fetchData = async() => {
-    const {data: response} = await axios.get(baseURL + "news")
-    setNewsList(response.data.news)
-  }
+  const fetchData = async () => {
+    const {data: response} = await axios.get(baseURL + 'news');
+    setNewsList(response.data.news);
+  };
 
   useEffect(fetchData, []);
 
@@ -131,7 +130,7 @@ export default function NewssList() {
                               <img src={row.photo} width={50} />
                             </TableCell>
                             <TableCell align="center">
-                            {new Date(row.updatedAt).getUTCFullYear()}/{new Date(row.updatedAt).getUTCMonth()}/{new Date(row.updatedAt).getUTCDay()}    
+                              {row.updatedAt.slice(0, 10)}
                             </TableCell>
                             <TableCell align="left">
                               {
@@ -140,7 +139,7 @@ export default function NewssList() {
                                 </Link>
                               }
                             </TableCell>
-                            <TableCell align="left" style={{cursor: "pointer"}}>
+                            <TableCell align="left" style={{cursor: 'pointer'}}>
                               {
                                 <DeleteIcon
                                   color="secondary"

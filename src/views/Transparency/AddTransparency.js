@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 // @material-ui/core components
-
+import {useHistory} from 'react-router-dom';
 import {useDropzone} from 'react-dropzone';
 import {makeStyles} from '@material-ui/core/styles';
 import GridItem from 'components/Grid/GridItem.js';
@@ -18,14 +18,16 @@ import Select from '@material-ui/core/Select';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-
-import AsyncSelect from 'react-select/async';
+import baseURL from 'api/baseUrl';
 
 const styles = {
   typo: {
     paddingLeft: '25%',
     marginBottom: '40px',
     position: 'relative',
+  },
+  formControl: {
+    minWidth: 120,
   },
   note: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -83,10 +85,25 @@ export default function TransparencyPage() {
   const [type, setType] = useState('');
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
+  const [cause, setCause] = useState('');
+  const [event, setEvent] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState('');
+  const [causeTypes, setCauseTypes] = useState([]);
+  const [eventTypes, setEventTypes] = useState([]);
+
+  useEffect(async () => {
+    const cause_types = await axios.get(baseURL + 'cause_type');
+
+    setCauseTypes(cause_types.data.data.Cause_type_var);
+  }, []);
+  useEffect(async () => {
+    const event_types = await axios.get(baseURL + 'event_type');
+
+    setEventTypes(event_types.data.data.Event_type_var);
+  }, []);
 
   // const handleFile = (e)=>{
   //   console.log(e.target.files)
@@ -95,12 +112,7 @@ export default function TransparencyPage() {
   //   setSelectedFile(file)
   // }
 
-  const [inputValue, setInputValue] = useState();
-
-  const handleInputChange = (newValue) => {
-    let inputValue = newValue.replace(/\W/g, '');
-    setInputValue({inputValue});
-  };
+  const history = useHistory();
 
   const handleUpload = (e) => {
     e.preventDefault();
@@ -113,10 +125,12 @@ export default function TransparencyPage() {
     formData.append('type', type);
     formData.append('amount', amount);
     formData.append('description', description);
+    formData.append('event', event);
+    formData.append('cause', cause);
 
     axios({
       method: 'POST',
-      url: 'https://haminepal.herokuapp.com/api/v1/transparency',
+      url: baseURL + 'transparency',
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -128,11 +142,10 @@ export default function TransparencyPage() {
         console.log(response);
         alert('file uploaded successfully');
         setSubmissionLoading(false);
+        history.push('/admin/transparency');
       })
       .catch(function (response) {
         //handle error
-        console.log(response);
-        console.log(response.message);
         setError(response.message);
         setSubmissionLoading(false);
       });
@@ -179,6 +192,99 @@ export default function TransparencyPage() {
               </Select>
             </FormControl>
           </GridItem>
+          {type === 'cause' ? (
+            <GridItem xs={12} sm={12} md={12}>
+              <FormControl
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '4rem',
+                  margin: '30px 0',
+                }}
+                className={classes.formControl}>
+                <div style={{width: '100%'}}>
+                  <InputLabel id="demo-simple-select-label">
+                    Cause Type
+                  </InputLabel>
+                  <Select
+                    style={{width: '100%'}}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={cause}
+                    onChange={(e) => {
+                      setCause(e.target.value);
+                    }}>
+                    {causeTypes.map((obj) => (
+                      <MenuItem
+                        key={obj.cause_type}
+                        value={obj.cause_type}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        }}>
+                        {obj.cause_type}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                  }}></div>
+              </FormControl>
+            </GridItem>
+          ) : (
+            <GridItem xs={12} sm={12} md={12}>
+              <FormControl
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '4rem',
+                  margin: '30px 0',
+                }}
+                className={classes.formControl}>
+                <div style={{width: '100%'}}>
+                  <InputLabel id="demo-simple-select-label">
+                    Event Type
+                  </InputLabel>
+                  <Select
+                    style={{width: '100%'}}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={event}
+                    onChange={(e) => {
+                      setEvent(e.target.value);
+                    }}>
+                    {eventTypes.map((obj) => (
+                      <MenuItem
+                        key={obj.event_type}
+                        value={obj.event_type}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        }}>
+                        {obj.event_type}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                  }}></div>
+              </FormControl>
+            </GridItem>
+          )}
           {/* <GridItem xs={12} sm={12} md={4}>
             <TextField
               id="standard-basic"

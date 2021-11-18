@@ -15,7 +15,9 @@ import DashboardPage from 'views/Dashboard/Dashboard.js';
 import DonationsPage from 'views/Donations/Donations.js';
 import MessagesPage from 'views/Messages/Messages.js';
 import UserProfile from 'views/UserProfile/UserProfile.js';
-import Transparency from 'views/Transparency/Transparency.js';
+import AddTransparency from 'views/Transparency/AddTransparency.js';
+import ListTransparency from 'views/Transparency/ListTransparency';
+import EditTransparency from 'views/Transparency/EditTransparency.js';
 
 import Maps from 'views/Maps/Maps.js';
 import NotificationsPage from 'views/Notifications/Notifications.js';
@@ -26,6 +28,7 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import EventList from './views/EventList/EventList';
 import CauseList from './views/CauseList/CauseList';
 import CauseEditPage from './views/CauseEditPage/CauseEditPage';
+import CasueEventType from './views/Cause_Event_Type/CauseEventType';
 import EventEditPage from './views/AddNewEventPage/editEventPage';
 import AddNewEventPage from './views/AddNewEventPage/index';
 import AddNewCausePage from './views/AddNewCausePage/index';
@@ -37,6 +40,7 @@ import AddVideo from './views/AddHomeVideo/addVideo';
 import ActOfKindness from './views/ActOfKindness/act-of-kindness';
 import CreateActOfKindness from './views/CreateActOfKindness/CreateActOfKindness';
 import EditActOfKindness from './views/EditActOfKindness/EditActOfKindness';
+import ListNews from './views/News/ListNews';
 
 export const demoRoutes = [
   {
@@ -143,6 +147,20 @@ export const demoRoutes = [
     component: EditActOfKindness,
     layout: '/admin',
   },
+  {
+    path: '/transparency/create',
+    name: 'Create Transparency',
+    icon: CompareArrowsIcon,
+    component: AddTransparency,
+    layout: '/admin',
+  },
+  {
+    path: '/transparency/edit/:id',
+    name: 'Edit Transparency',
+    icon: CompareArrowsIcon,
+    component: EditTransparency,
+    layout: '/admin',
+  },
 ];
 
 export const dashboardRoutes = [
@@ -175,7 +193,7 @@ export const dashboardRoutes = [
     name: 'Transparency',
     rtlName: 'لوحة القيادة',
     icon: CompareArrowsIcon,
-    component: Transparency,
+    component: ListTransparency,
     layout: '/admin',
   },
 
@@ -187,14 +205,6 @@ export const dashboardRoutes = [
     component: EventList,
     layout: '/admin',
   },
-
-  {
-    path: '/volunteers',
-    name: 'Volunteers',
-    icon: DirectionsBikeIcon,
-    component: VolunteersIndexPage,
-    layout: '/admin',
-  },
   {
     path: '/causes',
     name: 'Causes',
@@ -203,6 +213,21 @@ export const dashboardRoutes = [
     component: CauseList,
     layout: '/admin',
   },
+  {
+    path: '/CauseEventType',
+    name: 'Create Cause/Event Type',
+    icon: CompareArrowsIcon,
+    component: CasueEventType,
+    layout: '/admin',
+  },
+  {
+    path: '/volunteers',
+    name: 'Volunteers',
+    icon: DirectionsBikeIcon,
+    component: VolunteersIndexPage,
+    layout: '/admin',
+  },
+
   {
     path: '/news',
     name: 'News',
