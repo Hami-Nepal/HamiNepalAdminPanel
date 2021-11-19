@@ -229,7 +229,7 @@ export default function Dashboard() {
       <GridContainer>
         <GridItem xs={12} sm={12} md={6}>
           <Card>
-            <CardHeader color="success">
+            <CardHeader color="danger">
               <h4 className={classes.cardTitleWhite}>Ongoing Events</h4>
               <p className={classes.cardCategoryWhite}>
                 list of ongoing events based on fund amount
@@ -286,7 +286,7 @@ export default function Dashboard() {
         </GridItem>
         <GridItem xs={12} sm={12} md={6}>
           <Card>
-            <CardHeader color="success">
+            <CardHeader color="danger">
               <h4 className={classes.cardTitleWhite}>Ongoing Causes</h4>
               <p className={classes.cardCategoryWhite}>
                 list of ongoing causes based on fund amount

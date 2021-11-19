@@ -29,6 +29,7 @@ import {deleteCause} from './../../store/actions/causes.actions';
 import api from 'api';
 import baseURL from 'api/baseUrl';
 import axios from 'axios';
+import {emptyCauseList} from '../../store/actions/causes.actions';
 
 const useStyles = makeStyles({
   table: {
@@ -40,10 +41,13 @@ export default function CauseList() {
 
   const dispatch = useDispatch();
 
+  const [mounted, setMounted] = useState(false);
+
   const [deleteCauseSuccess, setDeleteCauseSuccess] = useState(false);
   const [deleteCauseError, setDeleteCauseError] = useState('');
   const [error, setError] = useState();
-
+  const [curentPage, setcurentPage] = useState(1);
+  const [CauseLists, setCauseLists] = useState([]);
   const {
     causeListSuccess,
     causeListError,
@@ -71,20 +75,21 @@ export default function CauseList() {
   };
 
   useEffect(() => {
+    // setCauseLists(causeList.data.causes);
     if (!causeListSuccess) {
-      dispatch(listCauses());
-      console.log(causeList);
+      dispatch(listCauses(curentPage, mounted ? causeList : []));
+      setMounted(true);
     }
-  }, []);
+  }, [curentPage]);
 
-  const changeStatus = async (id) => {
+  const changeStatus = async (id, status) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
     await axios.put(
       baseURL + 'causes/' + id,
-      {status: 'ongoing' ? 'past' : 'ongoing'},
+      {status: status === 'ongoing' ? 'past' : 'ongoing'},
       {headers: {Authorization: 'Bearer ' + token}},
     );
-    dispatch(listCauses());
+    dispatch(listCauses(curentPage, CauseLists));
   };
 
   return (
@@ -136,57 +141,51 @@ export default function CauseList() {
                         Try Again
                       </Button>
                     </Alert>
-                  ) : (
-                    causeList &&
-                    (causeList.data
-                      ? causeList.data.causes.map((row) => (
-                          <TableRow key={row._id}>
-                            {/* <TableCell component="th" scope="row">
-                              {row._id}
-                            </TableCell> */}
-                            <TableCell align="center">{row.name}</TableCell>
-                            <TableCell align="center">
-                              <span
-                                onClick={() => changeStatus(row._id)}
-                                style={{
-                                  color:
-                                    row.status === 'ongoing' ? 'green' : 'red',
-                                  cursor: 'pointer',
-                                }}>
-                                {row.status}
-                              </span>
-                            </TableCell>
-                            <TableCell align="center">
-                              {row.cause_type}
-                            </TableCell>
+                  ) : causeList ? (
+                    causeList.map((row) => (
+                      <TableRow key={row._id}>
+                        {/* <TableCell component="th" scope="row">
+                          {row._id}
+                        </TableCell> */}
+                        <TableCell align="center">{row.name}</TableCell>
+                        <TableCell align="center">
+                          <span
+                            onClick={() => changeStatus(row._id, row.status)}
+                            style={{
+                              color: row.status === 'ongoing' ? 'green' : 'red',
+                              cursor: 'pointer',
+                            }}>
+                            {row.status}
+                          </span>
+                        </TableCell>
+                        <TableCell align="center">{row.cause_type}</TableCell>
 
-                            <TableCell align="center">
-                              <img src={row.photos[0]} width={50} />
-                            </TableCell>
-                            <TableCell align="center">{row.balance}</TableCell>
-                            <TableCell align="center">
-                              {row.updatedAt.slice(0, 10)}
-                            </TableCell>
-                            <TableCell align="center">
-                              {
-                                <Link to={`/admin/causes/edit/${row._id}`}>
-                                  <EditIcon color="primary" />
-                                </Link>
-                              }
-                            </TableCell>
-                            <TableCell
-                              align="right"
-                              style={{cursor: 'pointer'}}>
-                              {
-                                <DeleteIcon
-                                  color="secondary"
-                                  onClick={() => handleDeleteCause(row._id)}
-                                />
-                              }
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      : '')
+                        <TableCell align="center">
+                          <img src={row.photos[0]} width={50} />
+                        </TableCell>
+                        <TableCell align="center">{row.balance}</TableCell>
+                        <TableCell align="center">
+                          {row.updatedAt.slice(0, 10)}
+                        </TableCell>
+                        <TableCell align="center">
+                          {
+                            <Link to={`/admin/causes/edit/${row._id}`}>
+                              <EditIcon color="primary" />
+                            </Link>
+                          }
+                        </TableCell>
+                        <TableCell align="right" style={{cursor: 'pointer'}}>
+                          {
+                            <DeleteIcon
+                              color="secondary"
+                              onClick={() => handleDeleteCause(row._id)}
+                            />
+                          }
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    ''
                   )}
                   {deleteCauseSuccess ? (
                     <Alert severity="success">
@@ -200,6 +199,9 @@ export default function CauseList() {
                 </TableBody>
               </Table>
             </TableContainer>
+            <Button onClick={() => setcurentPage(curentPage + 1)}>
+              Load More
+            </Button>
           </CardBody>
         </Card>
       </GridItem>

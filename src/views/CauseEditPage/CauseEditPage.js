@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
+import {useHistory} from 'react-router-dom';
 import {useDropzone} from 'react-dropzone';
 import {makeStyles} from '@material-ui/core/styles';
 import GridItem from 'components/Grid/GridItem.js';
@@ -115,6 +116,7 @@ export default function AddNewCausePage({match}) {
     setUploadedUrl(result.data.cause.photos);
   }, []);
 
+  const history = useHistory();
   const handleCauseAdd = (e) => {
     e.preventDefault();
     setSubmissionLoading(true);
@@ -131,8 +133,8 @@ export default function AddNewCausePage({match}) {
     formData.append('balance', balance);
 
     axios({
-      method: 'POST',
-      url: baseURL + 'causes',
+      method: 'PUT',
+      url: baseURL + 'causes/' + id,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -142,8 +144,9 @@ export default function AddNewCausePage({match}) {
     })
       .then(function (response) {
         //handle success
-        alert('cause added successfully');
+        alert('cause updated successfully');
         setSubmissionLoading(false);
+        history.push('/admin/causes');
       })
       .catch(function (response) {
         //handle error
@@ -256,8 +259,6 @@ export default function AddNewCausePage({match}) {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
-                  color: '#c0c1c2',
-                  fontWeight: '390',
                 }}
               />
             </GridItem>
@@ -278,8 +279,6 @@ export default function AddNewCausePage({match}) {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
-                  color: '#c0c1c2',
-                  fontWeight: '390',
                 }}
               />
             </GridItem>
@@ -300,8 +299,6 @@ export default function AddNewCausePage({match}) {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
-                  color: '#c0c1c2',
-                  fontWeight: '390',
                 }}
               />
             </GridItem>
@@ -324,8 +321,6 @@ export default function AddNewCausePage({match}) {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
-                  color: '#c0c1c2',
-                  fontWeight: '390',
                 }}
               />
             </GridItem>

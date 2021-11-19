@@ -74,14 +74,14 @@ const useStyles = makeStyles(styles);
 
 export default function AddNewEventPage() {
   const onDrop = useCallback((acceptedFiles) => {
-    setSelectedFile(acceptedFiles[0]);
-    setUploadedUrl(URL.createObjectURL(acceptedFiles[0]));
+    setSelectedFile(acceptedFiles);
+    setUploadedUrl(acceptedFiles.map((file) => URL.createObjectURL(file)));
   }, []);
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
 
   const classes = useStyles();
 
-  const [uploadedUrl, setUploadedUrl] = useState('');
+  const [uploadedUrl, setUploadedUrl] = useState([]);
   const [ckEditor, setCkEditor] = useState(null);
 
   const [name, setName] = useState('');
@@ -159,7 +159,7 @@ export default function AddNewEventPage() {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('type', type);
-    formData.append('photos', selectedFile);
+    selectedFile?.map((file) => formData.append('photos', file));
     formData.append('balance', balance);
     formData.append('summary', summary);
     formData.append('description', description);
@@ -443,9 +443,12 @@ export default function AddNewEventPage() {
                     events photo
                   </p>
                 )}
-                {uploadedUrl && (
-                  <img src={uploadedUrl} style={{height: '200px'}} />
-                )}
+                <div style={{display: 'flex', gap: '1rem'}}>
+                  {uploadedUrl.length &&
+                    uploadedUrl.map((url) => (
+                      <img src={url} style={{height: '200px'}} />
+                    ))}
+                </div>
               </div>
             </GridItem>
             {error ? (

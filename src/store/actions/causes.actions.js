@@ -17,13 +17,17 @@ import {
 } from '../constants/causes.constants';
 import api from 'api';
 
-export const listCauses = () => async (dispatch) => {
+export const listCauses = (page, causeList) => async (dispatch) => {
+  const OriginalData = [];
   try {
     dispatch({type: CAUSE_LIST_REQUEST});
+    const {data} = await api.get(`/causes?page=${page}`);
 
-    const {data} = await api.get('/causes');
-    console.log(data);
-    dispatch({type: CAUSE_LIST_SUCCESS, payload: data});
+    dispatch({
+      type: CAUSE_LIST_SUCCESS,
+      payload: data,
+      causeList,
+    });
   } catch (error) {
     dispatch({
       type: CAUSE_LIST_FAIL,
@@ -134,3 +138,13 @@ export const updateCause = (cause) => async (dispatch, getState) => {
     });
   }
 };
+
+export const emptyCauseList = () => ({
+  type: CAUSE_LIST_SUCCESS,
+  payload: {
+    causeListLoading: false,
+    causeList: [],
+    causeListSuccess: false,
+    causeListError: null,
+  },
+});

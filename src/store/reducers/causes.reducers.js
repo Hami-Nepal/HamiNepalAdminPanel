@@ -53,7 +53,7 @@ export const causeReducer = (state = initialState, action) => {
     case CAUSE_LIST_SUCCESS:
       return {
         causeListLoading: false,
-        causeList: action.payload,
+        causeList: [...action.causeList, ...action.payload.data.causes],
         causeListSuccess: false,
         causeListError: null,
       };

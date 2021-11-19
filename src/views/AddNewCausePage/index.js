@@ -245,8 +245,6 @@ export default function AddNewCausePage({match}) {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
-                  color: '#c0c1c2',
-                  fontWeight: '390',
                 }}
               />
             </GridItem>
@@ -267,8 +265,6 @@ export default function AddNewCausePage({match}) {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
-                  color: '#c0c1c2',
-                  fontWeight: '390',
                 }}
               />
             </GridItem>
@@ -289,8 +285,6 @@ export default function AddNewCausePage({match}) {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
-                  color: '#c0c1c2',
-                  fontWeight: '390',
                 }}
               />
             </GridItem>
@@ -313,8 +307,6 @@ export default function AddNewCausePage({match}) {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
-                  color: '#c0c1c2',
-                  fontWeight: '390',
                 }}
               />
             </GridItem>

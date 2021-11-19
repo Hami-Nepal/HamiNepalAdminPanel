@@ -106,6 +106,7 @@ export default function AddCauseEvent() {
         //handle success
         alert('Cause Type Created Successfully');
         setSubmissionLoading(false);
+        setCauseList([response.data.data.newCause_type, ...causeList]);
       })
       .catch(function (response) {
         //handle error
@@ -136,7 +137,7 @@ export default function AddCauseEvent() {
         //handle success
         alert('Event Type Created Successfully');
         setSubmissionLoading(false);
-        history.push('/admin/CauseEventType');
+        setEventList([response.data.data.newEvent_type, ...eventList]);
       })
       .catch(function (response) {
         //handle error
@@ -276,7 +277,7 @@ export default function AddCauseEvent() {
                 )}
               </GridItem>
             </form>
-          ) : (
+          ) : type === 'event' ? (
             <form onSubmit={handleEventUpload}>
               <GridItem xs={12} sm={12} md={4}>
                 <TextField
@@ -309,6 +310,14 @@ export default function AddCauseEvent() {
                 )}
               </GridItem>
             </form>
+          ) : (
+            <GridItem xs={12} sm={12} md={4}>
+              <TextField
+                id="standard-basic"
+                label="Select the type first "
+                style={{width: '500px', margin: '30px 0'}}
+              />
+            </GridItem>
           )}
         </CardBody>
       </Card>

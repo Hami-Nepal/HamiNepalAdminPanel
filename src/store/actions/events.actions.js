@@ -17,13 +17,13 @@ import {
 } from '../constants/events.constants';
 import api from 'api';
 
-export const listEvents = () => async (dispatch) => {
+export const listEvents = (page, eventList) => async (dispatch) => {
   try {
     dispatch({type: EVENT_LIST_REQUEST});
 
-    const {data} = await api.get('/events');
+    const {data} = await api.get('/events?page=' + page);
 
-    dispatch({type: EVENT_LIST_SUCCESS, payload: data});
+    dispatch({type: EVENT_LIST_SUCCESS, payload: data, eventList});
   } catch (error) {
     dispatch({
       type: EVENT_LIST_FAIL,
@@ -134,3 +134,5 @@ export const updateEvent = (event) => async (dispatch, getState) => {
     });
   }
 };
+
+// export const updateEventList = ()

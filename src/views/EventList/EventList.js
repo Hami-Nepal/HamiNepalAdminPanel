@@ -37,6 +37,8 @@ const useStyles = makeStyles({
 export default function EventList() {
   const classes = useStyles();
 
+  const [mount, setMount] = useState(false);
+
   const dispatch = useDispatch();
 
   const [deleteEventSuccess, setDeleteEventSuccess] = useState(false);
@@ -69,19 +71,25 @@ export default function EventList() {
     }
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     if (!eventListSuccess) {
-      dispatch(listEvents());
+      dispatch(listEvents(currentPage, mount ? eventList : []));
+      setMount(true);
     }
-  }, []);
-  const changeStatus = async (id) => {
+  }, [currentPage]);
+
+  const changeStatus = async (id, status) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
-    await axios.put(
+
+    const {data} = await axios.put(
       baseUrl + 'events/' + id,
-      {status: 'ongoing' ? 'past' : 'ongoing'},
+      {status: status == 'ongoing' ? 'past' : 'ongoing'},
       {headers: {Authorization: 'Bearer ' + token}},
     );
-    dispatch(listEvents());
+
+    console.log(data);
   };
 
   return (
@@ -132,8 +140,8 @@ export default function EventList() {
                         Try Again
                       </Button>
                     </Alert>
-                  ) : eventList.data ? (
-                    eventList.data.map((row) => (
+                  ) : eventList ? (
+                    eventList.map((row) => (
                       <TableRow key={row._id}>
                         {/* <TableCell component="th" scope="row">
                           {row._id}
@@ -141,7 +149,7 @@ export default function EventList() {
                         <TableCell align="center">{row.name}</TableCell>
                         <TableCell align="center">
                           <span
-                            onClick={() => changeStatus(row._id)}
+                            onClick={() => changeStatus(row._id, row.status)}
                             style={{
                               color: row.status === 'ongoing' ? 'green' : 'red',
                               cursor: 'pointer',
@@ -188,6 +196,9 @@ export default function EventList() {
                 </TableBody>
               </Table>
             </TableContainer>
+            <Button onClick={() => setCurrentPage(currentPage + 1)}>
+              Load More
+            </Button>
           </CardBody>
         </Card>
       </GridItem>
