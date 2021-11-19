@@ -28,6 +28,7 @@ import {listEvents} from 'store/actions/events.actions';
 import axios from 'axios';
 import api from 'api';
 import baseUrl from 'api/baseUrl';
+import {updateEvent} from '../../store/actions/events.actions';
 
 const useStyles = makeStyles({
   table: {
@@ -80,16 +81,8 @@ export default function EventList() {
     }
   }, [currentPage]);
 
-  const changeStatus = async (id, status) => {
-    const token = JSON.parse(localStorage.getItem('userInfo')).token;
-
-    const {data} = await axios.put(
-      baseUrl + 'events/' + id,
-      {status: status == 'ongoing' ? 'past' : 'ongoing'},
-      {headers: {Authorization: 'Bearer ' + token}},
-    );
-
-    console.log(data);
+  const changeStatus = (id, status) => {
+    dispatch(updateEvent(id, status, eventList));
   };
 
   return (

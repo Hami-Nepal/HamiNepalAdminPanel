@@ -139,18 +139,16 @@ export const eventReducer = (state = initialState, action) => {
       };
 
     case EVENT_UPDATE_REQUEST:
-      return {
-        eventUpdateLoading: true,
-        eventUpdate: {},
-        eventUpdateSuccess: false,
-        eventUpdateError: null,
-      };
+      return state;
     case EVENT_UPDATE_SUCCESS:
+      const updatedEventList = state.eventList.map((event) =>
+        event._id === action.payload.data._id ? action.payload.data : event,
+      );
       return {
-        eventUpdateLoading: false,
-        eventUpdate: action.payload,
-        eventUpdateSuccess: true,
-        eventUpdateError: null,
+        eventListLoading: false,
+        eventList: updatedEventList,
+        eventListSuccess: false,
+        eventListError: null,
       };
     case EVENT_UPDATE_FAIL:
       return {

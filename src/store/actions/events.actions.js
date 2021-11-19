@@ -107,21 +107,19 @@ export const createEvent = (formData) => async (dispatch, getState) => {
   }
 };
 
-export const updateEvent = (event) => async (dispatch, getState) => {
+export const updateEvent = (id, status) => async (
+  dispatch,
+  getState,
+) => {
   try {
-    dispatch({type: EVENT_UPDATE_REQUEST});
+    dispatch({type: EVENT_UPDATE_REQUEST,});
 
-    const {
-      userLogin: {userInfo},
-    } = getState();
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-    const {data} = await api.patch(`/events/${event._id}`, event, config);
+    const token = JSON.parse(localStorage.getItem('userInfo')).token;
+    const {data} = await api.put(
+      'events/' + id,
+      {status: status == 'ongoing' ? 'past' : 'ongoing'},
+      {headers: {Authorization: 'Bearer ' + token}},
+    );
 
     dispatch({type: EVENT_UPDATE_SUCCESS, payload: data});
   } catch (error) {
