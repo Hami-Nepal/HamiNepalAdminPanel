@@ -297,7 +297,7 @@ export default function Donations() {
                           {donation.donation_message}
                         </Typography>
                       </CardHeader>
-                      <CardFooter stats>
+                      {/* <CardFooter stats>
                         <div className={classes.stats}>
                           <Primary>
                             <Info />
@@ -306,7 +306,7 @@ export default function Donations() {
                             View More
                           </a>
                         </div>
-                      </CardFooter>
+                      </CardFooter> */}
                     </Card>
                   </GridItem>
                 ))}
