@@ -31,6 +31,7 @@ import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CauseList from 'views/CauseList/CauseList';
+import TablePagination from '@mui/material/TablePagination';
 
 const styles = {
   typo: {
@@ -153,13 +154,22 @@ export default function AddCauseEvent() {
   const [causeListError, setCauseListError] = useState(null);
   const [causeListLoading, setCauseListLoading] = useState(null);
   const [causeList, setCauseList] = useState([]);
+  const [causePage, setCausePage] = React.useState(0);
+  const [total_data_C, setTotal_data_C] = useState(0);
 
-  const fetchCauseData = async () => {
-    const {data: response} = await axios.get(baseUrl + 'cause_type');
-    setCauseList(response.data.Cause_type_var);
+  const handleChangeCuasePage = (event, newPage) => {
+    setCausePage(newPage);
   };
 
-  useEffect(fetchCauseData, []);
+  const fetchCauseData = async () => {
+    const {data: response} = await axios.get(
+      baseUrl + 'cause_type?page=' + (causePage + 1),
+    );
+    setCauseList(response.data.Cause_type_var);
+    // setTotal_data_C(response.total_data)
+  };
+
+  useEffect(fetchCauseData, [causePage]);
 
   //list table event states
   const [deleteEventSuccess, setDeleteEventSuccess] = useState(false);
@@ -168,13 +178,22 @@ export default function AddCauseEvent() {
   const [eventListError, setEventListError] = useState(null);
   const [eventListLoading, setEventListLoading] = useState(null);
   const [eventList, setEventList] = useState([]);
+  const [eventPage, setEventPage] = React.useState(0);
+  const [total_data_E, setTotal_data_E] = useState(0);
 
-  const fetchEventData = async () => {
-    const {data: response} = await axios.get(baseUrl + 'event_type');
-    setEventList(response.data.Event_type_var);
+  const handleChangeEventPage = (event, newPage) => {
+    setEventPage(newPage);
   };
 
-  useEffect(fetchEventData, []);
+  const fetchEventData = async () => {
+    const {data: response} = await axios.get(
+      baseUrl + 'event_type?page=' + (eventPage + 1),
+    );
+    setEventList(response.data.Event_type_var);
+    // setTotal_data_E(response.total_data)
+  };
+
+  useEffect(fetchEventData, [eventPage]);
 
   const handleDeleteCause = async (id) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
@@ -400,6 +419,13 @@ export default function AddCauseEvent() {
                       )}
                     </TableBody>
                   </Table>
+                  <TablePagination
+                    component="div"
+                    count={12}
+                    page={causePage}
+                    onPageChange={handleChangeCuasePage}
+                    rowsPerPage={10}
+                  />
                 </TableContainer>
               </CardBody>
             </Card>
@@ -484,6 +510,13 @@ export default function AddCauseEvent() {
                       )}
                     </TableBody>
                   </Table>
+                  <TablePagination
+                    component="div"
+                    count={12}
+                    page={eventPage}
+                    onPageChange={handleChangeEventPage}
+                    rowsPerPage={10}
+                  />
                 </TableContainer>
               </CardBody>
             </Card>

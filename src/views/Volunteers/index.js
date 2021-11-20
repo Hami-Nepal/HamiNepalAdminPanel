@@ -26,6 +26,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {Link} from 'react-router-dom';
 import api from 'api';
 import baseURL from 'api/baseUrl';
+import TablePagination from '@mui/material/TablePagination';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {listVolunteers} from './../../store/actions/volunteers.actions';
@@ -51,6 +52,9 @@ export default function Index() {
     volunteerList,
   } = useSelector((state) => state.volunteers);
 
+  const [page, setPage] = React.useState(0);
+  const [total_data, setTotal_data] = useState(0);
+
   const deleteVol = async (id) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
     const config = {
@@ -69,11 +73,16 @@ export default function Index() {
     }
   };
 
-  useEffect(() => {
-    if (!volunteerListSuccess) {
-      dispatch(listVolunteers());
-    }
-  }, []);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const dispatchData = () => {
+    dispatch(listVolunteers(page + 1));
+    // if (!volunteerListSuccess) {
+    // }
+  };
+  useEffect(dispatchData, [page]);
 
   return (
     <GridContainer>
@@ -171,6 +180,13 @@ export default function Index() {
                   )}
                 </TableBody>
               </Table>
+              <TablePagination
+                component="div"
+                count={12}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={10}
+              />
             </TableContainer>
           </CardBody>
         </Card>

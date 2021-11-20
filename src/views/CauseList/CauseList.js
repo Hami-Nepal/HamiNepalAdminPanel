@@ -25,11 +25,12 @@ import DialogueBox from 'components/DialogueBox';
 import {Link} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {listCauses} from 'store/actions/causes.actions';
-import {deleteCause} from './../../store/actions/causes.actions';
+import {updateCause} from './../../store/actions/causes.actions';
 import api from 'api';
 import baseURL from 'api/baseUrl';
 import axios from 'axios';
 import {emptyCauseList} from '../../store/actions/causes.actions';
+import TablePagination from '@mui/material/TablePagination';
 
 const useStyles = makeStyles({
   table: {
@@ -46,7 +47,7 @@ export default function CauseList() {
   const [deleteCauseSuccess, setDeleteCauseSuccess] = useState(false);
   const [deleteCauseError, setDeleteCauseError] = useState('');
   const [error, setError] = useState();
-  const [curentPage, setcurentPage] = useState(1);
+  const [curentPage, setcurentPage] = useState(0);
   const [CauseLists, setCauseLists] = useState([]);
   const {
     causeListSuccess,
@@ -74,22 +75,19 @@ export default function CauseList() {
     }
   };
 
+  const handleChangePage = (event, newPage) => {
+    setcurentPage(newPage);
+  };
+
   useEffect(() => {
     // setCauseLists(causeList.data.causes);
-    if (!causeListSuccess) {
-      dispatch(listCauses(curentPage, mounted ? causeList : []));
-      setMounted(true);
-    }
+    dispatch(listCauses(curentPage + 1));
+    // if (!causeListSuccess) {
+    // }
   }, [curentPage]);
 
-  const changeStatus = async (id, status) => {
-    const token = JSON.parse(localStorage.getItem('userInfo')).token;
-    await axios.put(
-      baseURL + 'causes/' + id,
-      {status: status === 'ongoing' ? 'past' : 'ongoing'},
-      {headers: {Authorization: 'Bearer ' + token}},
-    );
-    dispatch(listCauses(curentPage, CauseLists));
+  const changeStatus = (id, status) => {
+    dispatch(updateCause(id, status, causeList));
   };
 
   return (
@@ -198,10 +196,14 @@ export default function CauseList() {
                   )}
                 </TableBody>
               </Table>
+              <TablePagination
+                component="div"
+                count={12}
+                page={curentPage}
+                onPageChange={handleChangePage}
+                rowsPerPage={10}
+              />
             </TableContainer>
-            <Button onClick={() => setcurentPage(curentPage + 1)}>
-              Load More
-            </Button>
           </CardBody>
         </Card>
       </GridItem>

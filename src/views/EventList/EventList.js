@@ -29,6 +29,7 @@ import axios from 'axios';
 import api from 'api';
 import baseUrl from 'api/baseUrl';
 import {updateEvent} from '../../store/actions/events.actions';
+import TablePagination from '@mui/material/TablePagination';
 
 const useStyles = makeStyles({
   table: {
@@ -72,13 +73,17 @@ export default function EventList() {
     }
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage);
+  };
 
   useEffect(() => {
-    if (!eventListSuccess) {
-      dispatch(listEvents(currentPage, mount ? eventList : []));
-      setMount(true);
-    }
+    dispatch(listEvents(currentPage + 1));
+    // if (!eventListSuccess) {
+    //   setMount(true);
+    // }
   }, [currentPage]);
 
   const changeStatus = (id, status) => {
@@ -188,10 +193,14 @@ export default function EventList() {
                   )}
                 </TableBody>
               </Table>
+              <TablePagination
+                component="div"
+                count={12}
+                page={currentPage}
+                onPageChange={handleChangePage}
+                rowsPerPage={10}
+              />
             </TableContainer>
-            <Button onClick={() => setCurrentPage(currentPage + 1)}>
-              Load More
-            </Button>
           </CardBody>
         </Card>
       </GridItem>

@@ -29,6 +29,7 @@ import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import {Link} from 'react-router-dom';
 import api from 'api';
 import baseURL from 'api/baseUrl';
+import TablePagination from '@mui/material/TablePagination';
 
 const useStyles = makeStyles({
   table: {
@@ -45,6 +46,8 @@ export default function CauseList() {
   const [KindnessListError, setKindnessListError] = useState(null);
   const [KindnessListLoading, setKindnessListLoading] = useState(null);
   const [KindnessList, setKindnessList] = useState([]);
+  const [page, setPage] = React.useState(0);
+  const [total_data, setTotal_data] = useState(0);
 
   const handleDeleteKindness = async (id) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
@@ -65,12 +68,19 @@ export default function CauseList() {
     }
   };
 
-  const fetchData = async () => {
-    const {data: response} = await axios.get(baseURL + 'kindness');
-    setKindnessList(response.data.kindness);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  useEffect(fetchData, []);
+  const fetchData = async () => {
+    const {data: response} = await axios.get(
+      baseURL + 'kindness?page=' + (page + 1),
+    );
+    setKindnessList(response.data.kindness);
+    // setTotal_data(response.total_data)
+  };
+
+  useEffect(fetchData, [page]);
 
   const addToFeatured = async (id) => {
     const {featured} = KindnessList.find(({_id}) => _id == id);
@@ -213,6 +223,13 @@ export default function CauseList() {
                   )}
                 </TableBody>
               </Table>
+              <TablePagination
+                component="div"
+                count={12}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={10}
+              />
             </TableContainer>
           </CardBody>
         </Card>

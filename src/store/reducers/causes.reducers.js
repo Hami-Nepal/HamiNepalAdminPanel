@@ -42,7 +42,8 @@ const initialState = {
 };
 
 export const causeReducer = (state = initialState, action) => {
-  switch (action.type) {
+  const {type, payload} = action;
+  switch (type) {
     case CAUSE_LIST_REQUEST:
       return {
         causeListLoading: true,
@@ -53,7 +54,7 @@ export const causeReducer = (state = initialState, action) => {
     case CAUSE_LIST_SUCCESS:
       return {
         causeListLoading: false,
-        causeList: [...action.causeList, ...action.payload.data.causes],
+        causeList: payload.data.causes,
         causeListSuccess: false,
         causeListError: null,
       };
@@ -138,18 +139,16 @@ export const causeReducer = (state = initialState, action) => {
       };
 
     case CAUSE_UPDATE_REQUEST:
-      return {
-        causeUpdateLoading: true,
-        causeUpdate: {},
-        causeUpdateSuccess: false,
-        causeUpdateError: null,
-      };
+      return state;
     case CAUSE_UPDATE_SUCCESS:
+      const updatedCauseList = state.causeList.map((cause) =>
+        cause._id === action.payload.data._id ? action.payload.data : cause,
+      );
       return {
-        causeUpdateLoading: false,
-        causeUpdate: action.payload,
-        causeUpdateSuccess: true,
-        causeUpdateError: null,
+        causeListLoading: false,
+        causeList: updatedCauseList,
+        causeListSuccess: false,
+        causeListError: null,
       };
     case CAUSE_UPDATE_FAIL:
       return {

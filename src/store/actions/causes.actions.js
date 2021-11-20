@@ -17,8 +17,7 @@ import {
 } from '../constants/causes.constants';
 import api from 'api';
 
-export const listCauses = (page, causeList) => async (dispatch) => {
-  const OriginalData = [];
+export const listCauses = (page) => async (dispatch) => {
   try {
     dispatch({type: CAUSE_LIST_REQUEST});
     const {data} = await api.get(`/causes?page=${page}`);
@@ -26,7 +25,6 @@ export const listCauses = (page, causeList) => async (dispatch) => {
     dispatch({
       type: CAUSE_LIST_SUCCESS,
       payload: data,
-      causeList,
     });
   } catch (error) {
     dispatch({
@@ -111,21 +109,16 @@ export const createCause = () => async (dispatch, getState) => {
   }
 };
 
-export const updateCause = (cause) => async (dispatch, getState) => {
+export const updateCause = (id, status) => async (dispatch, getState) => {
   try {
     dispatch({type: CAUSE_UPDATE_REQUEST});
 
-    const {
-      userLogin: {userInfo},
-    } = getState();
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-    const {data} = await api.patch(`/causes/${cause._id}`, cause, config);
+    const token = JSON.parse(localStorage.getItem('userInfo')).token;
+    const {data} = await api.put(
+      'causes/' + id,
+      {status: status == 'ongoing' ? 'past' : 'ongoing'},
+      {headers: {Authorization: 'Bearer ' + token}},
+    );
 
     dispatch({type: CAUSE_UPDATE_SUCCESS, payload: data});
   } catch (error) {

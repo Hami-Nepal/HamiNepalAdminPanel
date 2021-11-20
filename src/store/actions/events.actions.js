@@ -17,13 +17,13 @@ import {
 } from '../constants/events.constants';
 import api from 'api';
 
-export const listEvents = (page, eventList) => async (dispatch) => {
+export const listEvents = (page) => async (dispatch) => {
   try {
     dispatch({type: EVENT_LIST_REQUEST});
 
     const {data} = await api.get('/events?page=' + page);
 
-    dispatch({type: EVENT_LIST_SUCCESS, payload: data, eventList});
+    dispatch({type: EVENT_LIST_SUCCESS, payload: data});
   } catch (error) {
     dispatch({
       type: EVENT_LIST_FAIL,
@@ -107,12 +107,9 @@ export const createEvent = (formData) => async (dispatch, getState) => {
   }
 };
 
-export const updateEvent = (id, status) => async (
-  dispatch,
-  getState,
-) => {
+export const updateEvent = (id, status) => async (dispatch, getState) => {
   try {
-    dispatch({type: EVENT_UPDATE_REQUEST,});
+    dispatch({type: EVENT_UPDATE_REQUEST});
 
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
     const {data} = await api.put(

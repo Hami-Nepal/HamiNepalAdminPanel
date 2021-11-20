@@ -165,19 +165,16 @@ export default function EditActOfKindness() {
             difference[0].indexOf('/images/') + 8,
           );
           axios
-            .get(
-              `https://haminepal.herokuapp.com/api/v1/uploads/image/delete`,
-              {
-                params: {
-                  key,
-                },
-                headers: {
-                  Authorization: `Bearer ${
-                    JSON.parse(localStorage.getItem('userInfo')).token
-                  }`,
-                },
+            .get(`${baseUrl}+uploads/image/delete`, {
+              params: {
+                key,
               },
-            )
+              headers: {
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem('userInfo')).token
+                }`,
+              },
+            })
             .then((resp) => {
               setSeverity('success');
               setMessage('Successfully deleted the image to the server.');

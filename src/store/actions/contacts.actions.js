@@ -6,6 +6,7 @@ import {
 
 import api from 'api';
 import axios from 'axios';
+import baseUrl from 'api/baseUrl';
 
 export const listContacts = () => async (dispatch) => {
   const token = JSON.parse(localStorage.getItem('userInfo')).token;
@@ -14,7 +15,7 @@ export const listContacts = () => async (dispatch) => {
 
     const {data} = await axios({
       method: 'GET',
-      url: 'https://haminepal.herokuapp.com/api/v1/contacts',
+      url: baseUrl + 'contacts',
       headers: {
         Authorization: `Bearer ${token}`,
         'Access-Control-Allow-Origin': '*',

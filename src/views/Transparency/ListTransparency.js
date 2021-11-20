@@ -29,6 +29,7 @@ import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import {Link} from 'react-router-dom';
 import api from 'api';
 import baseURL from 'api/baseUrl';
+import TablePagination from '@mui/material/TablePagination';
 
 const useStyles = makeStyles({
   table: {
@@ -47,6 +48,8 @@ export default function TransparencysList() {
   const [transparencyListError, setTransparencyListError] = useState(null);
   const [transparencyListLoading, setTransparencyListLoading] = useState(true);
   const [transparencyList, setTransparencyList] = useState([]);
+  const [page, setPage] = React.useState(0);
+  const [total_data, setTotal_data] = useState(0);
 
   const handleDeleteTransparency = async (id) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
@@ -66,13 +69,20 @@ export default function TransparencysList() {
     }
   };
 
-  const fetchData = async () => {
-    const {data: response} = await axios.get(baseURL + 'transparency');
-    setTransparencyList(response.data.transparencies);
-    setTransparencyListLoading(false);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  useEffect(fetchData, []);
+  const fetchData = async () => {
+    const {data: response} = await axios.get(
+      baseURL + 'transparency?page=' + (page + 1),
+    );
+    setTransparencyList(response.data.transparencies);
+    setTransparencyListLoading(false);
+    // setTotal_data(response.total_data)
+  };
+
+  useEffect(fetchData, [page]);
 
   return (
     <GridContainer>
@@ -173,6 +183,13 @@ export default function TransparencysList() {
                   )}
                 </TableBody>
               </Table>
+              <TablePagination
+                component="div"
+                count={12}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={10}
+              />
             </TableContainer>
           </CardBody>
         </Card>

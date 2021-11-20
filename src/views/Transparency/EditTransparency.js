@@ -18,6 +18,7 @@ import Select from '@material-ui/core/Select';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
+import PropTypes from 'prop-types';
 
 import baseUrl from 'api/baseUrl';
 
@@ -60,8 +61,8 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function TransparencyPage({match}) {
-  const id = match.params.id;
+export default function TransparencyPage(props) {
+  const id = props.match.params.id;
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
 

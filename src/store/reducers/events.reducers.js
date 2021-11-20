@@ -42,7 +42,8 @@ const initialState = {
 };
 
 export const eventReducer = (state = initialState, action) => {
-  switch (action.type) {
+  const {type, payload} = action;
+  switch (type) {
     case EVENT_LIST_REQUEST:
       return {
         eventListLoading: true,
@@ -54,7 +55,7 @@ export const eventReducer = (state = initialState, action) => {
       return {
         eventListLoading: false,
         // eventList: action.payload,
-        eventList: [...action.eventList, ...action.payload.data],
+        eventList: payload.data,
         eventListSuccess: false,
         eventListError: null,
       };
