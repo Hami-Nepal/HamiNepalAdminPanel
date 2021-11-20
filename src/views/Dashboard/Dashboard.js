@@ -54,12 +54,12 @@ export default function Dashboard() {
 
   useEffect(async () => {
     const response = await axios.get(baseUrl + 'find/totalDonations', config);
-    serTotalDonations((response.data)? response.data.data[0].donation : '');
+    serTotalDonations((response.data && response.data.data[0])? response.data.data[0].donation : '');
     setDonationLoading(false);
   }, []);
   useEffect(async () => {
     const response = await axios.get(baseUrl + 'find/totalExpenses', config);
-    serTotalExpenses((response.data) ? response.data.data[0].total_expenses: '');
+    serTotalExpenses((response.data && response.data.data[0]) ? response.data.data[0].total_expenses: '');
     serTotalExpensesLoading(false);
   }, []);
 
