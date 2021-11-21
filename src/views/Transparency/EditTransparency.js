@@ -93,12 +93,12 @@ export default function TransparencyPage(props) {
   useEffect(async () => {
     const cause_types = await axios.get(baseUrl + 'cause_type');
 
-    setCauseTypes(cause_types.data.data.Cause_type_var);
+    setCauseTypes(cause_types.data.data);
   }, []);
   useEffect(async () => {
     const event_types = await axios.get(baseUrl + 'event_type');
 
-    setEventTypes(event_types.data.data.Event_type_var);
+    setEventTypes(event_types.data.data);
   }, []);
 
   useEffect(async () => {
@@ -328,7 +328,7 @@ export default function TransparencyPage(props) {
               onInputChange={handleInputChange}
             /> */}
           </div>
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={12}>
             <h5>Please upload a Bill Photo</h5>
             <div
               {...getRootProps()}

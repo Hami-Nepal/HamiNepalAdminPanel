@@ -220,7 +220,7 @@ export default function Addnews() {
               onInputChange={handleInputChange}
             /> */}
           </div>
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={12}>
             <h5>Please upload the news cover Photo</h5>
             <div
               {...getRootProps()}
@@ -230,7 +230,7 @@ export default function Addnews() {
                 border: '1px solid gray',
                 padding: '20px',
                 marginBottom: '20px',
-                width: '100%',
+                minHeight: '200px',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (

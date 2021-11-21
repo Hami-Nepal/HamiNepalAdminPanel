@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react';
-// @material-ui/core components
 import {useHistory} from 'react-router-dom';
+// @material-ui/core components
+
 import {useDropzone} from 'react-dropzone';
 import {makeStyles} from '@material-ui/core/styles';
 import GridItem from 'components/Grid/GridItem.js';
@@ -18,16 +19,15 @@ import Select from '@material-ui/core/Select';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-import baseURL from 'api/baseUrl';
+import baseUrl from '../../api/baseUrl';
+
+import AsyncSelect from 'react-select/async';
 
 const styles = {
   typo: {
     paddingLeft: '25%',
     marginBottom: '40px',
     position: 'relative',
-  },
-  formControl: {
-    minWidth: 120,
   },
   note: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -66,7 +66,7 @@ const loadOptions = (inputValue, callback) => {
   console.log(inputValue);
 };
 
-export default function TransparencyPage() {
+export default function AddMember() {
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
 
@@ -82,28 +82,18 @@ export default function TransparencyPage() {
 
   const [name, setName] = useState('');
 
-  const [type, setType] = useState('');
-  const [amount, setAmount] = useState('');
-  const [description, setDescription] = useState('');
-  const [cause, setCause] = useState('');
-  const [event, setEvent] = useState('');
+  const [designation, setDesignation] = useState('');
+  const [message, setMessage] = useState('');
+  const [facebookLink, setFacebookLink] = useState('');
+  const [instaLink, setInstaLink] = useState('');
+  const [twitterLink, setTwitter] = useState('');
+  const [linkedLink, setLinkedLink] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState('');
-  const [causeTypes, setCauseTypes] = useState([]);
-  const [eventTypes, setEventTypes] = useState([]);
 
-  useEffect(async () => {
-    const cause_types = await axios.get(baseURL + 'cause_type');
-
-    setCauseTypes(cause_types.data.data);
-  }, []);
-  useEffect(async () => {
-    const event_types = await axios.get(baseURL + 'event_type');
-
-    setEventTypes(event_types.data.data);
-  }, []);
+  const history = useHistory();
 
   // const handleFile = (e)=>{
   //   console.log(e.target.files)
@@ -111,8 +101,6 @@ export default function TransparencyPage() {
   //   let file = e.target.files[0];
   //   setSelectedFile(file)
   // }
-
-  const history = useHistory();
 
   const handleUpload = (e) => {
     e.preventDefault();
@@ -122,15 +110,16 @@ export default function TransparencyPage() {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('photo', selectedFile);
-    formData.append('type', type);
-    formData.append('amount', amount);
-    formData.append('description', description);
-    formData.append('event', event);
-    formData.append('cause', cause);
+    formData.append('designation', designation);
+    formData.append('facebookLink', facebookLink);
+    formData.append('instaLink', instaLink);
+    formData.append('twitterLink', twitterLink);
+    formData.append('linkedLink', linkedLink);
+    formData.append('message', message);
 
     axios({
       method: 'POST',
-      url: baseURL + 'transparency',
+      url: baseUrl + 'boardmembers',
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -139,10 +128,9 @@ export default function TransparencyPage() {
     })
       .then(function (response) {
         //handle success
-        console.log(response);
-        alert('file uploaded successfully');
+        alert('Member Created Successfully');
         setSubmissionLoading(false);
-        history.push('/admin/transparency');
+        history.push('/admin/board');
       })
       .catch(function (response) {
         //handle error
@@ -154,9 +142,9 @@ export default function TransparencyPage() {
   return (
     <Card>
       <CardHeader color="danger">
-        <h4 className={classes.cardTitleWhite}>Transparency CMS Screen</h4>
+        <h4 className={classes.cardTitleWhite}>Add Member Screen</h4>
         <p className={classes.cardCategoryWhite}>
-          For billing and files upload for transparency page
+          For adding board memmbers of Hami Nepal
         </p>
         <p className={classes.cardCategoryWhite}>
           Please check the information properly before submitting as it cannot
@@ -178,113 +166,17 @@ export default function TransparencyPage() {
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
-            <FormControl style={{width: '50%'}} className={classes.formControl}>
-              <InputLabel id="demo-simple-select-label">Bill Type</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={type}
-                onChange={(e) => {
-                  setType(e.target.value);
-                }}>
-                <MenuItem value={'cause'}>Cause</MenuItem>
-                <MenuItem value={'event'}>Events</MenuItem>
-              </Select>
-            </FormControl>
+            <TextField
+              id="standard-basic"
+              label="Designation"
+              value={designation}
+              onChange={(e) => {
+                setDesignation(e.target.value);
+              }}
+              required
+              style={{width: '500px', margin: '30px 0'}}
+            />
           </GridItem>
-          {type === 'cause' ? (
-            <GridItem xs={12} sm={12} md={12}>
-              <FormControl
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '4rem',
-                  margin: '30px 0',
-                }}
-                className={classes.formControl}>
-                <div style={{width: '100%'}}>
-                  <InputLabel id="demo-simple-select-label">
-                    Cause Type
-                  </InputLabel>
-                  <Select
-                    style={{width: '100%'}}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={cause}
-                    onChange={(e) => {
-                      setCause(e.target.value);
-                    }}>
-                    {causeTypes.map((obj) => (
-                      <MenuItem
-                        key={obj.cause_type}
-                        value={obj.cause_type}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                        }}>
-                        {obj.cause_type}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </div>
-                <div
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '1rem',
-                  }}></div>
-              </FormControl>
-            </GridItem>
-          ) : (
-            <GridItem xs={12} sm={12} md={12}>
-              <FormControl
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '4rem',
-                  margin: '30px 0',
-                }}
-                className={classes.formControl}>
-                <div style={{width: '100%'}}>
-                  <InputLabel id="demo-simple-select-label">
-                    Event Type
-                  </InputLabel>
-                  <Select
-                    style={{width: '100%'}}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={event}
-                    onChange={(e) => {
-                      setEvent(e.target.value);
-                    }}>
-                    {eventTypes.map((obj) => (
-                      <MenuItem
-                        key={obj.event_type}
-                        value={obj.event_type}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                        }}>
-                        {obj.event_type}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </div>
-                <div
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '1rem',
-                  }}></div>
-              </FormControl>
-            </GridItem>
-          )}
           {/* <GridItem xs={12} sm={12} md={4}>
             <TextField
               id="standard-basic"
@@ -298,26 +190,13 @@ export default function TransparencyPage() {
             />
           </GridItem> */}
           <GridItem xs={12} sm={12} md={4}>
-            <TextField
-              id="standard-basic"
-              label="Balance"
-              type="number"
-              value={amount}
-              onChange={(e) => {
-                setAmount(e.target.value);
-              }}
-              required
-              style={{width: '500px', margin: '30px 0'}}
-            />
-          </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
-              placeholder="Enter the description"
-              value={description}
+              placeholder="Enter the message from board mmeber"
+              value={message}
               onChange={(e) => {
-                setDescription(e.target.value);
+                setMessage(e.target.value);
               }}
               required
               style={{
@@ -326,9 +205,53 @@ export default function TransparencyPage() {
                 padding: '20px',
                 fontSize: '16px',
                 fontFamily: 'Roboto',
-                color: '#c0c1c2',
-                fontWeight: '390',
+                color: 'black',
+                fontWeight: '400',
               }}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="Facebook link"
+              value={facebookLink}
+              onChange={(e) => {
+                setFacebookLink(e.target.value);
+              }}
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="Instagram link"
+              value={instaLink}
+              onChange={(e) => {
+                setInstaLink(e.target.value);
+              }}
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="Twitter link"
+              value={twitterLink}
+              onChange={(e) => {
+                setTwitter(e.target.value);
+              }}
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="LinkedIn link"
+              value={linkedLink}
+              onChange={(e) => {
+                setLinkedLink(e.target.value);
+              }}
+              style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
 
@@ -341,7 +264,7 @@ export default function TransparencyPage() {
             /> */}
           </div>
           <GridItem xs={12} sm={12} md={12}>
-            <h5>Please upload a Bill Photo</h5>
+            <h5>Please upload the Member Profile Photo</h5>
             <div
               {...getRootProps()}
               required
@@ -350,14 +273,13 @@ export default function TransparencyPage() {
                 border: '1px solid gray',
                 padding: '20px',
                 marginBottom: '20px',
+                minHeight: '200px',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (
-                <p>Drop the bill photo here or...</p>
+                <p>Drop the photo here or...</p>
               ) : (
-                <p>
-                  Drag 'n' drop a bill picture here, or click to select bills
-                </p>
+                <p>Drag 'n' drop a photo here, or click to select the photo</p>
               )}
 
               {uploadedUrl && (
@@ -379,7 +301,7 @@ export default function TransparencyPage() {
               <CircularProgress />
             ) : (
               <Button color="danger" type="submit">
-                Submit
+                Add Member
               </Button>
             )}
           </GridItem>

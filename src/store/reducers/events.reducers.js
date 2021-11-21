@@ -48,6 +48,7 @@ export const eventReducer = (state = initialState, action) => {
       return {
         eventListLoading: true,
         eventList: [],
+        eventCount: 0,
         eventListSuccess: false,
         eventListError: null,
       };
@@ -56,6 +57,7 @@ export const eventReducer = (state = initialState, action) => {
         eventListLoading: false,
         // eventList: action.payload,
         eventList: payload.data,
+        eventCount: payload.total_data,
         eventListSuccess: false,
         eventListError: null,
       };

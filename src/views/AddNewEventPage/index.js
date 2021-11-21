@@ -124,14 +124,14 @@ export default function AddNewEventPage() {
       },
     );
 
-    setEventTypes((prev) => [...prev, eventType.data.data.newEvent_type]);
+    setEventTypes((prev) => [...prev, eventType.data.data]);
     setAddNewEventType('');
   };
 
   useEffect(async () => {
     const event_types = await axios.get(baseUrl + 'event_type');
     console.log(event_types);
-    setEventTypes(event_types.data.data.Event_type_var);
+    setEventTypes(event_types.data.data);
   }, []);
 
   const handleClose = () => {

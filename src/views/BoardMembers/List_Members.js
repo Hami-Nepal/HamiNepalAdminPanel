@@ -36,18 +36,18 @@ const useStyles = makeStyles({
     minWidth: 650,
   },
 });
-export default function CauseList() {
+export default function MemberList() {
   const classes = useStyles();
 
-  const [deleteKindnessSuccess, setDeleteKindnessSuccess] = useState(false);
-  const [deleteKindnessError, setDeleteKindnessError] = useState('');
+  const [deleteMemberSuccess, setDeleteMemberSuccess] = useState(false);
+  const [deleteMemberError, setDeleteMemberError] = useState('');
   const [error, setError] = useState();
-  const [KindnessListSuccess, setKindnessListSuccess] = useState(null);
-  const [KindnessListError, setKindnessListError] = useState(null);
-  const [KindnessListLoading, setKindnessListLoading] = useState(null);
-  const [KindnessList, setKindnessList] = useState([]);
+  const [newsListSuccess, setNewsListSuccess] = useState(null);
+  const [memberListError, setNewsListError] = useState(null);
+  const [memberListLoading, setNewsListLoading] = useState(null);
+  const [memberList, setMemberList] = useState([]);
 
-  const handleDeleteKindness = async (id) => {
+  const handleDeleteBoard = async (id) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
     const config = {
       headers: {
@@ -57,12 +57,12 @@ export default function CauseList() {
     };
 
     try {
-      const response = await api.delete(`/kindness/${id}`, config);
-      setDeleteKindnessSuccess(true);
-      setKindnessList(KindnessList.filter(({_id}) => _id !== id));
+      const response = await api.delete(`/boardmembers/${id}`, config);
+      setDeleteMemberSuccess(true);
+      setMemberList(memberList.filter(({_id}) => _id !== id));
     } catch (err) {
       setError(err);
-      setDeleteKindnessError(true);
+      setDeleteMemberError(true);
     }
   };
 
@@ -75,58 +75,32 @@ export default function CauseList() {
 
   const fetchData = async () => {
     const {data: response} = await axios.get(
-      baseURL + 'kindness?page=' + (page + 1),
+      baseURL + 'boardmembers?page=' + (page + 1),
     );
-    setKindnessList(response.data);
+    setMemberList(response.data);
     // setTotal_data(response.total_data)
     setTotal_data(response.total_data);
   };
 
   useEffect(fetchData, [page]);
 
-  const addToFeatured = async (id) => {
-    const {featured} = KindnessList.find(({_id}) => _id == id);
-    const featuredLists = KindnessList.filter(({featured}) => featured);
-    if (!featured && featuredLists.length >= 5) return;
-
-    const rankings = KindnessList.map(({featured_ranking}) => featured_ranking);
-    let nextRanking = null;
-
-    for (let i = 1; i <= 5; i++) {
-      if (!rankings.includes(i)) {
-        nextRanking = i;
-        break;
-      }
-    }
-
-    console.log(rankings, nextRanking);
-
-    const token = JSON.parse(localStorage.getItem('userInfo')).token;
-    const {data: response} = await axios.put(
-      baseURL + 'kindness/' + id,
-      {featured: !featured, featured_ranking: featured ? null : nextRanking},
-      {headers: {Authorization: 'Bearer ' + token}},
-    );
-    setKindnessList(
-      KindnessList.map((obj) => (obj._id === id ? response.data : obj)),
-    );
-  };
-
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
-        <Link to="/admin/act-of-kindness/create">
+        <Link to="/admin/board/create">
           <Button color="danger" type="submit">
-            Add a new Kindness
+            Add New Members
           </Button>
         </Link>
 
         {/* <DialogueBox /> */}
         <Card plain>
           <CardHeader plain color="danger">
-            <h4 className={classes.cardTitleWhite}>Kindnesss List</h4>
+            <h4 className={classes.cardTitleWhite}>
+              Current Board Member List
+            </h4>
             <p className={classes.cardCategoryWhite}>
-              Showing all the Kindnesss
+              Showing all the Board members
             </p>
           </CardHeader>
           <CardBody>
@@ -135,20 +109,17 @@ export default function CauseList() {
                 <TableHead>
                   <TableRow>
                     {/* <TableCell>id </TableCell> */}
-                    <TableCell align="center">Title</TableCell>
-                    <TableCell align="center">Type</TableCell>
-                    <TableCell align="center">Featured</TableCell>
-                    <TableCell align="center">Featured Ranking</TableCell>
+                    <TableCell align="center">Name</TableCell>
                     <TableCell align="center">Image</TableCell>
-                    <TableCell align="center">Updated At</TableCell>
+                    <TableCell align="center">Designation</TableCell>
                     <TableCell align="center ">Edit</TableCell>
                     <TableCell align="center ">Delete</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {KindnessListLoading ? (
+                  {memberListLoading ? (
                     <CircularProgress />
-                  ) : KindnessListError ? (
+                  ) : memberListError ? (
                     <Alert severity="error">
                       <AlertTitle>Error</AlertTitle>
                       Something bad happened —{' '}
@@ -163,50 +134,32 @@ export default function CauseList() {
                       </Button>
                     </Alert>
                   ) : (
-                    KindnessList.length &&
-                    (KindnessList
-                      ? KindnessList.map((row) => (
+                    memberList.length &&
+                    (memberList
+                      ? memberList.map((row) => (
                           <TableRow key={row._id}>
                             {/* <TableCell component="th" scope="row">
                               {row._id}
                             </TableCell> */}
-                            <TableCell align="center">{row.title}</TableCell>
-                            <TableCell align="center">{row.type}</TableCell>
-                            <TableCell
-                              align="center"
-                              component="th"
-                              scope="row"
-                              onClick={() => addToFeatured(row._id)}
-                              style={{
-                                color: row.featured ? 'green' : 'gray',
-                                cursor: 'pointer',
-                              }}>
-                              <VerifiedUserIcon />
+                            <TableCell align="center">{row.name}</TableCell>
+                            <TableCell align="center">
+                              <img src={row.photo} width={50} />
                             </TableCell>
                             <TableCell align="center">
-                              {row.featured_ranking}
+                              {row.designation}
                             </TableCell>
-                            <TableCell align="center">
-                              <img src={row.photos[0]} width={50} />
-                            </TableCell>
-                            <TableCell align="center">
-                              {new Date(row.updatedAt).getUTCFullYear()}
-                            </TableCell>
-                            <TableCell align="center">
+                            <TableCell align="left">
                               {
-                                <Link
-                                  to={`/admin/act-of-kindness/edit/${row._id}`}>
+                                <Link to={`/admin/board/edit/${row._id}`}>
                                   <EditIcon color="primary" />
                                 </Link>
                               }
                             </TableCell>
-                            <TableCell
-                              align="center"
-                              style={{cursor: 'pointer'}}>
+                            <TableCell align="left" style={{cursor: 'pointer'}}>
                               {
                                 <DeleteIcon
                                   color="secondary"
-                                  onClick={() => handleDeleteKindness(row._id)}
+                                  onClick={() => handleDeleteBoard(row._id)}
                                 />
                               }
                             </TableCell>
@@ -214,14 +167,14 @@ export default function CauseList() {
                         ))
                       : '')
                   )}
-                  {deleteKindnessSuccess ? (
+                  {deleteMemberSuccess ? (
                     <Alert severity="success">
                       <AlertTitle>Success</AlertTitle>
-                      Kindness deleted Successfully
+                      Member deleted Successfully
                     </Alert>
                   ) : null}
-                  {deleteKindnessError && (
-                    <div style={{color: 'red'}}>deleteKindnessError</div>
+                  {deleteMemberError && (
+                    <div style={{color: 'red'}}>deleteNewsError</div>
                   )}
                 </TableBody>
               </Table>

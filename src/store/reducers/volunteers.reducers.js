@@ -40,8 +40,8 @@ export const volunteersReducer = (state = initialState, action) => {
     case VOLUNTEERS_LIST_SUCCESS:
       return {
         ...state,
-        volunteerList: payload.data.volunteers,
-        volunteerCount: payload.results,
+        volunteerList: payload.data,
+        volunteerCount: payload.total_data,
         volunteerListLoading: false,
         volunteerListSuccess: true,
         volunteerListError: '',

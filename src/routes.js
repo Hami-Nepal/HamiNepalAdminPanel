@@ -41,6 +41,10 @@ import ActOfKindness from './views/ActOfKindness/act-of-kindness';
 import CreateActOfKindness from './views/CreateActOfKindness/CreateActOfKindness';
 import EditActOfKindness from './views/EditActOfKindness/EditActOfKindness';
 import ListNews from './views/News/ListNews';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import ListMembers from './views/BoardMembers/List_Members';
+import AddBoardMembers from './views/BoardMembers/addMembers';
+import EditBoardMembers from './views/BoardMembers/UpdateMembers';
 
 export const demoRoutes = [
   {
@@ -155,6 +159,20 @@ export const demoRoutes = [
     layout: '/admin',
   },
   {
+    path: '/board/create',
+    name: 'Create Board Member',
+    icon: CompareArrowsIcon,
+    component: AddBoardMembers,
+    layout: '/admin',
+  },
+  {
+    path: '/board/edit/:id',
+    name: 'Edit Board Member Detail',
+    icon: CompareArrowsIcon,
+    component: EditBoardMembers,
+    layout: '/admin',
+  },
+  {
     path: '/transparency/edit/:id',
     name: 'Edit Transparency',
     icon: CompareArrowsIcon,
@@ -240,6 +258,13 @@ export const dashboardRoutes = [
     name: 'Act of kindness',
     icon: KindnessIcon,
     component: ActOfKindness,
+    layout: '/admin',
+  },
+  {
+    path: '/board',
+    name: 'Add Board Members',
+    icon: PeopleAltIcon,
+    component: ListMembers,
     layout: '/admin',
   },
   {

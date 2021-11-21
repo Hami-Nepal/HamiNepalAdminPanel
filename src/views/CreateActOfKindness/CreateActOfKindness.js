@@ -113,7 +113,7 @@ export default function CreateActOfKindness() {
 
   useEffect(async () => {
     const {data: res} = await axios.get(baseUrl + 'volunteers');
-    setVolunteersList(res.data.volunteers);
+    setVolunteersList(res.data);
   }, []);
 
   const handleClose = () => {
@@ -129,54 +129,54 @@ export default function CreateActOfKindness() {
     setInputValue({inputValue});
   };
 
-  useEffect(() => {
-    if (ckEditor) {
-      let currentImageKeys = Array.from(
-        new DOMParser()
-          .parseFromString(ckEditor.getData(), 'text/html')
-          .querySelectorAll('img'),
-      ).map((img) => img.getAttribute('src'));
+  // useEffect(() => {
+  //   if (ckEditor) {
+  //     let currentImageKeys = Array.from(
+  //       new DOMParser()
+  //         .parseFromString(ckEditor.getData(), 'text/html')
+  //         .querySelectorAll('img'),
+  //     ).map((img) => img.getAttribute('src'));
 
-      if (currentImageKeys.length < imageKeys.length) {
-        // find the missing key
-        let difference = imageKeys.filter((x) => !currentImageKeys.includes(x));
+  //     if (currentImageKeys.length < imageKeys.length) {
+  //       // find the missing key
+  //       let difference = imageKeys.filter((x) => !currentImageKeys.includes(x));
 
-        if (difference[0]) {
-          const key = difference[0].substring(
-            difference[0].indexOf('/images/') + 8,
-          );
-          axios
-            .get(`${baseUrl}+uploads/image/delete`, {
-              params: {
-                key,
-              },
-              headers: {
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem('userInfo')).token
-                }`,
-              },
-            })
-            .then((resp) => {
-              setSeverity('success');
-              setMessage('Successfully deleted the image to the server.');
-              setOpen(true);
-            })
-            .catch((err) => {
-              setSeverity('error');
+  //       if (difference[0]) {
+  //         const key = difference[0].substring(
+  //           difference[0].indexOf('/images/') + 8,
+  //         );
+  //         axios
+  //           .get(`${baseUrl}+uploads/image/delete`, {
+  //             params: {
+  //               key,
+  //             },
+  //             headers: {
+  //               Authorization: `Bearer ${
+  //                 JSON.parse(localStorage.getItem('userInfo')).token
+  //               }`,
+  //             },
+  //           })
+  //           .then((resp) => {
+  //             setSeverity('success');
+  //             setMessage('Successfully deleted the image to the server.');
+  //             setOpen(true);
+  //           })
+  //           .catch((err) => {
+  //             setSeverity('error');
 
-              setMessage('Could not delete the file from the server.');
+  //             setMessage('Could not delete the file from the server.');
 
-              setOpen(true);
+  //             setOpen(true);
 
-              ckEditor.execute('undo');
-              console.error(err);
-            });
-          // push to /uploads/delete?key=key
-        }
-      }
-      setImageKeys(currentImageKeys);
-    }
-  }, [description]);
+  //             ckEditor.execute('undo');
+  //             console.error(err);
+  //           });
+  //         // push to /uploads/delete?key=key
+  //       }
+  //     }
+  //     setImageKeys(currentImageKeys);
+  //   }
+  // }, [description]);
 
   const handleEventSubmit = (e) => {
     e.preventDefault();
