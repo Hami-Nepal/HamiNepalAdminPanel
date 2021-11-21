@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 // @material-ui/core components
 
 import {useDropzone} from 'react-dropzone';
+import {useHistory} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 import GridItem from 'components/Grid/GridItem.js';
 import Button from 'components/CustomButtons/Button.js';
@@ -114,6 +115,8 @@ export default function Editnews({match}) {
     setInputValue({inputValue});
   };
 
+  const history = useHistory();
+
   const handleUpload = (e) => {
     e.preventDefault();
     setSubmissionLoading(true);
@@ -138,6 +141,7 @@ export default function Editnews({match}) {
         //handle success
         alert('News edited successfully');
         setSubmissionLoading(false);
+        history.push('/admin/news');
       })
       .catch(function (response) {
         //handle error
@@ -228,7 +232,7 @@ export default function Editnews({match}) {
               onInputChange={handleInputChange}
             /> */}
           </div>
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={12}>
             <h5>Please upload the news cover Photo</h5>
             <div
               {...getRootProps()}
@@ -238,7 +242,7 @@ export default function Editnews({match}) {
                 border: '1px solid gray',
                 padding: '20px',
                 marginBottom: '20px',
-                width: '100%',
+                minHeight: '200px',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (

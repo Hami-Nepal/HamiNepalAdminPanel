@@ -12,6 +12,8 @@ import CardFooter from 'components/Card/CardFooter.js';
 import {useDispatch, useSelector} from 'react-redux';
 import {listVolunteers} from './../../store/actions/volunteers.actions';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
@@ -20,7 +22,6 @@ import TableBody from '@material-ui/core/TableBody';
 import styles from 'assets/jss/material-dashboard-react/views/dashboardStyle.js';
 import baseUrl from '../../api/baseUrl';
 import axios from 'axios';
-
 
 const useStyles = makeStyles(styles);
 
@@ -54,12 +55,20 @@ export default function Dashboard() {
 
   useEffect(async () => {
     const response = await axios.get(baseUrl + 'find/totalDonations', config);
-    serTotalDonations((response.data && response.data.data[0])? response.data.data[0].donation : 0);
+    serTotalDonations(
+      response.data && response.data.data[0]
+        ? response.data.data[0].donation
+        : 0,
+    );
     setDonationLoading(false);
   }, []);
   useEffect(async () => {
     const response = await axios.get(baseUrl + 'find/totalExpenses', config);
-    serTotalExpenses((response.data && response.data.data[0]) ? response.data.data[0].total_expenses: 0);
+    serTotalExpenses(
+      response.data && response.data.data[0]
+        ? response.data.data[0].total_expenses
+        : 0,
+    );
     serTotalExpensesLoading(false);
   }, []);
 
@@ -96,7 +105,7 @@ export default function Dashboard() {
       .get(baseUrl + 'causes?sort=-balance&limit=5&status=ongoing')
       .then(function (response) {
         //handle success
-        setCauseList(response.data.data.causes);
+        setCauseList(response.data.data);
         setCauseListLoading(false);
       })
       .catch(function (response) {

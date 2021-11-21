@@ -47,13 +47,14 @@ export default function CauseList() {
   const [deleteCauseSuccess, setDeleteCauseSuccess] = useState(false);
   const [deleteCauseError, setDeleteCauseError] = useState('');
   const [error, setError] = useState();
-  const [curentPage, setcurentPage] = useState(0);
+
   const [CauseLists, setCauseLists] = useState([]);
   const {
     causeListSuccess,
     causeListError,
     causeListLoading,
     causeList,
+    causeCount,
   } = useSelector((state) => state.causes);
 
   const handleDeleteCause = async (id) => {
@@ -74,6 +75,8 @@ export default function CauseList() {
       setDeleteCauseError(true);
     }
   };
+  const [curentPage, setcurentPage] = useState(0);
+  const [total_data, setTotal_data] = useState(0);
 
   const handleChangePage = (event, newPage) => {
     setcurentPage(newPage);
@@ -84,7 +87,10 @@ export default function CauseList() {
     dispatch(listCauses(curentPage + 1));
     // if (!causeListSuccess) {
     // }
+    setTotal_data(causeCount);
   }, [curentPage]);
+
+  console.log();
 
   const changeStatus = (id, status) => {
     dispatch(updateCause(id, status, causeList));
@@ -198,7 +204,7 @@ export default function CauseList() {
               </Table>
               <TablePagination
                 component="div"
-                count={12}
+                count={total_data}
                 page={curentPage}
                 onPageChange={handleChangePage}
                 rowsPerPage={10}

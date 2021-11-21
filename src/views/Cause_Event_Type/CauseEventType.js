@@ -165,8 +165,8 @@ export default function AddCauseEvent() {
     const {data: response} = await axios.get(
       baseUrl + 'cause_type?page=' + (causePage + 1),
     );
-    setCauseList(response.data.Cause_type_var);
-    // setTotal_data_C(response.total_data)
+    setCauseList(response.data);
+    setTotal_data_C(response.total_data);
   };
 
   useEffect(fetchCauseData, [causePage]);
@@ -189,8 +189,8 @@ export default function AddCauseEvent() {
     const {data: response} = await axios.get(
       baseUrl + 'event_type?page=' + (eventPage + 1),
     );
-    setEventList(response.data.Event_type_var);
-    // setTotal_data_E(response.total_data)
+    setEventList(response.data);
+    setTotal_data_E(response.total_data);
   };
 
   useEffect(fetchEventData, [eventPage]);
@@ -421,7 +421,7 @@ export default function AddCauseEvent() {
                   </Table>
                   <TablePagination
                     component="div"
-                    count={12}
+                    count={total_data_C}
                     page={causePage}
                     onPageChange={handleChangeCuasePage}
                     rowsPerPage={10}
@@ -512,7 +512,7 @@ export default function AddCauseEvent() {
                   </Table>
                   <TablePagination
                     component="div"
-                    count={12}
+                    count={total_data_E}
                     page={eventPage}
                     onPageChange={handleChangeEventPage}
                     rowsPerPage={10}

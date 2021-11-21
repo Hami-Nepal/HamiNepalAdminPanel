@@ -52,6 +52,7 @@ export default function EventList() {
     eventListError,
     eventListLoading,
     eventList,
+    eventCount,
   } = useSelector((state) => state.events);
 
   const handleDeleteEvent = async (id) => {
@@ -74,6 +75,7 @@ export default function EventList() {
   };
 
   const [currentPage, setCurrentPage] = useState(0);
+  const [total_data, setTotal_data] = useState(0);
 
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
@@ -84,6 +86,7 @@ export default function EventList() {
     // if (!eventListSuccess) {
     //   setMount(true);
     // }
+    setTotal_data(eventCount);
   }, [currentPage]);
 
   const changeStatus = (id, status) => {
@@ -195,7 +198,7 @@ export default function EventList() {
               </Table>
               <TablePagination
                 component="div"
-                count={12}
+                count={total_data}
                 page={currentPage}
                 onPageChange={handleChangePage}
                 rowsPerPage={10}

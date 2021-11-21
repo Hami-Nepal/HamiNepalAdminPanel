@@ -77,9 +77,9 @@ export default function TransparencysList() {
     const {data: response} = await axios.get(
       baseURL + 'transparency?page=' + (page + 1),
     );
-    setTransparencyList(response.data.transparencies);
+    setTransparencyList(response.data);
     setTransparencyListLoading(false);
-    // setTotal_data(response.total_data)
+    setTotal_data(response.total_data);
   };
 
   useEffect(fetchData, [page]);
@@ -185,7 +185,7 @@ export default function TransparencysList() {
               </Table>
               <TablePagination
                 component="div"
-                count={12}
+                count={total_data}
                 page={page}
                 onPageChange={handleChangePage}
                 rowsPerPage={10}

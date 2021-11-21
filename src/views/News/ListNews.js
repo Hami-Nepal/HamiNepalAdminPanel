@@ -46,8 +46,6 @@ export default function NewssList() {
   const [newsListError, setNewsListError] = useState(null);
   const [newsListLoading, setNewsListLoading] = useState(null);
   const [newsList, setNewsList] = useState([]);
-  const [page, setPage] = React.useState(0);
-  const [total_data, setTotal_data] = useState(0);
 
   const handleDeleteNews = async (id) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
@@ -68,6 +66,9 @@ export default function NewssList() {
     }
   };
 
+  const [page, setPage] = React.useState(0);
+  const [total_data, setTotal_data] = useState(0);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -78,6 +79,7 @@ export default function NewssList() {
     );
     setNewsList(response.data);
     // setTotal_data(response.total_data)
+    setTotal_data(response.total_data);
   };
 
   useEffect(fetchData, [page]);
@@ -174,7 +176,7 @@ export default function NewssList() {
               </Table>
               <TablePagination
                 component="div"
-                count={12}
+                count={total_data}
                 page={page}
                 onPageChange={handleChangePage}
                 rowsPerPage={10}

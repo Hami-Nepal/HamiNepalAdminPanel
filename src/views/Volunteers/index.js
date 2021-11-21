@@ -50,10 +50,8 @@ export default function Index() {
     volunteerListError,
     volunteerListLoading,
     volunteerList,
+    volunteerCount,
   } = useSelector((state) => state.volunteers);
-
-  const [page, setPage] = React.useState(0);
-  const [total_data, setTotal_data] = useState(0);
 
   const deleteVol = async (id) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
@@ -72,6 +70,8 @@ export default function Index() {
       setDeleteVolunteerError(err);
     }
   };
+  const [page, setPage] = React.useState(0);
+  const [total_data, setTotal_data] = useState(0);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -81,6 +81,7 @@ export default function Index() {
     dispatch(listVolunteers(page + 1));
     // if (!volunteerListSuccess) {
     // }
+    setTotal_data(volunteerCount);
   };
   useEffect(dispatchData, [page]);
 
@@ -182,7 +183,7 @@ export default function Index() {
               </Table>
               <TablePagination
                 component="div"
-                count={12}
+                count={total_data}
                 page={page}
                 onPageChange={handleChangePage}
                 rowsPerPage={10}

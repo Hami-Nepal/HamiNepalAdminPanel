@@ -115,7 +115,7 @@ export default function TransparencyPage() {
 
     axios({
       method: 'PUT',
-      url: baseUrl + 'homepage/613e3067845f7e2e78c5863c',
+      url: baseUrl + 'homepage/619a2b71499553895d06bab7',
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',

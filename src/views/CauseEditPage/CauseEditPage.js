@@ -98,8 +98,7 @@ export default function AddNewCausePage({match}) {
 
   useEffect(async () => {
     const cause_types = await axios.get(baseURL + 'cause_type');
-    console.log(cause_types.data.Cause_type_var);
-    setCauseTypes(cause_types.data.data.Cause_type_var);
+    setCauseTypes(cause_types.data.data);
   }, []);
 
   useEffect(async () => {
