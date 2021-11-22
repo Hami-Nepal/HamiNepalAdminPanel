@@ -204,7 +204,7 @@ export default function AddNewEventPage() {
       </Snackbar>
       <Card>
         <CardHeader color="danger">
-          <h4 className={classes.cardTitleWhite}>Edit Event Screen</h4>
+          <h4 className={classes.cardTitleWhite}>Add New Event Screen</h4>
           <p className={classes.cardCategoryWhite}>
             For updating images for events
           </p>
