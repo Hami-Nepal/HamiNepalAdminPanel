@@ -23,7 +23,6 @@
 .noUi-target,
 .noUi-target * {
   -webkit-touch-callout: none;
-  -ms-touch-action: none;
   user-select: none;
   box-sizing: border-box;
 }
@@ -182,7 +181,7 @@
 
 .slider.slider-danger .noUi-connect,
 .slider.slider-danger.noUi-connect {
-  background-color: #f44336;
+  background-color: #800000;
 }
 
 .slider.slider-danger .noUi-handle {
@@ -642,7 +641,7 @@ h2.title {
 }
 
 .text-danger {
-  color: #f44336;
+  color: #800000;
 }
 
 .text-success {
@@ -1680,7 +1679,7 @@ fieldset[disabled] .navbar .navbar-nav > li > a.btn.btn-warning.active {
 .open > .navbar .navbar-nav > li > a.btn.btn-danger.dropdown-toggle,
 .open > .navbar .navbar-nav > li > a.btn.btn-danger.dropdown-toggle:focus,
 .open > .navbar .navbar-nav > li > a.btn.btn-danger.dropdown-toggle:hover {
-  background-color: #f44336;
+  background-color: #800000;
   color: #ffffff;
 }
 
@@ -4375,7 +4374,6 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
   border-radius: 10px;
   text-align: center;
   line-height: 19px;
-  vertical-align: middle;
   display: block;
 }
 
@@ -5039,13 +5037,6 @@ fieldset[disabled] .navbar .btn-link:focus {
 }
 
 @media (max-width: 1199px) {
-  .navbar {
-    /*
-        .navbar-form {
-          margin-top: 10px;
-        }
-    */
-  }
   .navbar .navbar-brand {
     height: 50px;
     padding: 10px 15px;
@@ -6923,9 +6914,6 @@ footer .btn {
   }
   .dropdown-menu {
     display: none;
-  }
-  .navbar-fixed-top {
-    -webkit-backface-visibility: hidden;
   }
   #bodyClick {
     height: 100%;

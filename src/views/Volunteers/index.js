@@ -30,6 +30,7 @@ import TablePagination from '@mui/material/TablePagination';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {listVolunteers} from './../../store/actions/volunteers.actions';
+import {verifyVolunteer} from './../../store/actions/volunteers.actions';
 
 const useStyles = makeStyles({
   table: {
@@ -45,6 +46,8 @@ export default function Index() {
   const [deleteVolunteerError, setDeleteVolunteerError] = useState('');
   const [error, setError] = useState();
 
+  const [isverified, setisVerified] = useState(false);
+
   const {
     volunteerListSuccess,
     volunteerListError,
@@ -52,6 +55,10 @@ export default function Index() {
     volunteerList,
     volunteerCount,
   } = useSelector((state) => state.volunteers);
+
+  const handleVerifyVolunteer = (id) => {
+    dispatch(verifyVolunteer(id, volunteerList));
+  };
 
   const deleteVol = async (id) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
@@ -71,7 +78,6 @@ export default function Index() {
     }
   };
   const [page, setPage] = React.useState(0);
-  const [total_data, setTotal_data] = useState(0);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -81,7 +87,6 @@ export default function Index() {
     dispatch(listVolunteers(page + 1));
     // if (!volunteerListSuccess) {
     // }
-    setTotal_data(volunteerCount);
   };
   useEffect(dispatchData, [page]);
 
@@ -98,6 +103,7 @@ export default function Index() {
               <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                   <TableRow>
+                    <TableCell align="center">Verify</TableCell>
                     <TableCell align="center">Name</TableCell>
                     <TableCell align="center">Avatar</TableCell>
                     <TableCell align="center">Contact</TableCell>
@@ -131,6 +137,16 @@ export default function Index() {
                   ) : volunteerList ? (
                     volunteerList.map((row) => (
                       <TableRow key={row._id}>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          onClick={() => handleVerifyVolunteer(row._id)}
+                          style={{
+                            color: row.isVerified ? 'green' : 'red',
+                            cursor: 'pointer',
+                          }}>
+                          <VerifiedUserIcon />
+                        </TableCell>
                         <TableCell align="center">
                           {row.first_name} {row.last_name}
                         </TableCell>
@@ -183,7 +199,7 @@ export default function Index() {
               </Table>
               <TablePagination
                 component="div"
-                count={total_data}
+                count={volunteerCount}
                 page={page}
                 onPageChange={handleChangePage}
                 rowsPerPage={10}

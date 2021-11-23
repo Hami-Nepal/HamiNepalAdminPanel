@@ -144,12 +144,12 @@ export default function AddNewEventPage() {
         // find the missing key
         let difference = imageKeys.filter((x) => !currentImageKeys.includes(x));
 
-        console.log('image delete detected, image key: ', difference);
+        // console.log('image delete detected, image key: ', difference);
         if (difference[0]) {
           const key = difference[0].substring(
             difference[0].indexOf('/images/') + 8,
           );
-          console.log(key);
+          // console.log(key);
           axios
             .get(`${baseUrl}+uploads/image/delete`, {
               params: {
@@ -165,7 +165,7 @@ export default function AddNewEventPage() {
               setSeverity('success');
               setMessage('Successfully deleted the image to the server.');
               setOpen(true);
-              console.log(resp);
+              // console.log(resp);
             })
             .catch((err) => {
               setSeverity('error');
@@ -175,7 +175,7 @@ export default function AddNewEventPage() {
               setOpen(true);
 
               ckEditor.execute('undo');
-              console.error(err);
+              // console.error(err);
             });
           // push to /uploads/delete?key=key
         }
@@ -217,14 +217,14 @@ export default function AddNewEventPage() {
     })
       .then(function (response) {
         //handle success
-        console.log(response);
+        // console.log(response);
         alert('file uploaded successfully');
         setSubmissionLoading(false);
       })
       .catch(function (response) {
         //handle error
-        console.log(response);
-        console.log(response.message);
+        // console.log(response);
+        // console.log(response.message);
         setError(response.message);
         setSubmissionLoading(false);
       });

@@ -121,7 +121,7 @@ export default function AddNewEventPage({match}) {
 
   useEffect(async () => {
     const event_types = await axios.get(baseUrl + 'event_type');
-    console.log(event_types);
+
     setEventTypes(event_types.data.data);
   }, []);
 
@@ -131,7 +131,6 @@ export default function AddNewEventPage({match}) {
   const [imageKeys, setImageKeys] = useState([]);
 
   const handleTypeChange = (event) => {
-    console.log(event.target.value);
     setType(event.target.value);
   };
   const history = useHistory();
@@ -166,15 +165,14 @@ export default function AddNewEventPage({match}) {
     })
       .then(function (response) {
         //handle success
-        console.log(response);
+
         alert('Event updated successfully');
         setSubmissionLoading(false);
         history.push('/admin/events');
       })
       .catch(function (response) {
         //handle error
-        console.log(response);
-        console.log(response.message);
+
         setError(response.message);
         setSubmissionLoading(false);
       });

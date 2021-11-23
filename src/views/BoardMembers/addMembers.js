@@ -62,9 +62,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-const loadOptions = (inputValue, callback) => {
-  console.log(inputValue);
-};
+const loadOptions = (inputValue, callback) => {};
 
 export default function AddMember() {
   const onDrop = useCallback((acceptedFiles) => {

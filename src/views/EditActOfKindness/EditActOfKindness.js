@@ -229,7 +229,7 @@ export default function EditActOfKindness() {
       })
       .catch(function ({response}) {
         //handle error
-        console.log(response);
+        // console.log(response);
         setError(response);
         setSubmissionLoading(false);
       });

@@ -64,9 +64,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-const loadOptions = (inputValue, callback) => {
-  console.log(inputValue);
-};
+const loadOptions = (inputValue, callback) => {};
 
 export default function TransparencyPage() {
   const onDrop = useCallback((acceptedFiles) => {
@@ -125,14 +123,13 @@ export default function TransparencyPage() {
     })
       .then(function (response) {
         //handle success
-        console.log(response);
+
         alert('file updated successfully');
         setSubmissionLoading(false);
       })
       .catch(function (response) {
         //handle error
-        console.log(response);
-        console.log(response.message);
+
         setError(response.message);
         setSubmissionLoading(false);
       });
@@ -181,17 +178,32 @@ export default function TransparencyPage() {
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={6}>
-            <TextField
-              id="standard-basic"
-              label="Enter the Hexcode for ttitle color (eg:#0000)"
-              value={color}
-              onChange={(e) => {
-                setColor(e.target.value);
-              }}
-              required
-              style={{width: '500px', margin: '30px 0'}}
-            />
+            <InputLabel
+              id="demo-simple-select-label"
+              style={{width: '200px', margin: '10px 0'}}>
+              Select Color
+            </InputLabel>
+            <div style={{display: 'flex', alignItems: 'center'}}>
+              <input
+                id="colorpicker"
+                type="color"
+                value={color}
+                onChange={(e) => {
+                  setColor(e.target.value);
+                }}
+                required
+                style={{width: '100px'}}
+              />
+              <TextField
+                id="standard-basic"
+                value={color}
+                required
+                style={{width: '100px', paddingLeft: '20px'}}
+              />
+            </div>
           </GridItem>
+          {/* <GridItem xs={12} sm={12} md={6}>
+          </GridItem> */}
 
           <div>
             {/* <AsyncSelect

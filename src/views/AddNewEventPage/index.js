@@ -130,7 +130,7 @@ export default function AddNewEventPage() {
 
   useEffect(async () => {
     const event_types = await axios.get(baseUrl + 'event_type');
-    console.log(event_types);
+
     setEventTypes(event_types.data.data);
   }, []);
 
@@ -140,7 +140,6 @@ export default function AddNewEventPage() {
   const [imageKeys, setImageKeys] = useState([]);
 
   const handleTypeChange = (event) => {
-    console.log(event.target.value);
     setType(event.target.value);
   };
   const handleInputChange = (newValue) => {
@@ -154,7 +153,6 @@ export default function AddNewEventPage() {
     e.preventDefault();
     setSubmissionLoading(true);
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
-    console.log(token);
 
     const formData = new FormData();
     formData.append('name', name);
@@ -181,15 +179,14 @@ export default function AddNewEventPage() {
     })
       .then(function (response) {
         //handle success
-        console.log(response);
+
         alert('file uploaded successfully');
         setSubmissionLoading(false);
         history.push('/admin/events');
       })
       .catch(function (response) {
         //handle error
-        console.log(response);
-        console.log(response.message);
+
         setError(response.message);
         setSubmissionLoading(false);
       });

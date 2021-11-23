@@ -87,10 +87,7 @@ export default function CauseList() {
     dispatch(listCauses(curentPage + 1));
     // if (!causeListSuccess) {
     // }
-    setTotal_data(causeCount);
   }, [curentPage]);
-
-  console.log();
 
   const changeStatus = (id, status) => {
     dispatch(updateCause(id, status, causeList));
@@ -204,7 +201,7 @@ export default function CauseList() {
               </Table>
               <TablePagination
                 component="div"
-                count={total_data}
+                count={causeCount}
                 page={curentPage}
                 onPageChange={handleChangePage}
                 rowsPerPage={10}

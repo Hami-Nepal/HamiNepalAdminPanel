@@ -64,7 +64,7 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 const loadOptions = (inputValue, callback) => {
-  console.log(inputValue);
+  // console.log(inputValue);
 };
 
 export default function Editnews({match}) {
@@ -145,8 +145,8 @@ export default function Editnews({match}) {
       })
       .catch(function (response) {
         //handle error
-        console.log(response);
-        console.log(response.message);
+        // console.log(response);
+        // console.log(response.message);
         setError(response.message);
         setSubmissionLoading(false);
       });

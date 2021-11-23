@@ -139,7 +139,7 @@ export default function TransparencyPage() {
     })
       .then(function (response) {
         //handle success
-        console.log(response);
+        // console.log(response);
         alert('file uploaded successfully');
         setSubmissionLoading(false);
         history.push('/admin/transparency');
