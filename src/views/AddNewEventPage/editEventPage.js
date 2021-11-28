@@ -440,7 +440,7 @@ export default function AddNewEventPage({match}) {
                 <div style={{display: 'flex', gap: '1rem'}}>
                   {uploadedUrl.length &&
                     uploadedUrl.map((url) => (
-                      <img src={url} style={{height: '200px'}} />
+                      <img src={url} style={{height: '80px'}} />
                     ))}
                 </div>
               </div>

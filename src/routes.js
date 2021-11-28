@@ -46,6 +46,11 @@ import ListMembers from './views/BoardMembers/List_Members';
 import AddBoardMembers from './views/BoardMembers/addMembers';
 import EditBoardMembers from './views/BoardMembers/UpdateMembers';
 
+import UserPage from './views/Users/user';
+import CivilMoment from './views/civilrightMoment/ListCivilRights';
+import AddCivilRights from './views/civilrightMoment/AddCivilRIghts';
+import EditCivilRights from './views/civilrightMoment/EditCivilRights';
+
 export const demoRoutes = [
   {
     path: '/user',
@@ -166,12 +171,25 @@ export const demoRoutes = [
     layout: '/admin',
   },
   {
+    path: '/civilrights/create',
+    name: 'Create Civil Blogs',
+    component: AddCivilRights,
+    layout: '/admin',
+  },
+  {
+    path: '/civilrights/edit/:id',
+    name: 'Edit Civil Rights Content',
+    component: EditCivilRights,
+    layout: '/admin',
+  },
+  {
     path: '/board/edit/:id',
     name: 'Edit Board Member Detail',
     icon: CompareArrowsIcon,
     component: EditBoardMembers,
     layout: '/admin',
   },
+
   {
     path: '/transparency/edit/:id',
     name: 'Edit Transparency',
@@ -196,6 +214,13 @@ export const dashboardRoutes = [
     rtlName: 'لوحة القيادة',
     icon: MonetizationOnIcon,
     component: DonationsPage,
+    layout: '/admin',
+  },
+  {
+    path: '/users',
+    name: 'User List',
+    icon: PeopleAltIcon,
+    component: UserPage,
     layout: '/admin',
   },
   // {
@@ -262,9 +287,16 @@ export const dashboardRoutes = [
   },
   {
     path: '/board',
-    name: 'Add Board Members',
+    name: 'Board Members',
     icon: PeopleAltIcon,
     component: ListMembers,
+    layout: '/admin',
+  },
+  {
+    path: '/civilrights',
+    name: 'Civil Right Moment',
+    icon: PeopleAltIcon,
+    component: CivilMoment,
     layout: '/admin',
   },
   {

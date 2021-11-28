@@ -27,6 +27,31 @@ import {CKEditor} from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import MyCustomUploadAdapterPlugin from 'utils/UploadAdapter';
 
+import Checkbox from '@material-ui/core/Checkbox';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+  getContentAnchorEl: null,
+  anchorOrigin: {
+    vertical: 'bottom',
+    horizontal: 'center',
+  },
+  transformOrigin: {
+    vertical: 'top',
+    horizontal: 'center',
+  },
+  variant: 'menu',
+};
+
 const styles = {
   typo: {
     paddingLeft: '25%',
@@ -124,9 +149,17 @@ export default function CreateActOfKindness() {
   const handleTypeChange = (event) => {
     setType(event.target.value);
   };
-  const handleInputChange = (newValue) => {
-    let inputValue = newValue.replace(/\W/g, '');
-    setInputValue({inputValue});
+  const handleChange = (event) => {
+    const value = event.target.value;
+    if (value[value.length - 1] === 'all') {
+      setSelected(
+        selectedVolunteers.length === volunteersList.length
+          ? []
+          : volunteersList,
+      );
+      return;
+    }
+    setSelectedVolunteers(value);
   };
 
   // useEffect(() => {
@@ -347,6 +380,39 @@ export default function CreateActOfKindness() {
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
+              <InputLabel id="mutiple-select-label">
+                Select Volunteer
+              </InputLabel>
+              <Select
+                labelId="mutiple-select-label"
+                multiple
+                value={selectedVolunteers}
+                onChange={handleChange}
+                renderValue={(selectedVolunteers) =>
+                  selectedVolunteers.join(', ')
+                }
+                MenuProps={MenuProps}
+                style={{width: '50%'}}>
+                {volunteersList.map((option) => (
+                  <MenuItem key={`${option.first_name}`} value={option._id}>
+                    <ListItemIcon>
+                      <Checkbox
+                        checked={selectedVolunteers.indexOf(option) > -1}
+                      />
+                    </ListItemIcon>
+                    <img
+                      src={option.photo}
+                      alt={option.first_name}
+                      style={{width: '50px', borderRadius: '50%'}}
+                    />
+                    <ListItemText
+                      primary={`${option.first_name} ${option.last_name}`}
+                    />
+                  </MenuItem>
+                ))}
+              </Select>
+            </GridItem>
+            {/* <GridItem xs={12} sm={12} md={12}>
               <h5>Volunteers</h5>
               <div
                 style={{
@@ -401,7 +467,7 @@ export default function CreateActOfKindness() {
                   </div>
                 ))}
               </div>
-            </GridItem>
+            </GridItem> */}
             <GridItem xs={12} sm={12} md={12}>
               <h5>Upload photos of event</h5>
               <div
@@ -425,7 +491,7 @@ export default function CreateActOfKindness() {
                 <div style={{display: 'flex', gap: '1rem'}}>
                   {uploadedUrl.length &&
                     uploadedUrl.map((url) => (
-                      <img src={url} style={{height: '200px'}} />
+                      <img src={url} style={{height: '80px'}} />
                     ))}
                 </div>
               </div>
