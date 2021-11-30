@@ -62,10 +62,6 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-const loadOptions = (inputValue, callback) => {
-  console.log(inputValue);
-};
-
 export default function TransparencyPage() {
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
@@ -83,27 +79,43 @@ export default function TransparencyPage() {
   const [name, setName] = useState('');
 
   const [type, setType] = useState('');
-  const [amount, setAmount] = useState('');
-  const [description, setDescription] = useState('');
   const [cause, setCause] = useState('');
   const [event, setEvent] = useState('');
+  const [currentName, setCurrentName] = useState('');
+
+  const [amount, setAmount] = useState('');
+  const [description, setDescription] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState('');
   const [causeTypes, setCauseTypes] = useState([]);
   const [eventTypes, setEventTypes] = useState([]);
+  // const [causeNames, setCauseNames] = useState([]);
+  // const [eventNames, setEventNames] = useState([]);
+  const [causeEventsNames, setCauseEventsNames] = useState([]);
 
   useEffect(async () => {
     const cause_types = await axios.get(baseURL + 'cause_type');
 
     setCauseTypes(cause_types.data.data);
   }, []);
+
   useEffect(async () => {
     const event_types = await axios.get(baseURL + 'event_type');
 
     setEventTypes(event_types.data.data);
   }, []);
+
+  useEffect(async () => {
+    if (type === 'cause') {
+      const {data} = await axios.get(baseURL + 'causes?cause_type=' + cause);
+      setCauseEventsNames(data.data);
+    } else if (type === 'event') {
+      const {data} = await axios.get(baseURL + 'events?type=' + event);
+      setCauseEventsNames(data.data);
+    }
+  }, [type, cause, event]);
 
   // const handleFile = (e)=>{
   //   console.log(e.target.files)
@@ -125,8 +137,14 @@ export default function TransparencyPage() {
     formData.append('type', type);
     formData.append('amount', amount);
     formData.append('description', description);
-    formData.append('event', event);
-    formData.append('cause', cause);
+
+    type === 'event'
+      ? formData.append('event', event)
+      : formData.append('cause', cause);
+
+    currentName && type === 'event'
+      ? formData.append('event_name', currentName)
+      : formData.append('cause_name', currentName);
 
     axios({
       method: 'POST',
@@ -186,6 +204,7 @@ export default function TransparencyPage() {
                 value={type}
                 onChange={(e) => {
                   setType(e.target.value);
+                  setCauseEventsNames([]);
                 }}>
                 <MenuItem value={'cause'}>Cause</MenuItem>
                 <MenuItem value={'event'}>Events</MenuItem>
@@ -285,18 +304,56 @@ export default function TransparencyPage() {
               </FormControl>
             </GridItem>
           )}
-          {/* <GridItem xs={12} sm={12} md={4}>
-            <TextField
-              id="standard-basic"
-              label="Bill Type"
-              value={type}
-              onChange={(e) => {
-                setType(e.target.value);
-              }}
-              required
-              style={{width: '500px', margin: '30px 0'}}
-            />
-          </GridItem> */}
+
+          {causeEventsNames.length && (
+            <GridItem xs={12} sm={12} md={12}>
+              <FormControl
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '4rem',
+                  margin: '30px 0',
+                }}
+                className={classes.formControl}>
+                <div style={{width: '100%'}}>
+                  <InputLabel id="demo-simple-select-label">
+                    {type[0].toUpperCase()}
+                    {type.slice(1)} names
+                  </InputLabel>
+                  <Select
+                    style={{width: '100%'}}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={currentName}
+                    onChange={(e) => {
+                      setCurrentName(e.target.value);
+                    }}>
+                    {causeEventsNames.map((obj) => (
+                      <MenuItem
+                        key={obj._id}
+                        value={obj.name}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        }}>
+                        {obj.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                  }}></div>
+              </FormControl>
+            </GridItem>
+          )}
+
           <GridItem xs={12} sm={12} md={4}>
             <TextField
               id="standard-basic"

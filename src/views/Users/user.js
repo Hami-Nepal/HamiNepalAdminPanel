@@ -102,7 +102,6 @@ export default function NewssList() {
       config,
     );
     setUserList(response.data);
-
     setTotal_data(response.total_data);
     // setTotal_data(response.total_data);
   };
