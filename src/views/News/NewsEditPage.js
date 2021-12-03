@@ -23,6 +23,7 @@ import baseUrl from '../../api/baseUrl';
 import ListNews from './ListNews';
 
 import AsyncSelect from 'react-select/async';
+import {SentimentVerySatisfiedSharp} from '@material-ui/icons';
 
 const styles = {
   typo: {
@@ -86,6 +87,7 @@ export default function Editnews({match}) {
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
   const [link, setLink] = useState('');
+  const [type, setType] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
@@ -97,6 +99,7 @@ export default function Editnews({match}) {
 
     setTitle(result.data.title);
     setSummary(result.data.summary);
+    setType(result.data.newsType);
     setLink(result.data.link);
     setUploadedUrl(result.data.photo);
   }, []);
@@ -177,6 +180,21 @@ export default function Editnews({match}) {
               required
               style={{width: '500px', margin: '30px 0'}}
             />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <FormControl style={{width: '50%'}} className={classes.formControl}>
+              <InputLabel id="demo-simple-select-label">News Type</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={type}
+                onChange={(e) => {
+                  setType(e.target.value);
+                }}>
+                <MenuItem value={'national'}>National</MenuItem>
+                <MenuItem value={'international'}>International</MenuItem>
+              </Select>
+            </FormControl>
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
             <TextField
