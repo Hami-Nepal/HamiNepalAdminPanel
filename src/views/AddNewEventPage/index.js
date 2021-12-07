@@ -202,9 +202,7 @@ export default function AddNewEventPage() {
       <Card>
         <CardHeader color="danger">
           <h4 className={classes.cardTitleWhite}>Add New Event Screen</h4>
-          <p className={classes.cardCategoryWhite}>
-            For updating images for events
-          </p>
+          <p className={classes.cardCategoryWhite}>For updating events</p>
           <p className={classes.cardCategoryWhite}>
             Please check the information properly before submitting .
           </p>
@@ -274,7 +272,7 @@ export default function AddNewEventPage() {
                 onChange={(e) => {
                   setBalance(e.target.value);
                 }}
-                required
+                // required
                 style={{width: '50%', margin: '30px 0'}}
               />
             </GridItem>
@@ -289,7 +287,7 @@ export default function AddNewEventPage() {
                 onChange={(e) => {
                   setSummary(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '95.8%',
                   margin: '30px 0',
@@ -310,7 +308,7 @@ export default function AddNewEventPage() {
                 onChange={(e) => {
                   setDescription(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '95.8%',
                   margin: '30px 0',
@@ -328,7 +326,7 @@ export default function AddNewEventPage() {
                 onChange={(e) => {
                   setCountry(e.target.value);
                 }}
-                required
+                // required
                 style={{width: '50%', margin: '30px 0'}}
               />
             </GridItem>
@@ -360,7 +358,7 @@ export default function AddNewEventPage() {
                 onChange={(e) => {
                   setCity(e.target.value);
                 }}
-                required
+                // required
                 style={{width: '50%', margin: '30px 0'}}
               />
             </GridItem>
@@ -372,7 +370,7 @@ export default function AddNewEventPage() {
                 onChange={(e) => {
                   setStreet(e.target.value);
                 }}
-                required
+                // required
                 style={{width: '50%', margin: '30px 0'}}
               />
             </GridItem>
@@ -389,7 +387,7 @@ export default function AddNewEventPage() {
                 onChange={(e) => {
                   setDifficulties(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '95.8%',
                   margin: '30px 0',
@@ -409,7 +407,7 @@ export default function AddNewEventPage() {
                 onChange={(e) => {
                   setChallenges(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '95.8%',
                   margin: '30px 0',
@@ -424,7 +422,7 @@ export default function AddNewEventPage() {
               <h5>Please upload an Event Photo</h5>
               <div
                 {...getRootProps()}
-                required
+                // required
                 style={{
                   cursor: 'pointer',
                   border: '1px solid gray',

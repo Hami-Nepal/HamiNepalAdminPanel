@@ -69,8 +69,8 @@ export default function TransparencyPage(props) {
     // const reader = new FileReader();
     // reader.readAsArrayBuffer(acceptedFiles[0])
     // console.log(reader,acceptedFiles[0]);
-    setSelectedFile(acceptedFiles[0]);
-    setUploadedUrl(URL.createObjectURL(acceptedFiles[0]));
+    setSelectedFile(acceptedFiles);
+    setUploadedUrl(acceptedFiles.map((file) => URL.createObjectURL(file)));
   }, []);
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
 
@@ -86,7 +86,7 @@ export default function TransparencyPage(props) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
-  const [uploadedUrl, setUploadedUrl] = useState('');
+  const [uploadedUrl, setUploadedUrl] = useState([]);
   const [causeTypes, setCauseTypes] = useState([]);
   const [eventTypes, setEventTypes] = useState([]);
 
@@ -109,7 +109,7 @@ export default function TransparencyPage(props) {
     setType(result.data.transparency.type);
     setAmount(result.data.transparency.amount);
     setDescription(result.data.transparency.description);
-    setUploadedUrl(result.data.transparency.photo);
+    setUploadedUrl(result.data.transparency.photos);
     setCause(result.data.transparency.cause);
     setEvent(result.data.transparency.event);
   }, []);
@@ -122,7 +122,7 @@ export default function TransparencyPage(props) {
 
     const formData = new FormData();
     formData.append('name', name);
-    formData.append('photo', selectedFile);
+    selectedFile?.map((file) => formData.append('photos', file));
     formData.append('type', type);
     formData.append('amount', amount);
     formData.append('description', description);
@@ -329,10 +329,10 @@ export default function TransparencyPage(props) {
             /> */}
           </div>
           <GridItem xs={12} sm={12} md={12}>
-            <h5>Please upload a Bill Photo</h5>
+            <h5>Please upload the bill photos</h5>
             <div
               {...getRootProps()}
-              required
+              // required
               style={{
                 cursor: 'pointer',
                 border: '1px solid gray',
@@ -341,16 +341,16 @@ export default function TransparencyPage(props) {
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (
-                <p>Drop the bill photo here or...</p>
+                <p>Drop the bills here or...</p>
               ) : (
-                <p>
-                  Drag 'n' drop a bill picture here, or click to select bills
-                </p>
+                <p>Drag 'n' drop bills here, or click to select photos</p>
               )}
-
-              {uploadedUrl && (
-                <img src={uploadedUrl} style={{height: '200px'}} />
-              )}
+              <div style={{display: 'flex', gap: '1rem'}}>
+                {uploadedUrl.length &&
+                  uploadedUrl.map((url) => (
+                    <img src={url} style={{height: '80px'}} />
+                  ))}
+              </div>
             </div>
           </GridItem>
           {error ? (

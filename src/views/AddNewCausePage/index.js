@@ -222,7 +222,7 @@ export default function AddNewCausePage({match}) {
                 onChange={(e) => {
                   setBalance(e.target.value);
                 }}
-                required
+                // required
                 style={{width: '500px', margin: '30px 0'}}
               />
             </GridItem>
@@ -257,7 +257,7 @@ export default function AddNewCausePage({match}) {
                 onChange={(e) => {
                   setDescription(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '500px',
                   margin: '30px 0',
@@ -277,7 +277,7 @@ export default function AddNewCausePage({match}) {
                 onChange={(e) => {
                   setChallenges(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '500px',
                   margin: '30px 0',
@@ -299,7 +299,7 @@ export default function AddNewCausePage({match}) {
                 onChange={(e) => {
                   setDifficulties(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '500px',
                   margin: '30px 0',

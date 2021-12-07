@@ -145,7 +145,7 @@ export default function TransparencysList() {
                             <TableCell align="center">{row.type}</TableCell>
                             <TableCell align="center">{row.amount}</TableCell>
                             <TableCell align="center">
-                              <img src={row.photo} width={50} />
+                              <img src={row.photos[0]} width={50} />
                             </TableCell>
                             <TableCell align="center">
                               {row.updatedAt.slice(0, 10)}

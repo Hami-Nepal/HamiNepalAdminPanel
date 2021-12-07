@@ -394,7 +394,9 @@ export default function CreateActOfKindness() {
                 MenuProps={MenuProps}
                 style={{width: '50%'}}>
                 {volunteersList.map((option) => (
-                  <MenuItem key={`${option.first_name}`} value={option._id}>
+                  <MenuItem
+                    key={`${option.first_name}`}
+                    value={option.first_name}>
                     <ListItemIcon>
                       <Checkbox
                         checked={selectedVolunteers.indexOf(option) > -1}

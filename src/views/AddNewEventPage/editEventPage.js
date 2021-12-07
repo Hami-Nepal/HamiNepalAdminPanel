@@ -260,7 +260,7 @@ export default function AddNewEventPage({match}) {
                 onChange={(e) => {
                   setBalance(e.target.value);
                 }}
-                required
+                // required
                 style={{width: '50%', margin: '30px 0'}}
               />
             </GridItem>
@@ -275,7 +275,7 @@ export default function AddNewEventPage({match}) {
                 onChange={(e) => {
                   setSummary(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '95.8%',
                   margin: '30px 0',
@@ -296,7 +296,7 @@ export default function AddNewEventPage({match}) {
                 onChange={(e) => {
                   setDescription(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '95.8%',
                   margin: '30px 0',
@@ -358,19 +358,7 @@ export default function AddNewEventPage({match}) {
                 onChange={(e) => {
                   setStreet(e.target.value);
                 }}
-                required
-                style={{width: '50%', margin: '30px 0'}}
-              />
-            </GridItem>
-            <GridItem xs={12} sm={12} md={12}>
-              <TextField
-                id="standard-basic"
-                label="Country"
-                value={country}
-                onChange={(e) => {
-                  setCountry(e.target.value);
-                }}
-                required
+                // required
                 style={{width: '50%', margin: '30px 0'}}
               />
             </GridItem>
@@ -386,7 +374,7 @@ export default function AddNewEventPage({match}) {
                 onChange={(e) => {
                   setDifficulties(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '95.8%',
                   margin: '30px 0',
@@ -406,7 +394,7 @@ export default function AddNewEventPage({match}) {
                 onChange={(e) => {
                   setChallenges(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '95.8%',
                   margin: '30px 0',
