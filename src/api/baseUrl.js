@@ -1,1 +1,1 @@
-export default 'http://localhost:5000/api/v1/';
+export default 'https://api.haminepal.org/api/v1/';
