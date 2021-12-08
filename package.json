@@ -12,6 +12,7 @@
     "@material-ui/data-grid": "^4.0.0-alpha.31",
     "@material-ui/icons": "4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.58",
+    "@mui/icons-material": "^5.2.1",
     "@mui/material": "^5.1.1",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@svgr/webpack": "5.5.0",

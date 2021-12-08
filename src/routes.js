@@ -45,6 +45,9 @@ import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import ListMembers from './views/BoardMembers/List_Members';
 import AddBoardMembers from './views/BoardMembers/addMembers';
 import EditBoardMembers from './views/BoardMembers/UpdateMembers';
+import KindDonationsPage from './views/Kind Donation/ListKindDonation';
+import AddKindDonation from 'views/Kind Donation/AddKindDonation';
+import UpdateKindDonation from 'views/Kind Donation/UpdateKindDonation';
 
 import UserPage from './views/Users/user';
 import CivilMoment from './views/civilrightMoment/ListCivilRights';
@@ -119,6 +122,20 @@ export const demoRoutes = [
     name: 'Create News',
     icon: DirectionsBikeIcon,
     component: NewsCreatePage,
+    layout: '/admin',
+  },
+  {
+    path: '/kinddonation/create',
+    name: 'Add Kind Donation',
+    icon: DirectionsBikeIcon,
+    component: AddKindDonation,
+    layout: '/admin',
+  },
+  {
+    path: '/kinddonation/edit/:id',
+    name: 'Edit a Donation',
+    icon: Unarchive,
+    component: UpdateKindDonation,
     layout: '/admin',
   },
   {
@@ -214,6 +231,13 @@ export const dashboardRoutes = [
     rtlName: 'لوحة القيادة',
     icon: MonetizationOnIcon,
     component: DonationsPage,
+    layout: '/admin',
+  },
+  {
+    path: '/Kinddonations',
+    name: 'Kind Donations',
+    icon: MonetizationOnIcon,
+    component: KindDonationsPage,
     layout: '/admin',
   },
   {
