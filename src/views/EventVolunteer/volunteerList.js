@@ -90,7 +90,11 @@ export default function EventList(props) {
     };
 
     const {data} = await axios.patch(
-      baseUrl + 'events/volunteers/update/' + id,
+      baseUrl +
+        'events/volunteers/' +
+        eventData.volunteers.find(({volunteerId}) => volunteerId === id)._id +
+        '/update/' +
+        id,
       {participated: !bool},
       config,
     );

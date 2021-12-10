@@ -52,6 +52,7 @@ import KindTransparency from 'views/KindTransparency/ListKindTransparency';
 import AddKindTransparency from 'views/KindTransparency/AddKindTransparency';
 import EditKindTransparency from 'views/KindTransparency/EditKindTransparency';
 import EventVolunteer from 'views/EventVolunteer/volunteerList';
+import CauseVolunteer from 'views/CauseVolunteer/volunteerList';
 
 import UserPage from './views/Users/user';
 import CivilMoment from './views/civilrightMoment/ListCivilRights';
@@ -161,6 +162,13 @@ export const demoRoutes = [
     name: 'Verify Volunteers',
     icon: Unarchive,
     component: EventVolunteer,
+    layout: '/admin',
+  },
+  {
+    path: '/causes/:causeId/volunteers',
+    name: 'Verify Volunteers',
+    icon: Unarchive,
+    component: CauseVolunteer,
     layout: '/admin',
   },
   {
