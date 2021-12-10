@@ -48,6 +48,9 @@ import EditBoardMembers from './views/BoardMembers/UpdateMembers';
 import KindDonationsPage from './views/Kind Donation/ListKindDonation';
 import AddKindDonation from 'views/Kind Donation/AddKindDonation';
 import UpdateKindDonation from 'views/Kind Donation/UpdateKindDonation';
+import KindTransparency from 'views/KindTransparency/ListKindTransparency';
+import AddKindTransparency from 'views/KindTransparency/AddKindTransparency';
+import EditKindTransparency from 'views/KindTransparency/EditKindTransparency';
 
 import UserPage from './views/Users/user';
 import CivilMoment from './views/civilrightMoment/ListCivilRights';
@@ -194,6 +197,18 @@ export const demoRoutes = [
     layout: '/admin',
   },
   {
+    path: '/kindtransparency/create',
+    name: 'Create Kind Transparency',
+    component: AddKindTransparency,
+    layout: '/admin',
+  },
+  {
+    path: '/kindtransparency/edit/:id',
+    name: 'Edit Kind Transparency',
+    component: EditKindTransparency,
+    layout: '/admin',
+  },
+  {
     path: '/civilrights/edit/:id',
     name: 'Edit Civil Rights Content',
     component: EditCivilRights,
@@ -238,6 +253,13 @@ export const dashboardRoutes = [
     name: 'Kind Donations',
     icon: MonetizationOnIcon,
     component: KindDonationsPage,
+    layout: '/admin',
+  },
+  {
+    path: '/Kindtransparency',
+    name: 'Kind Transparency',
+    icon: CompareArrowsIcon,
+    component: KindTransparency,
     layout: '/admin',
   },
   {

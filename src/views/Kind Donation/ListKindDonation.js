@@ -143,6 +143,7 @@ export default function Donations() {
                       }
                       title={donation.donatedItem}
                       subheader={donation.category}
+                      style={{backgroundColor: 'white'}}
                     />
                     <CardMedia
                       component="img"
@@ -150,28 +151,32 @@ export default function Donations() {
                       image={donation.photos[0]}
                       alt="Item Photo"
                     />
-                    <CardContent>
+                    <CardContent style={{backgroundColor: 'white'}}>
                       <Typography
                         variant="subtitle1"
                         style={{color: 'green', marginBottom: '1rem'}}>
                         Donated by:{donation.donerFullName}
                       </Typography>
-                      <Typography variant="body2" style={{color: '#C24A31'}}>
+                      <Typography variant="body2" style={{color: 'black'}}>
                         {donation.category === 'cause'
-                          ? `Cause: ${donation.cause_name} (${donation.cause})`
-                          : `Event: ${donation.event_name} (${donation.event})`}
+                          ? `CAUSE: ${donation.cause_name} (${donation.cause})`
+                          : `EVENT: ${donation.event_name} (${donation.event})`}
                       </Typography>
-                      <Typography variant="body2" style={{color: '#C24A31'}}>
-                        Conatact:{donation.phoneNumber}
+                      <div style={{borderBottom: '1px solid #D3D3D3'}}></div>
+                      <Typography variant="body2" style={{color: 'black'}}>
+                        CONTACT:{donation.phoneNumber}
                       </Typography>
-                      <Typography variant="body2" style={{color: '#C24A31'}}>
-                        Email:{donation.donerEmail}
+                      <div style={{borderBottom: '1px solid #D3D3D3'}}></div>
+                      <Typography variant="body2" style={{color: 'black'}}>
+                        EMAIL:{donation.donerEmail}
                       </Typography>
-                      <Typography variant="body2" style={{color: '#C24A31'}}>
-                        Date:{donation.createdAt.slice(0, 10)}
+                      <div style={{borderBottom: '1px solid #D3D3D3'}}></div>
+                      <Typography variant="body2" style={{color: 'black'}}>
+                        DATE:{donation.createdAt.slice(0, 10)}
                       </Typography>
-                      <Typography variant="body2" style={{color: '#C24A31'}}>
-                        Address: {donation.city} {donation.state} (
+                      <div style={{borderBottom: '1px solid #D3D3D3'}}></div>
+                      <Typography variant="body2" style={{color: 'black'}}>
+                        ADDRESS: {donation.city} {donation.state} (
                         {donation.country})
                       </Typography>
                     </CardContent>

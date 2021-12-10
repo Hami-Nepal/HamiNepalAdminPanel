@@ -26,7 +26,7 @@ export const donationsReducer = (state = initialState, action) => {
         case DONATION_LIST_SUCCESS:
             return {
                 donationsList: payload.data,
-                donationsCount: payload.results,
+                donationsCount: payload.total_data,
                 donationsListLoading: false,
                 donationsListSuccess: true,
                 donationsListError: '',
