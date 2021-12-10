@@ -51,6 +51,7 @@ import UpdateKindDonation from 'views/Kind Donation/UpdateKindDonation';
 import KindTransparency from 'views/KindTransparency/ListKindTransparency';
 import AddKindTransparency from 'views/KindTransparency/AddKindTransparency';
 import EditKindTransparency from 'views/KindTransparency/EditKindTransparency';
+import EventVolunteer from 'views/EventVolunteer/volunteerList';
 
 import UserPage from './views/Users/user';
 import CivilMoment from './views/civilrightMoment/ListCivilRights';
@@ -153,6 +154,13 @@ export const demoRoutes = [
     name: 'Edit a news',
     icon: Unarchive,
     component: NewsEditPage,
+    layout: '/admin',
+  },
+  {
+    path: '/events/:eventId/volunteers',
+    name: 'Verify Volunteers',
+    icon: Unarchive,
+    component: EventVolunteer,
     layout: '/admin',
   },
   {
