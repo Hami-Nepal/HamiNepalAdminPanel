@@ -125,6 +125,7 @@ export default function EventList() {
                     <TableCell align="center">City</TableCell>
                     <TableCell align="center">Fund Amount</TableCell>
                     <TableCell align="center">Updated At</TableCell>
+                    <TableCell align="center">Volunter Participate</TableCell>
                     <TableCell align="right">Edit</TableCell>
                     <TableCell align="right">Delete</TableCell>
                   </TableRow>
@@ -178,6 +179,13 @@ export default function EventList() {
                         <TableCell align="center">{row.balance}</TableCell>
                         <TableCell align="center">
                           {row.updatedAt.slice(0, 10)}
+                        </TableCell>
+                        <TableCell align="center">
+                          <Link
+                            to={`/admin/events/${row._id}/volunteers`}
+                            style={{cursor: 'pointer'}}>
+                            List Volunteers
+                          </Link>
                         </TableCell>
                         <TableCell align="right">
                           {
