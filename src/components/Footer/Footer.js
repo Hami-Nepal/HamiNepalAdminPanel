@@ -42,9 +42,9 @@ export default function Footer(props) {
               {logoText}
             </Link>
             <p className={classes.right}>
-              <span>
-                &copy; {1900 + new Date().getYear()} Hash Technologies , All
-                Rights Reserved.
+              <span style={{marginLeft: '-4rem'}}>
+                &copy; {new Date().getFullYear()} Hash Technologies , All Rights
+                Reserved.
               </span>
             </p>
           </div>
