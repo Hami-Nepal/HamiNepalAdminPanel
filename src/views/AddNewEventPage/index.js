@@ -94,7 +94,7 @@ export default function AddNewEventPage() {
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [street, setStreet] = useState('');
-  const [difficulties, setDifficulties] = useState('');
+  // const [difficulties, setDifficulties] = useState('');
   const [challenges, setChallenges] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
@@ -162,7 +162,7 @@ export default function AddNewEventPage() {
     formData.append('summary', summary);
     formData.append('description', description);
     formData.append('challenges', challenges);
-    formData.append('difficulties', difficulties);
+    // formData.append('difficulties', difficulties);
     formData.append('country', country);
     formData.append('state', state);
     formData.append('city', city);
@@ -375,7 +375,7 @@ export default function AddNewEventPage() {
               />
             </GridItem>
 
-            <GridItem xs={12} sm={12} md={12}>
+            {/* <GridItem xs={12} sm={12} md={12}>
               <InputLabel id="demo-simple-select-label">
                 Difficulties
               </InputLabel>
@@ -396,7 +396,7 @@ export default function AddNewEventPage() {
                   fontFamily: 'Roboto',
                 }}
               />
-            </GridItem>
+            </GridItem> */}
             <GridItem xs={12} sm={12} md={12}>
               <InputLabel id="demo-simple-select-label">Challenges</InputLabel>
               <TextareaAutosize

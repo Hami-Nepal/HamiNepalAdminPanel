@@ -86,7 +86,7 @@ export default function AddNewCausePage({match}) {
   const [type, setType] = useState('');
   const [balance, setBalance] = useState();
   const [selectedFile, setSelectedFile] = useState(null);
-  const [difficulties, setDifficulties] = useState('');
+  // const [difficulties, setDifficulties] = useState('');
   const [challenges, setChallenges] = useState('');
   const [description, setDescription] = useState('');
   const [summary, setSummary] = useState('');
@@ -114,7 +114,7 @@ export default function AddNewCausePage({match}) {
     formData.append('summary', summary);
     formData.append('description', description);
     formData.append('challenges', challenges);
-    formData.append('difficulties', difficulties);
+    // formData.append('difficulties', difficulties);
     formData.append('balance', balance);
 
     axios({
@@ -287,7 +287,7 @@ export default function AddNewCausePage({match}) {
                 }}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
+            {/* <GridItem xs={12} sm={12} md={4}>
               <InputLabel id="demo-simple-select-label">
                 Difficulties
               </InputLabel>
@@ -308,7 +308,7 @@ export default function AddNewCausePage({match}) {
                   fontFamily: 'Roboto',
                 }}
               />
-            </GridItem>
+            </GridItem> */}
             <GridItem xs={12} sm={12} md={12}>
               <h5>Please upload Cause Photo</h5>
               <div

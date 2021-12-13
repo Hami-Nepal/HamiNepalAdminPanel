@@ -121,7 +121,7 @@ export default function CreateActOfKindness() {
   const [results, setResults] = useState('');
   const [details, setDetails] = useState('');
   const [summary, setSummary] = useState('');
-  const [difficulties, setDifficulties] = useState('');
+  // const [difficulties, setDifficulties] = useState('');
   const [challenges, setChallenges] = useState('');
   const [title, setTitle] = useState('');
   const [uploadedUrl, setUploadedUrl] = useState([]);
@@ -219,7 +219,7 @@ export default function CreateActOfKindness() {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('challenges', challenges);
-    formData.append('difficulties', difficulties);
+    // formData.append('difficulties', difficulties);
     formData.append('summary', summary);
     formData.append('details', details);
     formData.append('results', results);
@@ -299,7 +299,7 @@ export default function CreateActOfKindness() {
                 }}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={12}>
+            {/* <GridItem xs={12} sm={12} md={12}>
               <h5 style={{marginBottom: '-1rem'}}>Difficulties</h5>
               <TextareaAutosize
                 aria-label="minimum height"
@@ -318,7 +318,7 @@ export default function CreateActOfKindness() {
                   fontFamily: 'Roboto',
                 }}
               />
-            </GridItem>
+            </GridItem> */}
             <GridItem xs={12} sm={12} md={12}>
               <h5 style={{marginBottom: '-1rem'}}>Summary</h5>
               <TextareaAutosize

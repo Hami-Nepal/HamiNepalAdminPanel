@@ -90,7 +90,7 @@ export default function AddNewEventPage({match}) {
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [street, setStreet] = useState('');
-  const [difficulties, setDifficulties] = useState('');
+  // const [difficulties, setDifficulties] = useState('');
   const [challenges, setChallenges] = useState('');
 
   const [error, setError] = useState('');
@@ -114,7 +114,7 @@ export default function AddNewEventPage({match}) {
     setState(result.data.state);
     setCity(result.data.city);
     setStreet(result.data.street_address);
-    setDifficulties(result.data.difficulties);
+    // setDifficulties(result.data.difficulties);
     setChallenges(result.data.challenges);
     setUploadedUrl(result.data.photos);
   }, []);
@@ -148,7 +148,7 @@ export default function AddNewEventPage({match}) {
     formData.append('summary', summary);
     formData.append('description', description);
     formData.append('challenges', challenges);
-    formData.append('difficulties', difficulties);
+    // formData.append('difficulties', difficulties);
     formData.append('country', country);
     formData.append('state', state);
     formData.append('city', city);
@@ -362,7 +362,7 @@ export default function AddNewEventPage({match}) {
                 style={{width: '50%', margin: '30px 0'}}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={12}>
+            {/* <GridItem xs={12} sm={12} md={12}>
               <InputLabel id="demo-simple-select-label">
                 Difficulties
               </InputLabel>
@@ -383,7 +383,7 @@ export default function AddNewEventPage({match}) {
                   fontFamily: 'Roboto',
                 }}
               />
-            </GridItem>
+            </GridItem> */}
             <GridItem xs={12} sm={12} md={12}>
               <InputLabel id="demo-simple-select-label">Challenges</InputLabel>
               <TextareaAutosize
