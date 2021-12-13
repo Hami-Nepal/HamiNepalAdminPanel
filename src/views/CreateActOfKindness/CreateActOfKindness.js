@@ -135,6 +135,7 @@ export default function CreateActOfKindness() {
 
   const [volunteersList, setVolunteersList] = useState([]);
   const [selectedVolunteers, setSelectedVolunteers] = useState([]);
+  const [volunteersId, setVolunteersId] = useState([]);
 
   useEffect(async () => {
     const {data: res} = await axios.get(baseUrl + 'volunteers');
@@ -149,6 +150,7 @@ export default function CreateActOfKindness() {
   const handleTypeChange = (event) => {
     setType(event.target.value);
   };
+
   const handleChange = (event) => {
     const value = event.target.value;
     if (value[value.length - 1] === 'all') {
@@ -393,25 +395,31 @@ export default function CreateActOfKindness() {
                 }
                 MenuProps={MenuProps}
                 style={{width: '50%'}}>
-                {volunteersList.map((option) => (
-                  <MenuItem
-                    key={`${option.first_name}`}
-                    value={option.first_name}>
-                    <ListItemIcon>
-                      <Checkbox
-                        checked={selectedVolunteers.indexOf(option) > -1}
+                {volunteersList.map((option) => {
+                  return (
+                    <MenuItem key={`${option._id}`} value={option._id}>
+                      <ListItemIcon>
+                        <Checkbox
+                          checked={
+                            selectedVolunteers.indexOf(option.first_name) > -1
+                          }
+                        />
+                      </ListItemIcon>
+                      <img
+                        src={option.photo}
+                        alt={option.first_name}
+                        style={{
+                          width: '50px',
+                          borderRadius: '50%',
+                          marginRight: '.8rem',
+                        }}
                       />
-                    </ListItemIcon>
-                    <img
-                      src={option.photo}
-                      alt={option.first_name}
-                      style={{width: '50px', borderRadius: '50%'}}
-                    />
-                    <ListItemText
-                      primary={`${option.first_name} ${option.last_name}`}
-                    />
-                  </MenuItem>
-                ))}
+                      <ListItemText
+                        primary={`${option.first_name} ${option.last_name}`}
+                      />
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </GridItem>
             {/* <GridItem xs={12} sm={12} md={12}>
