@@ -26,6 +26,9 @@ import MuiAlert from '@material-ui/lab/Alert';
 import {CKEditor} from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import MyCustomUploadAdapterPlugin from 'utils/UploadAdapter';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Checkbox from '@material-ui/core/Checkbox';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const styles = {
   typo: {
@@ -68,6 +71,27 @@ const styles = {
     marginBottom: '3px',
     textDecoration: 'none',
   },
+};
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+  getContentAnchorEl: null,
+  anchorOrigin: {
+    vertical: 'bottom',
+    horizontal: 'center',
+  },
+  transformOrigin: {
+    vertical: 'top',
+    horizontal: 'center',
+  },
+  variant: 'menu',
 };
 
 const useStyles = makeStyles(styles);
@@ -147,6 +171,21 @@ export default function EditActOfKindness() {
     let inputValue = newValue.replace(/\W/g, '');
     setInputValue({inputValue});
   };
+
+  const handleChange = (event) => {
+    const value = event.target.value;
+    if (value[value.length - 1] === 'all') {
+      setSelected(
+        selectedVolunteers.length === volunteersList.length
+          ? []
+          : volunteersList,
+      );
+      return;
+    }
+    setSelectedVolunteers(value);
+  };
+
+  console.log(selectedVolunteers);
 
   // useEffect(() => {
   //   if (ckEditor) {
@@ -367,60 +406,44 @@ export default function EditActOfKindness() {
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
-              <h5>Volunteers</h5>
-              <div
-                style={{
-                  border: '1px solid gray',
-                  padding: '1.5rem',
-                  display: 'flex',
-                  gap: '1rem',
-                  flexWrap: 'wrap',
-                }}>
-                {volunteersList.map((user) => (
-                  <div
-                    key={user._id}
-                    style={{
-                      border: '1px solid rgb(207, 207, 207)',
-                      padding: '.5rem .8rem',
-                      borderRadius: '10px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '.8rem',
-                    }}>
-                    <img
-                      src={user.photo}
-                      alt={user.first_name}
-                      style={{width: '40px', borderRadius: '100rem'}}
-                    />
-                    <p style={{margin: '0'}}>
-                      {user.first_name} {user.last_name}
-                    </p>
-                    {selectedVolunteers.includes(user._id) ? (
-                      <Button
-                        color="danger"
-                        type="button"
-                        onClick={() => {
-                          const index = selectedVolunteers.indexOf(user._id);
-                          setSelectedVolunteers((prev) => [
-                            ...prev.slice(0, index),
-                            ...prev.slice(index + 1),
-                          ]);
-                        }}>
-                        Remove
-                      </Button>
-                    ) : (
-                      <Button
-                        color="primary"
-                        type="button"
-                        onClick={() =>
-                          setSelectedVolunteers((prev) => [...prev, user._id])
-                        }>
-                        Add
-                      </Button>
-                    )}
-                  </div>
-                ))}
-              </div>
+              <InputLabel id="mutiple-select-label">
+                Select Volunteer
+              </InputLabel>
+              <Select
+                labelId="mutiple-select-label"
+                multiple
+                value={selectedVolunteers}
+                onChange={handleChange}
+                renderValue={(selectedVolunteers) =>
+                  selectedVolunteers.join(', ')
+                }
+                MenuProps={MenuProps}
+                style={{width: '50%'}}>
+                {volunteersList.map((option) => {
+                  console.log(option._id);
+                  return (
+                    <MenuItem key={`${option._id}`} value={option._id}>
+                      <ListItemIcon>
+                        <Checkbox
+                          checked={selectedVolunteers.indexOf(option._id) > -1}
+                        />
+                      </ListItemIcon>
+                      <img
+                        src={option.photo}
+                        alt={option.first_name}
+                        style={{
+                          width: '50px',
+                          borderRadius: '50%',
+                          marginRight: '.8rem',
+                        }}
+                      />
+                      <ListItemText
+                        primary={`${option.first_name} ${option.last_name}`}
+                      />
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
               <h5>Upload photos of event</h5>
