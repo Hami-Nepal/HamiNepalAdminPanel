@@ -244,7 +244,7 @@ export default function EditActOfKindness() {
       </Snackbar>
       <Card>
         <CardHeader color="primary">
-          <h4 className={classes.cardTitleWhite}>Add a New Act of kindness</h4>
+          <h4 className={classes.cardTitleWhite}>Update Act of kindness</h4>
           <p className={classes.cardCategoryWhite}>
             For creating and uploading images for new events
           </p>
@@ -442,10 +442,10 @@ export default function EditActOfKindness() {
                     events photo
                   </p>
                 )}
-                <div style={{display: 'flex', gap: '1rem'}}>
+                <div style={{display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
                   {uploadedUrl.length &&
                     uploadedUrl.map((url) => (
-                      <img src={url} style={{height: '80px'}} />
+                      <img src={url} style={{height: '40px'}} />
                     ))}
                 </div>
               </div>

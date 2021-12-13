@@ -167,6 +167,7 @@ export default function KindDonation() {
     currentName && category === 'event'
       ? formData.append('event_name', currentName)
       : formData.append('cause_name', currentName);
+    console.log(formData);
 
     axios({
       method: 'PUT',
@@ -494,10 +495,10 @@ export default function KindDonation() {
               ) : (
                 <p>Drag 'n' drop here, or click to select photos</p>
               )}
-              <div style={{display: 'flex', gap: '1rem'}}>
+              <div style={{display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
                 {uploadedUrl.length &&
                   uploadedUrl.map((url) => (
-                    <img src={url} style={{height: '80px'}} />
+                    <img src={url} style={{height: '40px'}} />
                   ))}
               </div>
             </div>

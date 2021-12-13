@@ -490,10 +490,10 @@ export default function CreateActOfKindness() {
                     events photo
                   </p>
                 )}
-                <div style={{display: 'flex', gap: '1rem'}}>
+                <div style={{display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
                   {uploadedUrl.length &&
                     uploadedUrl.map((url) => (
-                      <img src={url} style={{height: '80px'}} />
+                      <img src={url} style={{height: '40px'}} />
                     ))}
                 </div>
               </div>
