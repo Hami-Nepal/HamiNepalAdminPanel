@@ -400,9 +400,7 @@ export default function CreateActOfKindness() {
                     <MenuItem key={`${option._id}`} value={option._id}>
                       <ListItemIcon>
                         <Checkbox
-                          checked={
-                            selectedVolunteers.indexOf(option.first_name) > -1
-                          }
+                          checked={selectedVolunteers.indexOf(option._id) > -1}
                         />
                       </ListItemIcon>
                       <img
