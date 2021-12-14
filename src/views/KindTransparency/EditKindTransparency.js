@@ -79,27 +79,44 @@ export default function TransparencyPage(props) {
   const [name, setName] = useState('');
 
   const [type, setType] = useState('');
-  const [amount, setAmount] = useState('');
-  const [description, setDescription] = useState('');
   const [cause, setCause] = useState('');
   const [event, setEvent] = useState('');
+  const [currentName, setCurrentName] = useState('');
+
+  const [amount, setAmount] = useState('');
+  const [description, setDescription] = useState('');
+  const [quantity, setQuantity] = useState(0);
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState([]);
   const [causeTypes, setCauseTypes] = useState([]);
   const [eventTypes, setEventTypes] = useState([]);
+  // const [causeNames, setCauseNames] = useState([]);
+  // const [eventNames, setEventNames] = useState([]);
+  const [causeEventsNames, setCauseEventsNames] = useState([]);
 
   useEffect(async () => {
     const cause_types = await axios.get(baseUrl + 'cause_type');
 
     setCauseTypes(cause_types.data.data);
   }, []);
+
   useEffect(async () => {
     const event_types = await axios.get(baseUrl + 'event_type');
 
     setEventTypes(event_types.data.data);
   }, []);
+
+  useEffect(async () => {
+    if (type === 'cause') {
+      const {data} = await axios.get(baseUrl + 'causes?cause_type=' + cause);
+      setCauseEventsNames(data.data);
+    } else if (type === 'event') {
+      const {data} = await axios.get(baseUrl + 'events?type=' + event);
+      setCauseEventsNames(data.data);
+    }
+  }, [type, cause, event]);
 
   useEffect(async () => {
     let result = await fetch(baseUrl + 'kindtransparency/' + id);
@@ -109,9 +126,14 @@ export default function TransparencyPage(props) {
     setType(result.data.kindtransparency.type);
     setAmount(result.data.kindtransparency.amount);
     setDescription(result.data.kindtransparency.description);
-    setUploadedUrl(result.data.kindtransparency.photos);
     setCause(result.data.kindtransparency.cause);
     setEvent(result.data.kindtransparency.event);
+
+    setQuantity(result.data.kindtransparency.quantity);
+    currentName && type === 'event'
+      ? setCurrentName(result.data.kindtransparency.event_name)
+      : setCurrentName(result.data.kindtransparency.cause_name);
+    setUploadedUrl(result.data.kindtransparency.photos);
   }, []);
 
   const history = useHistory();
@@ -126,8 +148,15 @@ export default function TransparencyPage(props) {
     formData.append('type', type);
     formData.append('amount', amount);
     formData.append('description', description);
-    formData.append('event', event);
-    formData.append('cause', cause);
+    formData.append('quantity', quantity);
+
+    type === 'event'
+      ? formData.append('event', event)
+      : formData.append('cause', cause);
+
+    currentName && type === 'event'
+      ? formData.append('event_name', currentName)
+      : formData.append('cause_name', currentName);
 
     axios({
       method: 'PUT',
@@ -154,13 +183,13 @@ export default function TransparencyPage(props) {
   return (
     <Card>
       <CardHeader color="danger">
-        <h4 className={classes.cardTitleWhite}>Kind Transparency Update</h4>
+        <h4 className={classes.cardTitleWhite}>Transparency CMS Screen</h4>
         <p className={classes.cardCategoryWhite}>
-          For uploading Kind transparencies
+          For billing and files upload for transparency page
         </p>
         <p className={classes.cardCategoryWhite}>
-          Please check the information properly before updating as it cannot be
-          manipulated again for security reasons !
+          Please check the information properly before submitting as it cannot
+          be manipulated again for security reasons !
         </p>
       </CardHeader>
       <CardBody>
@@ -186,6 +215,7 @@ export default function TransparencyPage(props) {
                 value={type}
                 onChange={(e) => {
                   setType(e.target.value);
+                  setCauseEventsNames([]);
                 }}>
                 <MenuItem value={'cause'}>Cause</MenuItem>
                 <MenuItem value={'event'}>Events</MenuItem>
@@ -285,6 +315,56 @@ export default function TransparencyPage(props) {
               </FormControl>
             </GridItem>
           )}
+
+          {causeEventsNames.length && (
+            <GridItem xs={12} sm={12} md={12}>
+              <FormControl
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '4rem',
+                  margin: '30px 0',
+                }}
+                className={classes.formControl}>
+                <div style={{width: '100%'}}>
+                  <InputLabel id="demo-simple-select-label">
+                    {type[0].toUpperCase()}
+                    {type.slice(1)} names
+                  </InputLabel>
+                  <Select
+                    style={{width: '100%'}}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={currentName}
+                    onChange={(e) => {
+                      setCurrentName(e.target.value);
+                    }}>
+                    {causeEventsNames.map((obj) => (
+                      <MenuItem
+                        key={obj._id}
+                        value={obj.name}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        }}>
+                        {obj.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                  }}></div>
+              </FormControl>
+            </GridItem>
+          )}
+
           <GridItem xs={12} sm={12} md={4}>
             <TextField
               id="standard-basic"
@@ -293,6 +373,19 @@ export default function TransparencyPage(props) {
               value={amount}
               onChange={(e) => {
                 setAmount(e.target.value);
+              }}
+              required
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="Quantity Provided"
+              type="number"
+              value={quantity}
+              onChange={(e) => {
+                setQuantity(e.target.value);
               }}
               required
               style={{width: '500px', margin: '30px 0'}}
@@ -367,7 +460,7 @@ export default function TransparencyPage(props) {
               <CircularProgress />
             ) : (
               <Button color="danger" type="submit">
-                Update
+                Uplaod
               </Button>
             )}
           </GridItem>

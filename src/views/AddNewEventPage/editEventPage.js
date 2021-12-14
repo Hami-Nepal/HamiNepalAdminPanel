@@ -92,6 +92,7 @@ export default function AddNewEventPage({match}) {
   const [street, setStreet] = useState('');
   // const [difficulties, setDifficulties] = useState('');
   const [challenges, setChallenges] = useState('');
+  const [results, setResults] = useState('');
 
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
@@ -110,6 +111,7 @@ export default function AddNewEventPage({match}) {
     setBalance(result.data.balance);
     setSummary(result.data.summary);
     setDescription(result.data.description);
+    setResults(result.data.results);
     setCountry(result.data.country);
     setState(result.data.state);
     setCity(result.data.city);
@@ -147,6 +149,7 @@ export default function AddNewEventPage({match}) {
     formData.append('balance', balance);
     formData.append('summary', summary);
     formData.append('description', description);
+    formData.append('results', results);
     formData.append('challenges', challenges);
     // formData.append('difficulties', difficulties);
     formData.append('country', country);
@@ -393,6 +396,26 @@ export default function AddNewEventPage({match}) {
                 value={summary}
                 onChange={(e) => {
                   setChallenges(e.target.value);
+                }}
+                // required
+                style={{
+                  width: '95.8%',
+                  margin: '30px 0',
+                  padding: '20px',
+                  fontSize: '16px',
+                  fontFamily: 'Roboto',
+                }}
+              />
+            </GridItem>
+            <GridItem xs={12} sm={12} md={12}>
+              <InputLabel id="demo-simple-select-label">Results</InputLabel>
+              <TextareaAutosize
+                aria-label="minimum height"
+                rowsMin={5}
+                placeholder="Enter the results of Past event not exceeding 250 character"
+                value={results}
+                onChange={(e) => {
+                  setResults(e.target.value);
                 }}
                 // required
                 style={{

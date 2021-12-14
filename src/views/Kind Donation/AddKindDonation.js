@@ -91,6 +91,7 @@ export default function KindDonation() {
   const [country, setCountry] = useState('');
   const [donatedItem, setDonatedItem] = useState('');
   const [itemWorth, setItemWorth] = useState();
+  const [quantity, setQuantity] = useState(0);
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
@@ -135,6 +136,7 @@ export default function KindDonation() {
     formData.append('country', country);
     formData.append('donatedItem', donatedItem);
     formData.append('itemWorth', itemWorth);
+    formData.append('quantity', quantity);
     formData.append('category', category);
     formData.append('donerEmail', donerEmail);
     category === 'event'
@@ -375,7 +377,6 @@ export default function KindDonation() {
               onChange={(e) => {
                 setDonerEmail(e.target.value);
               }}
-              required
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
@@ -388,7 +389,6 @@ export default function KindDonation() {
               onChange={(e) => {
                 setPhoneNumber(e.target.value);
               }}
-              required
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
@@ -448,6 +448,19 @@ export default function KindDonation() {
               value={itemWorth}
               onChange={(e) => {
                 setItemWorth(e.target.value);
+              }}
+              required
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="Items Quantity"
+              type="number"
+              value={quantity}
+              onChange={(e) => {
+                setQuantity(e.target.value);
               }}
               required
               style={{width: '500px', margin: '30px 0'}}

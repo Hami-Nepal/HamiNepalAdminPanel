@@ -142,7 +142,7 @@ export default function Donations() {
                         </IconButton>
                       }
                       title={donation.donatedItem}
-                      subheader={donation.category}
+                      subheader={`Type: ${donation.category}, Quantity: ${donation.quantity}`}
                       style={{backgroundColor: 'white'}}
                     />
                     <CardMedia

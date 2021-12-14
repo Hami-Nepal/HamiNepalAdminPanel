@@ -108,6 +108,7 @@ export default function TransparencysList() {
                     <TableCell align="center">Name</TableCell>
                     <TableCell align="center">Type</TableCell>
                     <TableCell align="center">Amount</TableCell>
+                    <TableCell align="center">Quantity</TableCell>
                     <TableCell align="center">Photo</TableCell>
                     <TableCell align="center">Updated At</TableCell>
                     <TableCell align="center ">Edit</TableCell>
@@ -142,6 +143,7 @@ export default function TransparencysList() {
                             <TableCell align="center">{row.name}</TableCell>
                             <TableCell align="center">{row.type}</TableCell>
                             <TableCell align="center">{row.amount}</TableCell>
+                            <TableCell align="center">{row.quantity}</TableCell>
                             <TableCell align="center">
                               <img src={row.photos[0]} width={50} />
                             </TableCell>

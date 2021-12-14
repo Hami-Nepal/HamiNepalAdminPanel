@@ -85,6 +85,7 @@ export default function TransparencyPage() {
 
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
+  const [quantity, setQuantity] = useState(0);
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
@@ -137,6 +138,7 @@ export default function TransparencyPage() {
     formData.append('type', type);
     formData.append('amount', amount);
     formData.append('description', description);
+    formData.append('quantity', quantity);
 
     type === 'event'
       ? formData.append('event', event)
@@ -362,6 +364,19 @@ export default function TransparencyPage() {
               value={amount}
               onChange={(e) => {
                 setAmount(e.target.value);
+              }}
+              required
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="Quantity Provided"
+              type="number"
+              value={quantity}
+              onChange={(e) => {
+                setQuantity(e.target.value);
               }}
               required
               style={{width: '500px', margin: '30px 0'}}

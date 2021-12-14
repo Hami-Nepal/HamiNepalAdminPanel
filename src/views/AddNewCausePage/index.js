@@ -88,6 +88,7 @@ export default function AddNewCausePage({match}) {
   const [selectedFile, setSelectedFile] = useState(null);
   // const [difficulties, setDifficulties] = useState('');
   const [challenges, setChallenges] = useState('');
+  const [results, setResults] = useState('');
   const [description, setDescription] = useState('');
   const [summary, setSummary] = useState('');
   const [uploadedUrl, setUploadedUrl] = useState([]);
@@ -114,6 +115,7 @@ export default function AddNewCausePage({match}) {
     formData.append('summary', summary);
     formData.append('description', description);
     formData.append('challenges', challenges);
+    formData.append('results', results);
     // formData.append('difficulties', difficulties);
     formData.append('balance', balance);
 
@@ -280,6 +282,26 @@ export default function AddNewCausePage({match}) {
                 // required
                 style={{
                   width: '500px',
+                  margin: '30px 0',
+                  padding: '20px',
+                  fontSize: '16px',
+                  fontFamily: 'Roboto',
+                }}
+              />
+            </GridItem>
+            <GridItem xs={12} sm={12} md={12}>
+              <InputLabel id="demo-simple-select-label">Results</InputLabel>
+              <TextareaAutosize
+                aria-label="minimum height"
+                rowsMin={5}
+                placeholder="Enter the results of Past causes not exceeding 250 character"
+                value={results}
+                onChange={(e) => {
+                  setResults(e.target.value);
+                }}
+                // required
+                style={{
+                  width: '95.8%',
                   margin: '30px 0',
                   padding: '20px',
                   fontSize: '16px',
