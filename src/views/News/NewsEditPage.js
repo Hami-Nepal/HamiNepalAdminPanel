@@ -130,6 +130,7 @@ export default function Editnews({match}) {
     formData.append('photo', selectedFile);
     formData.append('summary', summary);
     formData.append('link', link);
+    formData.append('newsType', type);
 
     axios({
       method: 'PUT',
