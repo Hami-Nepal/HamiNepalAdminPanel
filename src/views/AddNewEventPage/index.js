@@ -300,23 +300,15 @@ export default function AddNewEventPage() {
               />
             </GridItem>
 
-            <GridItem xs={12} sm={12} md={12}>
-              <InputLabel id="demo-simple-select-label">Description</InputLabel>
-              <TextareaAutosize
-                aria-label="minimum height"
-                rowsMin={5}
-                placeholder="Enter a short description about the event"
-                value={description}
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                }}
-                // required
-                style={{
-                  width: '95.8%',
-                  margin: '30px 0',
-                  padding: '20px',
-                  fontSize: '16px',
-                  fontFamily: 'Roboto',
+            <GridItem xs={12} sm={12} md={8}>
+              <h5>Please add the Description</h5>
+              <CKEditor
+                editor={ClassicEditor}
+                data={description}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+
+                  setDescription(data);
                 }}
               />
             </GridItem>

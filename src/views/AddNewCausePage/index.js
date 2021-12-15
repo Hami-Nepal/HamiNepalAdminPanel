@@ -17,8 +17,8 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-// import {CKEditor} from '@ckeditor/ckeditor5-react';
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {CKEditor} from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import baseURL from '../../api/baseUrl';
 
 const styles = {
@@ -249,23 +249,15 @@ export default function AddNewCausePage({match}) {
                 }}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
-              <InputLabel id="demo-simple-select-label">Description</InputLabel>
-              <TextareaAutosize
-                aria-label="minimum height"
-                rowsMin={5}
-                placeholder="Enter a short description about the cause"
-                value={description}
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                }}
-                // required
-                style={{
-                  width: '500px',
-                  margin: '30px 0',
-                  padding: '20px',
-                  fontSize: '16px',
-                  fontFamily: 'Roboto',
+            <GridItem xs={12} sm={12} md={8}>
+              <h5>Please add the Description</h5>
+              <CKEditor
+                editor={ClassicEditor}
+                data={description}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+
+                  setDescription(data);
                 }}
               />
             </GridItem>

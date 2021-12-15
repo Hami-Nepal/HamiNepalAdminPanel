@@ -17,8 +17,8 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-// import {CKEditor} from '@ckeditor/ckeditor5-react';
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {CKEditor} from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import baseURL from '../../api/baseUrl';
 
 const styles = {
@@ -264,7 +264,19 @@ export default function AddNewCausePage({match}) {
                 }}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
+            <GridItem xs={12} sm={12} md={8}>
+              <h5>Please add the Description</h5>
+              <CKEditor
+                editor={ClassicEditor}
+                data={description}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+
+                  setDescription(data);
+                }}
+              />
+            </GridItem>
+            {/* <GridItem xs={12} sm={12} md={4}>
               <InputLabel id="demo-simple-select-label">Description</InputLabel>
               <TextareaAutosize
                 aria-label="minimum height"
@@ -283,7 +295,7 @@ export default function AddNewCausePage({match}) {
                   fontFamily: 'Roboto',
                 }}
               />
-            </GridItem>
+            </GridItem> */}
             <GridItem xs={12} sm={12} md={4}>
               <InputLabel id="demo-simple-select-label">Challenges</InputLabel>
               <TextareaAutosize
