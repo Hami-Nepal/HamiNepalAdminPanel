@@ -96,6 +96,7 @@ export const volunteersReducer = (state = initialState, action) => {
         verifyVolunteerLoading: false,
         verifyVolunteerError: '',
         volunteerList: updatedVolunteerList,
+
         // [
         //   ...state.volunteerList.map((volunteer) => {
         //     let v = volunteer;
@@ -113,7 +114,7 @@ export const volunteersReducer = (state = initialState, action) => {
         ...state,
         verifyVolunteerSuccess: false,
         verifyVolunteerLoading: false,
-        verifyVolunteerError: payload,
+        verifyVolunteerError: payload.data,
       };
     default:
       return state;

@@ -192,7 +192,7 @@ export default function KindDonation() {
                 onChange={(e) => {
                   setDonerType(e.target.value);
                 }}>
-                <MenuItem value={'Organization'}>Orgization</MenuItem>
+                <MenuItem value={'Organization'}>Organization</MenuItem>
                 <MenuItem value={'Individual'}>Individual</MenuItem>
               </Select>
             </FormControl>
