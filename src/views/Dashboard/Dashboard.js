@@ -152,7 +152,11 @@ export default function Dashboard() {
               </CardIcon>
               <p className={classes.cardCategory}>Total donations</p>
               <h4 className={classes.cardTitle}>
-                {donationLoading ? <CircularProgress /> : totalDonations}
+                {donationLoading ? (
+                  <CircularProgress />
+                ) : (
+                  new Intl.NumberFormat('en-IN').format(totalDonations)
+                )}
               </h4>
             </CardHeader>
             <CardFooter stats>
@@ -171,7 +175,11 @@ export default function Dashboard() {
               </CardIcon>
               <p className={classes.cardCategory}>Total Expenditure</p>
               <h3 className={classes.cardTitle} style={{fontSize: '20px'}}>
-                {totalExpensesLoading ? <CircularProgress /> : totalExpenses}
+                {totalExpensesLoading ? (
+                  <CircularProgress />
+                ) : (
+                  new Intl.NumberFormat('en-IN').format(totalExpenses)
+                )}
               </h3>
             </CardHeader>
             <CardFooter stats>
@@ -193,7 +201,9 @@ export default function Dashboard() {
                 {totalExpensesLoading && donationLoading ? (
                   <CircularProgress />
                 ) : (
-                  totalDonations - totalExpenses
+                  new Intl.NumberFormat('en-IN').format(
+                    totalDonations - totalExpenses,
+                  )
                 )}
               </h3>
             </CardHeader>
