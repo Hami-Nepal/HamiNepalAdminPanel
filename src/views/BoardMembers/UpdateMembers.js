@@ -63,7 +63,7 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 const loadOptions = (inputValue, callback) => {
-  console.log(inputValue);
+  // console.log(inputValue);
 };
 
 export default function EditMember({match}) {

@@ -14,7 +14,7 @@ import CardBody from 'components/Card/CardBody.js';
 
 // import {Link} from 'react-router-dom';
 
-import baseUrl from '../../api/baseUrl'
+import baseUrl from '../../api/baseUrl';
 
 const styles = {
   cardCategoryWhite: {
@@ -61,10 +61,10 @@ export default function UserList() {
           headers: {authorization: `Bearer ${token}`},
         });
 
-        console.log(data);
+        // console.log(data);
         setUsers(data.data);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     getUsers();

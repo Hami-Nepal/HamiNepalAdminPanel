@@ -144,7 +144,7 @@ export const causeReducer = (state = initialState, action) => {
       return state;
     case CAUSE_UPDATE_SUCCESS:
       const updatedCauseList = state.causeList.map((cause) =>
-        cause._id === action.payload.data._id ? action.payload.data : cause,
+        cause._id === payload.data.cause._id ? payload.data.cause : cause,
       );
       return {
         causeListLoading: false,

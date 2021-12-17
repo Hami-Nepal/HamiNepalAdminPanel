@@ -99,8 +99,6 @@ export default function CauseList() {
       }
     }
 
-    console.log(rankings, nextRanking);
-
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
     const {data: response} = await axios.put(
       baseURL + 'kindness/' + id,
@@ -136,7 +134,7 @@ export default function CauseList() {
                   <TableRow>
                     {/* <TableCell>id </TableCell> */}
                     <TableCell align="center">Title</TableCell>
-                    <TableCell align="center">Type</TableCell>
+                    {/* <TableCell align="center">Type</TableCell> */}
                     <TableCell align="center">Featured</TableCell>
                     <TableCell align="center">Featured Ranking</TableCell>
                     <TableCell align="center">Image</TableCell>
@@ -171,7 +169,7 @@ export default function CauseList() {
                               {row._id}
                             </TableCell> */}
                             <TableCell align="center">{row.title}</TableCell>
-                            <TableCell align="center">{row.type}</TableCell>
+                            {/* <TableCell align="center">{row.type}</TableCell> */}
                             <TableCell
                               align="center"
                               component="th"

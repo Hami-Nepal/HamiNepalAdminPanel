@@ -18,16 +18,15 @@ import Select from '@material-ui/core/Select';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-import baseURL from 'api/baseUrl';
+import PropTypes from 'prop-types';
+
+import baseUrl from 'api/baseUrl';
 
 const styles = {
   typo: {
     paddingLeft: '25%',
     marginBottom: '40px',
     position: 'relative',
-  },
-  formControl: {
-    minWidth: 120,
   },
   note: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -62,7 +61,8 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function TransparencyPage() {
+export default function TransparencyPage(props) {
+  const id = props.match.params.id;
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
 
@@ -85,6 +85,7 @@ export default function TransparencyPage() {
 
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
+  const [quantity, setQuantity] = useState(0);
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
@@ -96,36 +97,46 @@ export default function TransparencyPage() {
   const [causeEventsNames, setCauseEventsNames] = useState([]);
 
   useEffect(async () => {
-    const cause_types = await axios.get(baseURL + 'cause_type');
+    const cause_types = await axios.get(baseUrl + 'cause_type');
 
     setCauseTypes(cause_types.data.data);
   }, []);
 
   useEffect(async () => {
-    const event_types = await axios.get(baseURL + 'event_type');
+    const event_types = await axios.get(baseUrl + 'event_type');
 
     setEventTypes(event_types.data.data);
   }, []);
 
   useEffect(async () => {
     if (type === 'cause') {
-      const {data} = await axios.get(baseURL + 'causes?cause_type=' + cause);
+      const {data} = await axios.get(baseUrl + 'causes?cause_type=' + cause);
       setCauseEventsNames(data.data);
     } else if (type === 'event') {
-      const {data} = await axios.get(baseURL + 'events?type=' + event);
+      const {data} = await axios.get(baseUrl + 'events?type=' + event);
       setCauseEventsNames(data.data);
     }
   }, [type, cause, event]);
 
-  // const handleFile = (e)=>{
-  //   console.log(e.target.files)
-  //   e.preventDefault();
-  //   let file = e.target.files[0];
-  //   setSelectedFile(file)
-  // }
+  useEffect(async () => {
+    let result = await fetch(baseUrl + 'kindtransparency/' + id);
+    result = await result.json();
+    console.log(result);
+    setName(result.data.kindtransparency.name);
+    setType(result.data.kindtransparency.type);
+    setAmount(result.data.kindtransparency.amount);
+    setDescription(result.data.kindtransparency.description);
+    setCause(result.data.kindtransparency.cause);
+    setEvent(result.data.kindtransparency.event);
+
+    setQuantity(result.data.kindtransparency.quantity);
+    currentName && type === 'event'
+      ? setCurrentName(result.data.kindtransparency.event_name)
+      : setCurrentName(result.data.kindtransparency.cause_name);
+    setUploadedUrl(result.data.kindtransparency.photos);
+  }, []);
 
   const history = useHistory();
-
   const handleUpload = (e) => {
     e.preventDefault();
     setSubmissionLoading(true);
@@ -137,6 +148,7 @@ export default function TransparencyPage() {
     formData.append('type', type);
     formData.append('amount', amount);
     formData.append('description', description);
+    formData.append('quantity', quantity);
 
     type === 'event'
       ? formData.append('event', event)
@@ -147,8 +159,8 @@ export default function TransparencyPage() {
       : formData.append('cause_name', currentName);
 
     axios({
-      method: 'POST',
-      url: baseURL + 'transparency',
+      method: 'PUT',
+      url: baseUrl + 'kindtransparency/' + id,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -157,10 +169,9 @@ export default function TransparencyPage() {
     })
       .then(function (response) {
         //handle success
-        // console.log(response);
-        alert('file uploaded successfully');
+        alert('File updated successfully');
         setSubmissionLoading(false);
-        history.push('/admin/transparency');
+        history.push('/admin/kindtransparency');
       })
       .catch(function (response) {
         //handle error
@@ -368,6 +379,19 @@ export default function TransparencyPage() {
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="Quantity Provided"
+              type="number"
+              value={quantity}
+              onChange={(e) => {
+                setQuantity(e.target.value);
+              }}
+              required
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
@@ -436,7 +460,7 @@ export default function TransparencyPage() {
               <CircularProgress />
             ) : (
               <Button color="danger" type="submit">
-                Submit
+                Uplaod
               </Button>
             )}
           </GridItem>

@@ -27,6 +27,31 @@ import {CKEditor} from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import MyCustomUploadAdapterPlugin from 'utils/UploadAdapter';
 
+import Checkbox from '@material-ui/core/Checkbox';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+  getContentAnchorEl: null,
+  anchorOrigin: {
+    vertical: 'bottom',
+    horizontal: 'center',
+  },
+  transformOrigin: {
+    vertical: 'top',
+    horizontal: 'center',
+  },
+  variant: 'menu',
+};
+
 const styles = {
   typo: {
     paddingLeft: '25%',
@@ -96,7 +121,7 @@ export default function CreateActOfKindness() {
   const [results, setResults] = useState('');
   const [details, setDetails] = useState('');
   const [summary, setSummary] = useState('');
-  const [difficulties, setDifficulties] = useState('');
+  // const [difficulties, setDifficulties] = useState('');
   const [challenges, setChallenges] = useState('');
   const [title, setTitle] = useState('');
   const [uploadedUrl, setUploadedUrl] = useState([]);
@@ -110,6 +135,7 @@ export default function CreateActOfKindness() {
 
   const [volunteersList, setVolunteersList] = useState([]);
   const [selectedVolunteers, setSelectedVolunteers] = useState([]);
+  const [volunteersId, setVolunteersId] = useState([]);
 
   useEffect(async () => {
     const {data: res} = await axios.get(baseUrl + 'volunteers');
@@ -124,9 +150,18 @@ export default function CreateActOfKindness() {
   const handleTypeChange = (event) => {
     setType(event.target.value);
   };
-  const handleInputChange = (newValue) => {
-    let inputValue = newValue.replace(/\W/g, '');
-    setInputValue({inputValue});
+
+  const handleChange = (event) => {
+    const value = event.target.value;
+    if (value[value.length - 1] === 'all') {
+      setSelected(
+        selectedVolunteers.length === volunteersList.length
+          ? []
+          : volunteersList,
+      );
+      return;
+    }
+    setSelectedVolunteers(value);
   };
 
   // useEffect(() => {
@@ -186,7 +221,7 @@ export default function CreateActOfKindness() {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('challenges', challenges);
-    formData.append('difficulties', difficulties);
+    // formData.append('difficulties', difficulties);
     formData.append('summary', summary);
     formData.append('details', details);
     formData.append('results', results);
@@ -266,7 +301,7 @@ export default function CreateActOfKindness() {
                 }}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={12}>
+            {/* <GridItem xs={12} sm={12} md={12}>
               <h5 style={{marginBottom: '-1rem'}}>Difficulties</h5>
               <TextareaAutosize
                 aria-label="minimum height"
@@ -285,7 +320,7 @@ export default function CreateActOfKindness() {
                   fontFamily: 'Roboto',
                 }}
               />
-            </GridItem>
+            </GridItem> */}
             <GridItem xs={12} sm={12} md={12}>
               <h5 style={{marginBottom: '-1rem'}}>Summary</h5>
               <TextareaAutosize
@@ -347,6 +382,45 @@ export default function CreateActOfKindness() {
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
+              <InputLabel id="mutiple-select-label">
+                Select Volunteer
+              </InputLabel>
+              <Select
+                labelId="mutiple-select-label"
+                multiple
+                value={selectedVolunteers}
+                onChange={handleChange}
+                renderValue={(selectedVolunteers) =>
+                  selectedVolunteers.join(', ')
+                }
+                MenuProps={MenuProps}
+                style={{width: '50%'}}>
+                {volunteersList.map((option) => {
+                  return (
+                    <MenuItem key={`${option._id}`} value={option._id}>
+                      <ListItemIcon>
+                        <Checkbox
+                          checked={selectedVolunteers.indexOf(option._id) > -1}
+                        />
+                      </ListItemIcon>
+                      <img
+                        src={option.photo}
+                        alt={option.first_name}
+                        style={{
+                          width: '50px',
+                          borderRadius: '50%',
+                          marginRight: '.8rem',
+                        }}
+                      />
+                      <ListItemText
+                        primary={`${option.first_name} ${option.last_name}`}
+                      />
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </GridItem>
+            {/* <GridItem xs={12} sm={12} md={12}>
               <h5>Volunteers</h5>
               <div
                 style={{
@@ -401,7 +475,7 @@ export default function CreateActOfKindness() {
                   </div>
                 ))}
               </div>
-            </GridItem>
+            </GridItem> */}
             <GridItem xs={12} sm={12} md={12}>
               <h5>Upload photos of event</h5>
               <div
@@ -422,10 +496,10 @@ export default function CreateActOfKindness() {
                     events photo
                   </p>
                 )}
-                <div style={{display: 'flex', gap: '1rem'}}>
+                <div style={{display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
                   {uploadedUrl.length &&
                     uploadedUrl.map((url) => (
-                      <img src={url} style={{height: '200px'}} />
+                      <img src={url} style={{height: '40px'}} />
                     ))}
                 </div>
               </div>

@@ -14,6 +14,9 @@ import {
   EVENT_UPDATE_REQUEST,
   EVENT_UPDATE_FAIL,
   EVENT_UPDATE_SUCCESS,
+  VERIFY_EVENT,
+  VERIFY_EVENT_SUCCESS,
+  VERIFY_EVENT_ERROR,
 } from '../constants/events.constants';
 import api from 'api';
 
@@ -99,10 +102,7 @@ export const createEvent = (formData) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: EVENT_CREATE_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: error,
     });
   }
 };
@@ -122,6 +122,35 @@ export const updateEvent = (id, status) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: EVENT_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const verifyEvent = (id, eventList) => async (dispatch, getState) => {
+  try {
+    const {isVerified} = eventList.find(({_id}) => _id == id);
+    dispatch({type: VERIFY_EVENT});
+    const {
+      userLogin: {userInfo},
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const {data} = await api.put(
+      `/events/verify/` + id,
+      {isVerified: isVerified ? false : true},
+      config,
+    );
+    dispatch({type: VERIFY_EVENT_SUCCESS, payload: data});
+  } catch (error) {
+    dispatch({
+      type: VERIFY_EVENT_ERROR,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

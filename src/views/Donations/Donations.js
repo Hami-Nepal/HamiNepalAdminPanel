@@ -38,6 +38,7 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import {Button} from '@material-ui/core';
 import GridContainer from 'components/Grid/GridContainer';
+import baseURL from 'api/baseUrl';
 
 function getStyles(column, name, theme) {
   return {
@@ -85,22 +86,21 @@ export default function Donations() {
   const theme = useTheme();
 
   const [sortBy, setSortBy] = useState('createdAt');
-  const [limitBy, setLimitBy] = useState(10);
   const [page, setPage] = useState(0);
-  const [isAscending, setIsAscending] = useState(true);
 
   const handleSortByChange = (event) => {
     setSortBy(event.target.value);
+    console.log(sortBy);
     fetchDataFromApi();
   };
-  const handleLimitByChange = (event) => {
-    setLimitBy(event.target.value);
-    fetchDataFromApi();
-  };
-  const handleIsAscendingChange = (event) => {
-    setIsAscending(!isAscending);
-    fetchDataFromApi();
-  };
+  // const handleLimitByChange = (event) => {
+  //   setLimitBy(event.target.value);
+  //   fetchDataFromApi();
+  // };
+  // const handleIsAscendingChange = (event) => {
+  //   setIsAscending(!isAscending);
+  //   fetchDataFromApi();
+  // };
   const {
     donationsListSuccess,
     donationsListError,
@@ -109,11 +109,11 @@ export default function Donations() {
     donationsCount,
   } = useSelector((state) => state.donations);
 
-  const makeParams = () => ({
-    limit: limitBy,
-    sort: isAscending ? sortBy : '-' + sortBy,
-    page,
-  });
+  // const makeParams = () => ({
+  //   limit: limitBy,
+  //   sort: isAscending ? sortBy : '-' + sortBy,
+  //   page,
+  // });
 
   useEffect(() => {
     if (!donationsListSuccess) {
@@ -121,9 +121,9 @@ export default function Donations() {
     }
   }, []);
 
-  const fetchDataFromApi = () => {
-    let params = makeParams();
-    dispatch(listDonations(params));
+  const fetchDataFromApi = async () => {
+    // let params = makeParams();
+    dispatch(listDonations(sortBy, page));
   };
 
   const fetchData = () => {
@@ -173,7 +173,7 @@ export default function Donations() {
                     </MenuItem>
                   ))}
                 </Select>
-                <FormControlLabel
+                {/* <FormControlLabel
                   control={
                     <Switch
                       checked={isAscending}
@@ -182,10 +182,10 @@ export default function Donations() {
                     />
                   }
                   label={isAscending ? 'Descending' : 'Acending'}
-                />
+                /> */}
               </FormControl>
             </GridItem>
-            <GridItem xs={8} sm={8} md={2} lg={2}>
+            {/* <GridItem xs={8} sm={8} md={2} lg={2}>
               <FormControl className={classes.formControl}>
                 <InputLabel id="limit-label">Limit</InputLabel>
                 <Select
@@ -217,7 +217,7 @@ export default function Donations() {
                   </MenuItem>
                 </Select>
               </FormControl>
-            </GridItem>
+            </GridItem> */}
           </GridContainer>
           {!donationsList.length ? (
             <Alert severity="info">

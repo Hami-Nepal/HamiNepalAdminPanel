@@ -63,7 +63,7 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 const loadOptions = (inputValue, callback) => {
-  console.log(inputValue);
+  // console.log(inputValue);
 };
 
 export default function Addnews() {
@@ -84,6 +84,7 @@ export default function Addnews() {
 
   const [summary, setSummary] = useState('');
   const [link, setLink] = useState('');
+  const [type, setType] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
@@ -115,6 +116,7 @@ export default function Addnews() {
     formData.append('photo', selectedFile);
     formData.append('summary', summary);
     formData.append('link', link);
+    formData.append('newsType', type);
 
     axios({
       method: 'POST',
@@ -133,8 +135,8 @@ export default function Addnews() {
       })
       .catch(function (response) {
         //handle error
-        console.log(response);
-        console.log(response.message);
+        // console.log(response);
+        // console.log(response.message);
         setError(response.message);
         setSubmissionLoading(false);
       });
@@ -165,6 +167,21 @@ export default function Addnews() {
               required
               style={{width: '500px', margin: '30px 0'}}
             />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <FormControl style={{width: '50%'}} className={classes.formControl}>
+              <InputLabel id="demo-simple-select-label">News Type</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={type}
+                onChange={(e) => {
+                  setType(e.target.value);
+                }}>
+                <MenuItem value={'national'}>National</MenuItem>
+                <MenuItem value={'international'}>International</MenuItem>
+              </Select>
+            </FormControl>
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
             <TextField

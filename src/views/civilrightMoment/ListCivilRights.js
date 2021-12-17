@@ -24,8 +24,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import DialogueBox from 'components/DialogueBox';
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import {Link} from 'react-router-dom';
 import api from 'api';
 import baseURL from 'api/baseUrl';
@@ -36,38 +34,38 @@ const useStyles = makeStyles({
     minWidth: 650,
   },
 });
-export default function TransparencysList() {
+export default function NewssList() {
   const classes = useStyles();
 
-  const [deleteTransparencySuccess, setDeleteTransparencySuccess] = useState(
-    false,
-  );
-  const [deleteTransparencyError, setDeleteTransparencyError] = useState('');
+  const [deleteCivilSuccess, setDeleteCivilSuccess] = useState(false);
+  const [deleteCivilError, setDeleteCivilError] = useState('');
   const [error, setError] = useState();
-  const [transparencyListSuccess, setTransparencyListSuccess] = useState(null);
-  const [transparencyListError, setTransparencyListError] = useState(null);
-  const [transparencyListLoading, setTransparencyListLoading] = useState(true);
-  const [transparencyList, setTransparencyList] = useState([]);
-  const [page, setPage] = React.useState(0);
-  const [total_data, setTotal_data] = useState(0);
+  const [civilListSuccess, setCivilListSuccess] = useState(null);
+  const [civilListError, setCivilListError] = useState(null);
+  const [civilListLoading, setCivilListLoading] = useState(null);
+  const [civilList, setCivilList] = useState([]);
 
-  const handleDeleteTransparency = async (id) => {
+  const handleDeleteRight = async (id) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
     const config = {
       headers: {
+        // 'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
     };
 
     try {
-      const response = await api.delete(`/transparency/${id}`, config);
-      setDeleteTransparencySuccess(true);
-      setTransparencyList(transparencyList.filter(({_id}) => _id !== id));
+      const response = await api.delete(`/civilrights/${id}`, config);
+      setDeleteCivilSuccess(true);
+      setCivilList(civilList.filter(({_id}) => _id !== id));
     } catch (err) {
       setError(err);
-      setDeleteTransparencyError(true);
+      setDeleteCivilError(true);
     }
   };
+
+  const [page, setPage] = React.useState(0);
+  const [total_data, setTotal_data] = useState(0);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -75,10 +73,10 @@ export default function TransparencysList() {
 
   const fetchData = async () => {
     const {data: response} = await axios.get(
-      baseURL + 'transparency?page=' + (page + 1),
+      baseURL + 'civilrights?page=' + (page + 1),
     );
-    setTransparencyList(response.data);
-    setTransparencyListLoading(false);
+    setCivilList(response.data);
+    // setTotal_data(response.total_data)
     setTotal_data(response.total_data);
   };
 
@@ -87,18 +85,20 @@ export default function TransparencysList() {
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
-        <Link to="/admin/transparency/create">
+        <Link to="/admin/civilrights/create">
           <Button color="danger" type="submit">
-            Add new Transparency
+            Add CIvil Rights Blogs
           </Button>
         </Link>
 
         {/* <DialogueBox /> */}
         <Card plain>
           <CardHeader plain color="danger">
-            <h4 className={classes.cardTitleWhite}>Transparency List</h4>
+            <h4 className={classes.cardTitleWhite}>
+              CIvil Rights Moments List
+            </h4>
             <p className={classes.cardCategoryWhite}>
-              Showing all the Transparencies
+              Showing all the CIvil Rights Moments
             </p>
           </CardHeader>
           <CardBody>
@@ -107,19 +107,17 @@ export default function TransparencysList() {
                 <TableHead>
                   <TableRow>
                     {/* <TableCell>id </TableCell> */}
-                    <TableCell align="center">Name</TableCell>
-                    <TableCell align="center">Type</TableCell>
-                    <TableCell align="center">Amount</TableCell>
-                    <TableCell align="center">Photo</TableCell>
+                    <TableCell align="center">Title</TableCell>
+                    <TableCell align="center">Image</TableCell>
                     <TableCell align="center">Updated At</TableCell>
                     <TableCell align="center ">Edit</TableCell>
                     <TableCell align="center ">Delete</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {transparencyListLoading ? (
+                  {civilListLoading ? (
                     <CircularProgress />
-                  ) : transparencyListError ? (
+                  ) : civilListError ? (
                     <Alert severity="error">
                       <AlertTitle>Error</AlertTitle>
                       Something bad happened —{' '}
@@ -134,16 +132,14 @@ export default function TransparencysList() {
                       </Button>
                     </Alert>
                   ) : (
-                    transparencyList.length &&
-                    (transparencyList
-                      ? transparencyList.map((row) => (
+                    civilList.length &&
+                    (civilList
+                      ? civilList.map((row) => (
                           <TableRow key={row._id}>
                             {/* <TableCell component="th" scope="row">
                               {row._id}
                             </TableCell> */}
-                            <TableCell align="center">{row.name}</TableCell>
-                            <TableCell align="center">{row.type}</TableCell>
-                            <TableCell align="center">{row.amount}</TableCell>
+                            <TableCell align="center">{row.title}</TableCell>
                             <TableCell align="center">
                               <img src={row.photos[0]} width={50} />
                             </TableCell>
@@ -152,8 +148,7 @@ export default function TransparencysList() {
                             </TableCell>
                             <TableCell align="left">
                               {
-                                <Link
-                                  to={`/admin/transparency/edit/${row._id}`}>
+                                <Link to={`/admin/civilrights/edit/${row._id}`}>
                                   <EditIcon color="primary" />
                                 </Link>
                               }
@@ -162,9 +157,7 @@ export default function TransparencysList() {
                               {
                                 <DeleteIcon
                                   color="secondary"
-                                  onClick={() =>
-                                    handleDeleteTransparency(row._id)
-                                  }
+                                  onClick={() => handleDeleteRight(row._id)}
                                 />
                               }
                             </TableCell>
@@ -172,14 +165,14 @@ export default function TransparencysList() {
                         ))
                       : '')
                   )}
-                  {deleteTransparencySuccess ? (
+                  {deleteCivilSuccess ? (
                     <Alert severity="success">
                       <AlertTitle>Success</AlertTitle>
-                      Transparency deleted Successfully
+                      Civil Rights deleted Successfully
                     </Alert>
                   ) : null}
-                  {deleteTransparencyError && (
-                    <div style={{color: 'red'}}>deleteTransparencyError</div>
+                  {deleteCivilError && (
+                    <div style={{color: 'red'}}>deleteCivilRightsError</div>
                   )}
                 </TableBody>
               </Table>

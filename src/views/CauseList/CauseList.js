@@ -42,20 +42,13 @@ export default function CauseList() {
 
   const dispatch = useDispatch();
 
-  const [mounted, setMounted] = useState(false);
-
   const [deleteCauseSuccess, setDeleteCauseSuccess] = useState(false);
   const [deleteCauseError, setDeleteCauseError] = useState('');
   const [error, setError] = useState();
 
-  const [CauseLists, setCauseLists] = useState([]);
-  const {
-    causeListSuccess,
-    causeListError,
-    causeListLoading,
-    causeList,
-    causeCount,
-  } = useSelector((state) => state.causes);
+  const {causeListError, causeListLoading, causeList, causeCount} = useSelector(
+    (state) => state.causes,
+  );
 
   const handleDeleteCause = async (id) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
@@ -87,10 +80,7 @@ export default function CauseList() {
     dispatch(listCauses(curentPage + 1));
     // if (!causeListSuccess) {
     // }
-    setTotal_data(causeCount);
   }, [curentPage]);
-
-  console.log();
 
   const changeStatus = (id, status) => {
     dispatch(updateCause(id, status, causeList));
@@ -125,6 +115,7 @@ export default function CauseList() {
                     <TableCell align="center">Image</TableCell>
                     <TableCell align="center">Fund Amount</TableCell>
                     <TableCell align="center">Updated At</TableCell>
+                    <TableCell align="center">Verify volunteers</TableCell>
                     <TableCell align="center">Actions</TableCell>
                   </TableRow>
                 </TableHead>
@@ -172,6 +163,13 @@ export default function CauseList() {
                           {row.updatedAt.slice(0, 10)}
                         </TableCell>
                         <TableCell align="center">
+                          <Link
+                            to={`/admin/causes/${row._id}/volunteers`}
+                            style={{cursor: 'pointer'}}>
+                            List Volunteers
+                          </Link>
+                        </TableCell>
+                        <TableCell align="center">
                           {
                             <Link to={`/admin/causes/edit/${row._id}`}>
                               <EditIcon color="primary" />
@@ -204,7 +202,7 @@ export default function CauseList() {
               </Table>
               <TablePagination
                 component="div"
-                count={total_data}
+                count={causeCount}
                 page={curentPage}
                 onPageChange={handleChangePage}
                 rowsPerPage={10}

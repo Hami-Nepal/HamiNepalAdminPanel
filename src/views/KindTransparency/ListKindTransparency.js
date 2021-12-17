@@ -24,8 +24,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import DialogueBox from 'components/DialogueBox';
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import {Link} from 'react-router-dom';
 import api from 'api';
 import baseURL from 'api/baseUrl';
@@ -60,7 +58,7 @@ export default function TransparencysList() {
     };
 
     try {
-      const response = await api.delete(`/transparency/${id}`, config);
+      const response = await api.delete(`/kindtransparency/${id}`, config);
       setDeleteTransparencySuccess(true);
       setTransparencyList(transparencyList.filter(({_id}) => _id !== id));
     } catch (err) {
@@ -75,7 +73,7 @@ export default function TransparencysList() {
 
   const fetchData = async () => {
     const {data: response} = await axios.get(
-      baseURL + 'transparency?page=' + (page + 1),
+      baseURL + 'kindtransparency?page=' + (page + 1),
     );
     setTransparencyList(response.data);
     setTransparencyListLoading(false);
@@ -87,18 +85,18 @@ export default function TransparencysList() {
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
-        <Link to="/admin/transparency/create">
+        <Link to="/admin/kindtransparency/create">
           <Button color="danger" type="submit">
-            Add new Transparency
+            Add new Kind Transparency
           </Button>
         </Link>
 
         {/* <DialogueBox /> */}
         <Card plain>
           <CardHeader plain color="danger">
-            <h4 className={classes.cardTitleWhite}>Transparency List</h4>
+            <h4 className={classes.cardTitleWhite}>Kind Transparency List</h4>
             <p className={classes.cardCategoryWhite}>
-              Showing all the Transparencies
+              Showing all the Kind Transparencies
             </p>
           </CardHeader>
           <CardBody>
@@ -110,6 +108,7 @@ export default function TransparencysList() {
                     <TableCell align="center">Name</TableCell>
                     <TableCell align="center">Type</TableCell>
                     <TableCell align="center">Amount</TableCell>
+                    <TableCell align="center">Quantity</TableCell>
                     <TableCell align="center">Photo</TableCell>
                     <TableCell align="center">Updated At</TableCell>
                     <TableCell align="center ">Edit</TableCell>
@@ -122,7 +121,7 @@ export default function TransparencysList() {
                   ) : transparencyListError ? (
                     <Alert severity="error">
                       <AlertTitle>Error</AlertTitle>
-                      Something bad happened —{' '}
+                      Something bad happened —{error}
                       <strong>Please try again later.</strong>
                       <br></br>
                       <br></br>
@@ -144,6 +143,7 @@ export default function TransparencysList() {
                             <TableCell align="center">{row.name}</TableCell>
                             <TableCell align="center">{row.type}</TableCell>
                             <TableCell align="center">{row.amount}</TableCell>
+                            <TableCell align="center">{row.quantity}</TableCell>
                             <TableCell align="center">
                               <img src={row.photos[0]} width={50} />
                             </TableCell>
@@ -153,7 +153,7 @@ export default function TransparencysList() {
                             <TableCell align="left">
                               {
                                 <Link
-                                  to={`/admin/transparency/edit/${row._id}`}>
+                                  to={`/admin/kindtransparency/edit/${row._id}`}>
                                   <EditIcon color="primary" />
                                 </Link>
                               }

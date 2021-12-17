@@ -12,18 +12,10 @@ import CardBody from 'components/Card/CardBody.js';
 import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import baseUrl from '../../api/baseUrl';
-import ListNews from './ListNews';
-
-import AsyncSelect from 'react-select/async';
-import {SentimentVerySatisfiedSharp} from '@material-ui/icons';
 
 const styles = {
   typo: {
@@ -64,10 +56,6 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-const loadOptions = (inputValue, callback) => {
-  // console.log(inputValue);
-};
-
 export default function Editnews({match}) {
   const id = match.params.id;
   const onDrop = useCallback((acceptedFiles) => {
@@ -76,8 +64,8 @@ export default function Editnews({match}) {
     // const reader = new FileReader();
     // reader.readAsArrayBuffer(acceptedFiles[0])
     // console.log(reader,acceptedFiles[0]);
-    setSelectedFile(acceptedFiles[0]);
-    setUploadedUrl(URL.createObjectURL(acceptedFiles[0]));
+    setSelectedFile(acceptedFiles);
+    setUploadedUrl(acceptedFiles.map((file) => URL.createObjectURL(file)));
   }, []);
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
@@ -85,38 +73,26 @@ export default function Editnews({match}) {
   const classes = useStyles();
 
   const [title, setTitle] = useState('');
+  const [introduction, setIntroduction] = useState('');
+  const [body1, setBody1] = useState('');
+  const [body2, setBody2] = useState('');
   const [summary, setSummary] = useState('');
-  const [link, setLink] = useState('');
-  const [type, setType] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
-  const [uploadedUrl, setUploadedUrl] = useState('');
+  const [uploadedUrl, setUploadedUrl] = useState([]);
 
   useEffect(async () => {
-    let result = await fetch(baseUrl + 'news/' + id);
+    let result = await fetch(baseUrl + 'civilrights/' + id);
     result = await result.json();
-
-    setTitle(result.data.title);
-    setSummary(result.data.summary);
-    setType(result.data.newsType);
-    setLink(result.data.link);
-    setUploadedUrl(result.data.photo);
+    console.log(result);
+    setTitle(result.data.civilRights.title);
+    setIntroduction(result.data.civilRights.introduction);
+    setBody1(result.data.civilRights.body1);
+    setBody2(result.data.civilRights.body2);
+    setSummary(result.data.civilRights.summary);
+    setUploadedUrl(result.data.civilRights.photos);
   }, []);
-
-  // const handleFile = (e)=>{
-  //   console.log(e.target.files)
-  //   e.preventDefault();
-  //   let file = e.target.files[0];
-  //   setSelectedFile(file)
-  // }
-
-  const [inputValue, setInputValue] = useState();
-
-  const handleInputChange = (newValue) => {
-    let inputValue = newValue.replace(/\W/g, '');
-    setInputValue({inputValue});
-  };
 
   const history = useHistory();
 
@@ -127,14 +103,15 @@ export default function Editnews({match}) {
 
     const formData = new FormData();
     formData.append('title', title);
-    formData.append('photo', selectedFile);
+    formData.append('introduction', introduction);
+    formData.append('body1', body1);
+    formData.append('body2', body2);
+    selectedFile?.map((file) => formData.append('photos', file));
     formData.append('summary', summary);
-    formData.append('link', link);
-    formData.append('newsType', type);
 
     axios({
       method: 'PUT',
-      url: baseUrl + 'news/' + id,
+      url: baseUrl + 'civilrights/' + id,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -143,9 +120,9 @@ export default function Editnews({match}) {
     })
       .then(function (response) {
         //handle success
-        alert('News edited successfully');
+        alert('Contents edited successfully');
         setSubmissionLoading(false);
-        history.push('/admin/news');
+        history.push('/admin/civilrights');
       })
       .catch(function (response) {
         //handle error
@@ -159,9 +136,9 @@ export default function Editnews({match}) {
   return (
     <Card>
       <CardHeader color="danger">
-        <h4 className={classes.cardTitleWhite}>Update News Screen</h4>
+        <h4 className={classes.cardTitleWhite}>Add News Screen</h4>
         <p className={classes.cardCategoryWhite}>
-          For editing Published news of Hami Nepal
+          For uplaoding Published news of Hami Nepal
         </p>
         <p className={classes.cardCategoryWhite}>
           Please check the information properly before submitting as it cannot
@@ -170,10 +147,10 @@ export default function Editnews({match}) {
       </CardHeader>
       <CardBody>
         <form onSubmit={handleUpload}>
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={12}>
             <TextField
               id="standard-basic"
-              label="Title"
+              label="Enter the Title"
               value={title}
               onChange={(e) => {
                 setTitle(e.target.value);
@@ -182,50 +159,74 @@ export default function Editnews({match}) {
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
-            <FormControl style={{width: '50%'}} className={classes.formControl}>
-              <InputLabel id="demo-simple-select-label">News Type</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={type}
-                onChange={(e) => {
-                  setType(e.target.value);
-                }}>
-                <MenuItem value={'national'}>National</MenuItem>
-                <MenuItem value={'international'}>International</MenuItem>
-              </Select>
-            </FormControl>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
-            <TextField
-              id="standard-basic"
-              label="Link"
-              value={link}
-              onChange={(e) => {
-                setLink(e.target.value);
-              }}
-              required
-              style={{width: '500px', margin: '30px 0'}}
-            />
-          </GridItem>
-          {/* <GridItem xs={12} sm={12} md={4}>
-            <TextField
-              id="standard-basic"
-              label="Bill Type"
-              value={type}
-              onChange={(e) => {
-                setType(e.target.value);
-              }}
-              required
-              style={{width: '500px', margin: '30px 0'}}
-            />
-          </GridItem> */}
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={12}>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
-              placeholder="Enter the summary"
+              placeholder="Enter the Introduction content"
+              value={introduction}
+              onChange={(e) => {
+                setIntroduction(e.target.value);
+              }}
+              required
+              style={{
+                width: '500px',
+                margin: '30px 0',
+                padding: '20px',
+                fontSize: '16px',
+                fontFamily: 'Roboto',
+                color: 'black',
+                fontWeight: '400',
+              }}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={12}>
+            <TextareaAutosize
+              aria-label="minimum height"
+              rowsMin={5}
+              placeholder="Enter the body content[part1]"
+              value={body1}
+              onChange={(e) => {
+                setBody1(e.target.value);
+              }}
+              required
+              style={{
+                width: '500px',
+                margin: '30px 0',
+                padding: '20px',
+                fontSize: '16px',
+                fontFamily: 'Roboto',
+                color: 'black',
+                fontWeight: '400',
+              }}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={12}>
+            <TextareaAutosize
+              aria-label="minimum height"
+              rowsMin={5}
+              placeholder="Enter the body content[part2]"
+              value={body2}
+              onChange={(e) => {
+                setBody2(e.target.value);
+              }}
+              required
+              style={{
+                width: '500px',
+                margin: '30px 0',
+                padding: '20px',
+                fontSize: '16px',
+                fontFamily: 'Roboto',
+                color: 'black',
+                fontWeight: '400',
+              }}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={12}>
+            <TextareaAutosize
+              aria-label="minimum height"
+              rowsMin={5}
+              placeholder="Enter the Summary of the content"
               value={summary}
               onChange={(e) => {
                 setSummary(e.target.value);
@@ -242,17 +243,9 @@ export default function Editnews({match}) {
               }}
             />
           </GridItem>
-
-          <div>
-            {/* <AsyncSelect
-              cacheOptions
-              loadOptions={loadOptions}
-              defaultOptions
-              onInputChange={handleInputChange}
-            /> */}
-          </div>
+          <div></div>
           <GridItem xs={12} sm={12} md={12}>
-            <h5>Please upload the news cover Photo</h5>
+            <h5>Please upload the content photos (at max 10)</h5>
             <div
               {...getRootProps()}
               required
@@ -273,9 +266,12 @@ export default function Editnews({match}) {
                 </p>
               )}
 
-              {uploadedUrl && (
-                <img src={uploadedUrl} style={{height: '200px'}} />
-              )}
+              <div style={{display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
+                {uploadedUrl.length &&
+                  uploadedUrl.map((url) => (
+                    <img src={url} style={{height: '50px'}} />
+                  ))}
+              </div>
             </div>
           </GridItem>
           {error ? (

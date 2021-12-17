@@ -45,6 +45,19 @@ import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import ListMembers from './views/BoardMembers/List_Members';
 import AddBoardMembers from './views/BoardMembers/addMembers';
 import EditBoardMembers from './views/BoardMembers/UpdateMembers';
+import KindDonationsPage from './views/Kind Donation/ListKindDonation';
+import AddKindDonation from 'views/Kind Donation/AddKindDonation';
+import UpdateKindDonation from 'views/Kind Donation/UpdateKindDonation';
+import KindTransparency from 'views/KindTransparency/ListKindTransparency';
+import AddKindTransparency from 'views/KindTransparency/AddKindTransparency';
+import EditKindTransparency from 'views/KindTransparency/EditKindTransparency';
+import EventVolunteer from 'views/EventVolunteer/volunteerList';
+import CauseVolunteer from 'views/CauseVolunteer/volunteerList';
+
+import UserPage from './views/Users/user';
+import CivilMoment from './views/civilrightMoment/ListCivilRights';
+import AddCivilRights from './views/civilrightMoment/AddCivilRIghts';
+import EditCivilRights from './views/civilrightMoment/EditCivilRights';
 
 export const demoRoutes = [
   {
@@ -117,6 +130,20 @@ export const demoRoutes = [
     layout: '/admin',
   },
   {
+    path: '/kinddonation/create',
+    name: 'Add Kind Donation',
+    icon: DirectionsBikeIcon,
+    component: AddKindDonation,
+    layout: '/admin',
+  },
+  {
+    path: '/kinddonation/edit/:id',
+    name: 'Edit a Donation',
+    icon: Unarchive,
+    component: UpdateKindDonation,
+    layout: '/admin',
+  },
+  {
     path: '/causes/edit/:id',
     name: 'Edit an event',
     icon: Unarchive,
@@ -128,6 +155,20 @@ export const demoRoutes = [
     name: 'Edit a news',
     icon: Unarchive,
     component: NewsEditPage,
+    layout: '/admin',
+  },
+  {
+    path: '/events/:eventId/volunteers',
+    name: 'Verify Volunteers',
+    icon: Unarchive,
+    component: EventVolunteer,
+    layout: '/admin',
+  },
+  {
+    path: '/causes/:causeId/volunteers',
+    name: 'Verify Volunteers',
+    icon: Unarchive,
+    component: CauseVolunteer,
     layout: '/admin',
   },
   {
@@ -166,12 +207,37 @@ export const demoRoutes = [
     layout: '/admin',
   },
   {
+    path: '/civilrights/create',
+    name: 'Create Civil Blogs',
+    component: AddCivilRights,
+    layout: '/admin',
+  },
+  {
+    path: '/kindtransparency/create',
+    name: 'Create Kind Transparency',
+    component: AddKindTransparency,
+    layout: '/admin',
+  },
+  {
+    path: '/kindtransparency/edit/:id',
+    name: 'Edit Kind Transparency',
+    component: EditKindTransparency,
+    layout: '/admin',
+  },
+  {
+    path: '/civilrights/edit/:id',
+    name: 'Edit Civil Rights Content',
+    component: EditCivilRights,
+    layout: '/admin',
+  },
+  {
     path: '/board/edit/:id',
     name: 'Edit Board Member Detail',
     icon: CompareArrowsIcon,
     component: EditBoardMembers,
     layout: '/admin',
   },
+
   {
     path: '/transparency/edit/:id',
     name: 'Edit Transparency',
@@ -196,6 +262,27 @@ export const dashboardRoutes = [
     rtlName: 'لوحة القيادة',
     icon: MonetizationOnIcon,
     component: DonationsPage,
+    layout: '/admin',
+  },
+  {
+    path: '/Kinddonations',
+    name: 'Kind Donations',
+    icon: MonetizationOnIcon,
+    component: KindDonationsPage,
+    layout: '/admin',
+  },
+  {
+    path: '/Kindtransparency',
+    name: 'Kind Transparency',
+    icon: CompareArrowsIcon,
+    component: KindTransparency,
+    layout: '/admin',
+  },
+  {
+    path: '/users',
+    name: 'User List',
+    icon: PeopleAltIcon,
+    component: UserPage,
     layout: '/admin',
   },
   // {
@@ -262,9 +349,16 @@ export const dashboardRoutes = [
   },
   {
     path: '/board',
-    name: 'Add Board Members',
+    name: 'Board Members',
     icon: PeopleAltIcon,
     component: ListMembers,
+    layout: '/admin',
+  },
+  {
+    path: '/civilrights',
+    name: 'Civil Right Moment',
+    icon: PeopleAltIcon,
+    component: CivilMoment,
     layout: '/admin',
   },
   {

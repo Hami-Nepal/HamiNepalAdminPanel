@@ -18,6 +18,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import {CKEditor} from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import Snackbar from '@material-ui/core/Snackbar';
 import baseUrl from '../../api/baseUrl';
@@ -90,8 +92,9 @@ export default function AddNewEventPage({match}) {
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [street, setStreet] = useState('');
-  const [difficulties, setDifficulties] = useState('');
+  // const [difficulties, setDifficulties] = useState('');
   const [challenges, setChallenges] = useState('');
+  const [results, setResults] = useState('');
 
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
@@ -110,18 +113,19 @@ export default function AddNewEventPage({match}) {
     setBalance(result.data.balance);
     setSummary(result.data.summary);
     setDescription(result.data.description);
+    setResults(result.data.results);
     setCountry(result.data.country);
     setState(result.data.state);
     setCity(result.data.city);
     setStreet(result.data.street_address);
-    setDifficulties(result.data.difficulties);
+    // setDifficulties(result.data.difficulties);
     setChallenges(result.data.challenges);
     setUploadedUrl(result.data.photos);
   }, []);
 
   useEffect(async () => {
     const event_types = await axios.get(baseUrl + 'event_type');
-    console.log(event_types);
+
     setEventTypes(event_types.data.data);
   }, []);
 
@@ -131,7 +135,6 @@ export default function AddNewEventPage({match}) {
   const [imageKeys, setImageKeys] = useState([]);
 
   const handleTypeChange = (event) => {
-    console.log(event.target.value);
     setType(event.target.value);
   };
   const history = useHistory();
@@ -148,8 +151,9 @@ export default function AddNewEventPage({match}) {
     formData.append('balance', balance);
     formData.append('summary', summary);
     formData.append('description', description);
+    formData.append('results', results);
     formData.append('challenges', challenges);
-    formData.append('difficulties', difficulties);
+    // formData.append('difficulties', difficulties);
     formData.append('country', country);
     formData.append('state', state);
     formData.append('city', city);
@@ -166,15 +170,14 @@ export default function AddNewEventPage({match}) {
     })
       .then(function (response) {
         //handle success
-        console.log(response);
+
         alert('Event updated successfully');
         setSubmissionLoading(false);
         history.push('/admin/events');
       })
       .catch(function (response) {
         //handle error
-        console.log(response);
-        console.log(response.message);
+
         setError(response.message);
         setSubmissionLoading(false);
       });
@@ -262,7 +265,7 @@ export default function AddNewEventPage({match}) {
                 onChange={(e) => {
                   setBalance(e.target.value);
                 }}
-                required
+                // required
                 style={{width: '50%', margin: '30px 0'}}
               />
             </GridItem>
@@ -277,7 +280,7 @@ export default function AddNewEventPage({match}) {
                 onChange={(e) => {
                   setSummary(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '95.8%',
                   margin: '30px 0',
@@ -288,23 +291,15 @@ export default function AddNewEventPage({match}) {
               />
             </GridItem>
 
-            <GridItem xs={12} sm={12} md={12}>
-              <InputLabel id="demo-simple-select-label">Description</InputLabel>
-              <TextareaAutosize
-                aria-label="minimum height"
-                rowsMin={5}
-                placeholder="Enter a short description about the event"
-                value={description}
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                }}
-                required
-                style={{
-                  width: '95.8%',
-                  margin: '30px 0',
-                  padding: '20px',
-                  fontSize: '16px',
-                  fontFamily: 'Roboto',
+            <GridItem xs={12} sm={12} md={8}>
+              <h5>Please add the Description</h5>
+              <CKEditor
+                editor={ClassicEditor}
+                data={description}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+
+                  setDescription(data);
                 }}
               />
             </GridItem>
@@ -360,23 +355,11 @@ export default function AddNewEventPage({match}) {
                 onChange={(e) => {
                   setStreet(e.target.value);
                 }}
-                required
+                // required
                 style={{width: '50%', margin: '30px 0'}}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={12}>
-              <TextField
-                id="standard-basic"
-                label="Country"
-                value={country}
-                onChange={(e) => {
-                  setCountry(e.target.value);
-                }}
-                required
-                style={{width: '50%', margin: '30px 0'}}
-              />
-            </GridItem>
-            <GridItem xs={12} sm={12} md={12}>
+            {/* <GridItem xs={12} sm={12} md={12}>
               <InputLabel id="demo-simple-select-label">
                 Difficulties
               </InputLabel>
@@ -388,7 +371,7 @@ export default function AddNewEventPage({match}) {
                 onChange={(e) => {
                   setDifficulties(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '95.8%',
                   margin: '30px 0',
@@ -397,7 +380,7 @@ export default function AddNewEventPage({match}) {
                   fontFamily: 'Roboto',
                 }}
               />
-            </GridItem>
+            </GridItem> */}
             <GridItem xs={12} sm={12} md={12}>
               <InputLabel id="demo-simple-select-label">Challenges</InputLabel>
               <TextareaAutosize
@@ -408,7 +391,27 @@ export default function AddNewEventPage({match}) {
                 onChange={(e) => {
                   setChallenges(e.target.value);
                 }}
-                required
+                // required
+                style={{
+                  width: '95.8%',
+                  margin: '30px 0',
+                  padding: '20px',
+                  fontSize: '16px',
+                  fontFamily: 'Roboto',
+                }}
+              />
+            </GridItem>
+            <GridItem xs={12} sm={12} md={12}>
+              <InputLabel id="demo-simple-select-label">Results</InputLabel>
+              <TextareaAutosize
+                aria-label="minimum height"
+                rowsMin={5}
+                placeholder="Enter the results of Past event not exceeding 250 character"
+                value={results}
+                onChange={(e) => {
+                  setResults(e.target.value);
+                }}
+                // required
                 style={{
                   width: '95.8%',
                   margin: '30px 0',
@@ -439,10 +442,10 @@ export default function AddNewEventPage({match}) {
                     events photo
                   </p>
                 )}
-                <div style={{display: 'flex', gap: '1rem'}}>
+                <div style={{display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
                   {uploadedUrl.length &&
                     uploadedUrl.map((url) => (
-                      <img src={url} style={{height: '200px'}} />
+                      <img src={url} style={{height: '50px'}} />
                     ))}
                 </div>
               </div>

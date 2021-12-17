@@ -36,50 +36,74 @@ const useStyles = makeStyles({
     minWidth: 650,
   },
 });
-export default function TransparencysList() {
+export default function NewssList() {
   const classes = useStyles();
 
-  const [deleteTransparencySuccess, setDeleteTransparencySuccess] = useState(
-    false,
-  );
-  const [deleteTransparencyError, setDeleteTransparencyError] = useState('');
+  const [deleteUserSuccess, setDeleteUserSuccess] = useState(false);
+  const [deleteUserError, setDeleteUserError] = useState('');
   const [error, setError] = useState();
-  const [transparencyListSuccess, setTransparencyListSuccess] = useState(null);
-  const [transparencyListError, setTransparencyListError] = useState(null);
-  const [transparencyListLoading, setTransparencyListLoading] = useState(true);
-  const [transparencyList, setTransparencyList] = useState([]);
-  const [page, setPage] = React.useState(0);
-  const [total_data, setTotal_data] = useState(0);
+  const [userListSuccess, setUserListSuccess] = useState(null);
+  const [userListError, setUserListError] = useState(null);
+  const [userListLoading, setUserListLoading] = useState(null);
+  const [userList, setUserList] = useState([]);
 
-  const handleDeleteTransparency = async (id) => {
+  const handleDeleteUser = async (id) => {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
     const config = {
       headers: {
+        // 'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
     };
 
     try {
-      const response = await api.delete(`/transparency/${id}`, config);
-      setDeleteTransparencySuccess(true);
-      setTransparencyList(transparencyList.filter(({_id}) => _id !== id));
+      const response = await api.delete(`/users/${id}`, config);
+      setDeleteUserSuccess(true);
+      setUserList(userList.filter(({_id}) => _id !== id));
     } catch (err) {
       setError(err);
-      setDeleteTransparencyError(true);
+      setDeleteUserError(true);
     }
   };
+
+  const [page, setPage] = React.useState(0);
+  const [total_data, setTotal_data] = useState(0);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  const fetchData = async () => {
-    const {data: response} = await axios.get(
-      baseURL + 'transparency?page=' + (page + 1),
+  const handleVerifyUser = async (id) => {
+    const token = JSON.parse(localStorage.getItem('userInfo')).token;
+    const config = {
+      headers: {
+        // 'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const {isVerified} = userList.find(({_id}) => _id == id);
+    const {data: response} = await axios.put(
+      baseURL + 'users/' + id,
+      {isVerified: isVerified ? false : true},
+      config,
     );
-    setTransparencyList(response.data);
-    setTransparencyListLoading(false);
+    setUserList(userList.map((obj) => (obj._id === id ? response.data : obj)));
+  };
+  const fetchData = async () => {
+    const token = JSON.parse(localStorage.getItem('userInfo')).token;
+    const config = {
+      headers: {
+        // 'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const {data: response} = await axios.get(
+      baseURL + 'users?page=' + (page + 1),
+      config,
+    );
+    setUserList(response.data);
     setTotal_data(response.total_data);
+    // setTotal_data(response.total_data);
   };
 
   useEffect(fetchData, [page]);
@@ -87,19 +111,11 @@ export default function TransparencysList() {
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
-        <Link to="/admin/transparency/create">
-          <Button color="danger" type="submit">
-            Add new Transparency
-          </Button>
-        </Link>
-
         {/* <DialogueBox /> */}
         <Card plain>
           <CardHeader plain color="danger">
-            <h4 className={classes.cardTitleWhite}>Transparency List</h4>
-            <p className={classes.cardCategoryWhite}>
-              Showing all the Transparencies
-            </p>
+            <h4 className={classes.cardTitleWhite}>All user List</h4>
+            <p className={classes.cardCategoryWhite}>Showing all the Users</p>
           </CardHeader>
           <CardBody>
             <TableContainer component={Paper}>
@@ -107,19 +123,19 @@ export default function TransparencysList() {
                 <TableHead>
                   <TableRow>
                     {/* <TableCell>id </TableCell> */}
+                    <TableCell align="left">Verify</TableCell>
                     <TableCell align="center">Name</TableCell>
-                    <TableCell align="center">Type</TableCell>
-                    <TableCell align="center">Amount</TableCell>
+                    <TableCell align="center">Email</TableCell>
+                    <TableCell align="center">Role</TableCell>
                     <TableCell align="center">Photo</TableCell>
-                    <TableCell align="center">Updated At</TableCell>
-                    <TableCell align="center ">Edit</TableCell>
+                    {/* <TableCell align="center">Updated At</TableCell> */}
                     <TableCell align="center ">Delete</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {transparencyListLoading ? (
+                  {userListLoading ? (
                     <CircularProgress />
-                  ) : transparencyListError ? (
+                  ) : userListError ? (
                     <Alert severity="error">
                       <AlertTitle>Error</AlertTitle>
                       Something bad happened —{' '}
@@ -134,37 +150,39 @@ export default function TransparencysList() {
                       </Button>
                     </Alert>
                   ) : (
-                    transparencyList.length &&
-                    (transparencyList
-                      ? transparencyList.map((row) => (
+                    userList.length &&
+                    (userList
+                      ? userList.map((row) => (
                           <TableRow key={row._id}>
                             {/* <TableCell component="th" scope="row">
                               {row._id}
                             </TableCell> */}
-                            <TableCell align="center">{row.name}</TableCell>
-                            <TableCell align="center">{row.type}</TableCell>
-                            <TableCell align="center">{row.amount}</TableCell>
-                            <TableCell align="center">
-                              <img src={row.photos[0]} width={50} />
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              onClick={() => handleVerifyUser(row._id)}
+                              style={{
+                                color: row.isVerified ? 'green' : 'red',
+                                cursor: 'pointer',
+                              }}>
+                              <VerifiedUserIcon />
                             </TableCell>
                             <TableCell align="center">
+                              {row.firstname} {row.lastname}
+                            </TableCell>
+                            <TableCell align="center">{row.email}</TableCell>
+                            <TableCell align="center">{row.role}</TableCell>
+                            <TableCell align="center">
+                              <img src={row.photo} width={50} />
+                            </TableCell>
+                            {/* <TableCell align="center">
                               {row.updatedAt.slice(0, 10)}
-                            </TableCell>
-                            <TableCell align="left">
-                              {
-                                <Link
-                                  to={`/admin/transparency/edit/${row._id}`}>
-                                  <EditIcon color="primary" />
-                                </Link>
-                              }
-                            </TableCell>
+                            </TableCell> */}
                             <TableCell align="left" style={{cursor: 'pointer'}}>
                               {
                                 <DeleteIcon
                                   color="secondary"
-                                  onClick={() =>
-                                    handleDeleteTransparency(row._id)
-                                  }
+                                  onClick={() => handleDeleteUser(row._id)}
                                 />
                               }
                             </TableCell>
@@ -172,14 +190,14 @@ export default function TransparencysList() {
                         ))
                       : '')
                   )}
-                  {deleteTransparencySuccess ? (
+                  {deleteUserSuccess ? (
                     <Alert severity="success">
                       <AlertTitle>Success</AlertTitle>
-                      Transparency deleted Successfully
+                      User deleted Successfully
                     </Alert>
                   ) : null}
-                  {deleteTransparencyError && (
-                    <div style={{color: 'red'}}>deleteTransparencyError</div>
+                  {deleteUserError && (
+                    <div style={{color: 'red'}}>deleteUserError</div>
                   )}
                 </TableBody>
               </Table>

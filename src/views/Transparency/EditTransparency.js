@@ -69,37 +69,52 @@ export default function TransparencyPage(props) {
     // const reader = new FileReader();
     // reader.readAsArrayBuffer(acceptedFiles[0])
     // console.log(reader,acceptedFiles[0]);
-    setSelectedFile(acceptedFiles[0]);
-    setUploadedUrl(URL.createObjectURL(acceptedFiles[0]));
+    setSelectedFile(acceptedFiles);
+    setUploadedUrl(acceptedFiles.map((file) => URL.createObjectURL(file)));
   }, []);
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
 
   const classes = useStyles();
-
   const [name, setName] = useState('');
 
   const [type, setType] = useState('');
-  const [amount, setAmount] = useState('');
-  const [description, setDescription] = useState('');
   const [cause, setCause] = useState('');
   const [event, setEvent] = useState('');
+  const [currentName, setCurrentName] = useState('');
+
+  const [amount, setAmount] = useState('');
+  const [description, setDescription] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
-  const [uploadedUrl, setUploadedUrl] = useState('');
+  const [uploadedUrl, setUploadedUrl] = useState([]);
   const [causeTypes, setCauseTypes] = useState([]);
   const [eventTypes, setEventTypes] = useState([]);
+  // const [causeNames, setCauseNames] = useState([]);
+  // const [eventNames, setEventNames] = useState([]);
+  const [causeEventsNames, setCauseEventsNames] = useState([]);
 
   useEffect(async () => {
     const cause_types = await axios.get(baseUrl + 'cause_type');
 
     setCauseTypes(cause_types.data.data);
   }, []);
+
   useEffect(async () => {
     const event_types = await axios.get(baseUrl + 'event_type');
 
     setEventTypes(event_types.data.data);
   }, []);
+
+  useEffect(async () => {
+    if (type === 'cause') {
+      const {data} = await axios.get(baseUrl + 'causes?cause_type=' + cause);
+      setCauseEventsNames(data.data);
+    } else if (type === 'event') {
+      const {data} = await axios.get(baseUrl + 'events?type=' + event);
+      setCauseEventsNames(data.data);
+    }
+  }, [type, cause, event]);
 
   useEffect(async () => {
     let result = await fetch(baseUrl + 'transparency/' + id);
@@ -109,12 +124,16 @@ export default function TransparencyPage(props) {
     setType(result.data.transparency.type);
     setAmount(result.data.transparency.amount);
     setDescription(result.data.transparency.description);
-    setUploadedUrl(result.data.transparency.photo);
     setCause(result.data.transparency.cause);
     setEvent(result.data.transparency.event);
+    currentName && type === 'event'
+      ? setCurrentName(result.data.transparency.event_name)
+      : setCurrentName(result.data.transparency.cause_name);
+    setUploadedUrl(result.data.transparency.photos);
   }, []);
 
   const history = useHistory();
+
   const handleUpload = (e) => {
     e.preventDefault();
     setSubmissionLoading(true);
@@ -122,12 +141,18 @@ export default function TransparencyPage(props) {
 
     const formData = new FormData();
     formData.append('name', name);
-    formData.append('photo', selectedFile);
+    selectedFile?.map((file) => formData.append('photos', file));
     formData.append('type', type);
     formData.append('amount', amount);
     formData.append('description', description);
-    formData.append('event', event);
-    formData.append('cause', cause);
+
+    type === 'event'
+      ? formData.append('event', event)
+      : formData.append('cause', cause);
+
+    currentName && type === 'event'
+      ? formData.append('event_name', currentName)
+      : formData.append('cause_name', currentName);
 
     axios({
       method: 'PUT',
@@ -156,11 +181,11 @@ export default function TransparencyPage(props) {
       <CardHeader color="danger">
         <h4 className={classes.cardTitleWhite}>Transparency CMS Screen</h4>
         <p className={classes.cardCategoryWhite}>
-          For uploading for transparencies
+          For billing and files upload for transparency page
         </p>
         <p className={classes.cardCategoryWhite}>
-          Please check the information properly before updating as it cannot be
-          manipulated again for security reasons !
+          Please check the information properly before submitting as it cannot
+          be manipulated again for security reasons !
         </p>
       </CardHeader>
       <CardBody>
@@ -186,6 +211,7 @@ export default function TransparencyPage(props) {
                 value={type}
                 onChange={(e) => {
                   setType(e.target.value);
+                  setCauseEventsNames([]);
                 }}>
                 <MenuItem value={'cause'}>Cause</MenuItem>
                 <MenuItem value={'event'}>Events</MenuItem>
@@ -285,6 +311,56 @@ export default function TransparencyPage(props) {
               </FormControl>
             </GridItem>
           )}
+
+          {causeEventsNames.length && (
+            <GridItem xs={12} sm={12} md={12}>
+              <FormControl
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '4rem',
+                  margin: '30px 0',
+                }}
+                className={classes.formControl}>
+                <div style={{width: '100%'}}>
+                  <InputLabel id="demo-simple-select-label">
+                    {type[0].toUpperCase()}
+                    {type.slice(1)} names
+                  </InputLabel>
+                  <Select
+                    style={{width: '100%'}}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={currentName}
+                    onChange={(e) => {
+                      setCurrentName(e.target.value);
+                    }}>
+                    {causeEventsNames.map((obj) => (
+                      <MenuItem
+                        key={obj._id}
+                        value={obj.name}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        }}>
+                        {obj.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                  }}></div>
+              </FormControl>
+            </GridItem>
+          )}
+
           <GridItem xs={12} sm={12} md={4}>
             <TextField
               id="standard-basic"
@@ -329,10 +405,10 @@ export default function TransparencyPage(props) {
             /> */}
           </div>
           <GridItem xs={12} sm={12} md={12}>
-            <h5>Please upload a Bill Photo</h5>
+            <h5>Please upload the bill photos</h5>
             <div
               {...getRootProps()}
-              required
+              // required
               style={{
                 cursor: 'pointer',
                 border: '1px solid gray',
@@ -341,16 +417,16 @@ export default function TransparencyPage(props) {
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (
-                <p>Drop the bill photo here or...</p>
+                <p>Drop the bills here or...</p>
               ) : (
-                <p>
-                  Drag 'n' drop a bill picture here, or click to select bills
-                </p>
+                <p>Drag 'n' drop bills here, or click to select photos</p>
               )}
-
-              {uploadedUrl && (
-                <img src={uploadedUrl} style={{height: '200px'}} />
-              )}
+              <div style={{display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
+                {uploadedUrl.length &&
+                  uploadedUrl.map((url) => (
+                    <img src={url} style={{height: '40px'}} />
+                  ))}
+              </div>
             </div>
           </GridItem>
           {error ? (

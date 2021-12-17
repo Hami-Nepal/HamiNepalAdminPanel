@@ -16,6 +16,9 @@ import {
   EVENT_UPDATE_SUCCESS,
   EVENT_UPDATE_FAIL,
   EVENT_UPDATE_RESET,
+  VERIFY_EVENT,
+  VERIFY_EVENT_SUCCESS,
+  VERIFY_EVENT_ERROR,
 } from '../constants/events.constants';
 
 const initialState = {
@@ -39,6 +42,9 @@ const initialState = {
   eventCreateLoading: false,
   eventCreateError: null,
   eventCreateSuccess: false,
+  verifyEventSuccess: false,
+  verifyEventLoading: false,
+  verifyEventError: '',
 };
 
 export const eventReducer = (state = initialState, action) => {
@@ -166,6 +172,35 @@ export const eventReducer = (state = initialState, action) => {
         eventUpdate: {},
         eventUpdateSuccess: false,
         eventUpdateError: false,
+      };
+    case VERIFY_EVENT:
+      return state;
+    case VERIFY_EVENT_SUCCESS:
+      const updateEventList = state.eventList.map((Event) =>
+        Event._id === payload.data._id ? payload.data : Event,
+      );
+      return {
+        verifyEventSuccess: true,
+        verifyEventLoading: false,
+        verifyEventError: '',
+        eventList: updateEventList,
+        // [
+        //   ...state.EventList.map((Event) => {
+        //     let v = Event;
+        //     v.isVerified =
+        //       v._id === payload.data.Event._id
+        //         ? payload.data.Event.isVerified
+        //         : v.isVerified;
+
+        //     return v;
+        //   }),
+        // ],
+      };
+    case VERIFY_EVENT_ERROR:
+      return {
+        verifyEventSuccess: false,
+        verifyEventLoading: false,
+        verifyEventError: payload,
       };
     default:
       return state;

@@ -87,30 +87,34 @@ export const volunteersReducer = (state = initialState, action) => {
         verifyVolunteerError: '',
       };
     case VERIFY_VOLUNTEER_SUCCESS:
-      debugger;
+      const updatedVolunteerList = state.volunteerList.map((volunteer) =>
+        volunteer._id === payload.data._id ? payload.data : volunteer,
+      );
       return {
         ...state,
         verifyVolunteerSuccess: true,
         verifyVolunteerLoading: false,
         verifyVolunteerError: '',
-        volunteerList: [
-          ...state.volunteerList.map((volunteer) => {
-            let v = volunteer;
-            v.is_verified =
-              v._id === payload.data.volunteer._id
-                ? payload.data.volunteer.is_verified
-                : v.is_verified;
+        volunteerList: updatedVolunteerList,
 
-            return v;
-          }),
-        ],
+        // [
+        //   ...state.volunteerList.map((volunteer) => {
+        //     let v = volunteer;
+        //     v.isVerified =
+        //       v._id === payload.data.volunteer._id
+        //         ? payload.data.volunteer.isVerified
+        //         : v.isVerified;
+
+        //     return v;
+        //   }),
+        // ],
       };
     case VERIFY_VOLUNTEER_ERROR:
       return {
         ...state,
         verifyVolunteerSuccess: false,
         verifyVolunteerLoading: false,
-        verifyVolunteerError: payload,
+        verifyVolunteerError: payload.data,
       };
     default:
       return state;

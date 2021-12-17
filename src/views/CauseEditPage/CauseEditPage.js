@@ -17,8 +17,8 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-// import {CKEditor} from '@ckeditor/ckeditor5-react';
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {CKEditor} from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import baseURL from '../../api/baseUrl';
 
 const styles = {
@@ -86,8 +86,9 @@ export default function AddNewCausePage({match}) {
   const [type, setType] = useState('');
   const [balance, setBalance] = useState();
   const [selectedFile, setSelectedFile] = useState(null);
-  const [difficulties, setDifficulties] = useState('');
+  // const [difficulties, setDifficulties] = useState('');
   const [challenges, setChallenges] = useState('');
+  const [results, setResults] = useState('');
   const [description, setDescription] = useState('');
   const [summary, setSummary] = useState('');
   const [uploadedUrl, setUploadedUrl] = useState([]);
@@ -108,9 +109,10 @@ export default function AddNewCausePage({match}) {
     setName(result.data.cause.name);
     setType(result.data.cause.cause_type);
     setBalance(result.data.cause.balance);
-    setDifficulties(result.data.cause.difficulties);
+    // setDifficulties(result.data.cause.difficulties);
     setChallenges(result.data.cause.challenges);
     setDescription(result.data.cause.description);
+    setResults(result.data.cause.results);
     setSummary(result.data.cause.summary);
     setUploadedUrl(result.data.cause.photos);
   }, []);
@@ -127,8 +129,9 @@ export default function AddNewCausePage({match}) {
     selectedFile?.map((file) => formData.append('photos', file));
     formData.append('summary', summary);
     formData.append('description', description);
+    formData.append('results', results);
     formData.append('challenges', challenges);
-    formData.append('difficulties', difficulties);
+    // formData.append('difficulties', difficulties);
     formData.append('balance', balance);
 
     axios({
@@ -236,7 +239,7 @@ export default function AddNewCausePage({match}) {
                 onChange={(e) => {
                   setBalance(e.target.value);
                 }}
-                required
+                // required
                 style={{width: '500px', margin: '30px 0'}}
               />
             </GridItem>
@@ -251,7 +254,7 @@ export default function AddNewCausePage({match}) {
                 onChange={(e) => {
                   setSummary(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '500px',
                   margin: '30px 0',
@@ -261,7 +264,19 @@ export default function AddNewCausePage({match}) {
                 }}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
+            <GridItem xs={12} sm={12} md={8}>
+              <h5>Please add the Description</h5>
+              <CKEditor
+                editor={ClassicEditor}
+                data={description}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+
+                  setDescription(data);
+                }}
+              />
+            </GridItem>
+            {/* <GridItem xs={12} sm={12} md={4}>
               <InputLabel id="demo-simple-select-label">Description</InputLabel>
               <TextareaAutosize
                 aria-label="minimum height"
@@ -271,7 +286,7 @@ export default function AddNewCausePage({match}) {
                 onChange={(e) => {
                   setDescription(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '500px',
                   margin: '30px 0',
@@ -280,7 +295,7 @@ export default function AddNewCausePage({match}) {
                   fontFamily: 'Roboto',
                 }}
               />
-            </GridItem>
+            </GridItem> */}
             <GridItem xs={12} sm={12} md={4}>
               <InputLabel id="demo-simple-select-label">Challenges</InputLabel>
               <TextareaAutosize
@@ -291,7 +306,7 @@ export default function AddNewCausePage({match}) {
                 onChange={(e) => {
                   setChallenges(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '500px',
                   margin: '30px 0',
@@ -301,7 +316,27 @@ export default function AddNewCausePage({match}) {
                 }}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
+            <GridItem xs={12} sm={12} md={12}>
+              <InputLabel id="demo-simple-select-label">Results</InputLabel>
+              <TextareaAutosize
+                aria-label="minimum height"
+                rowsMin={5}
+                placeholder="Enter the results of Past causes not exceeding 250 character"
+                value={results}
+                onChange={(e) => {
+                  setResults(e.target.value);
+                }}
+                // required
+                style={{
+                  width: '95.8%',
+                  margin: '30px 0',
+                  padding: '20px',
+                  fontSize: '16px',
+                  fontFamily: 'Roboto',
+                }}
+              />
+            </GridItem>
+            {/* <GridItem xs={12} sm={12} md={4}>
               <InputLabel id="demo-simple-select-label">
                 Difficulties
               </InputLabel>
@@ -313,7 +348,7 @@ export default function AddNewCausePage({match}) {
                 onChange={(e) => {
                   setDifficulties(e.target.value);
                 }}
-                required
+                // required
                 style={{
                   width: '500px',
                   margin: '30px 0',
@@ -322,7 +357,7 @@ export default function AddNewCausePage({match}) {
                   fontFamily: 'Roboto',
                 }}
               />
-            </GridItem>
+            </GridItem> */}
             <GridItem xs={12} sm={12} md={12}>
               <h5>Please upload Cause Photo</h5>
               <div
@@ -344,10 +379,10 @@ export default function AddNewCausePage({match}) {
                     causes photo
                   </p>
                 )}
-                <div style={{display: 'flex', gap: '1rem'}}>
+                <div style={{display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
                   {uploadedUrl.length &&
                     uploadedUrl.map((url) => (
-                      <img src={url} style={{height: '200px'}} />
+                      <img src={url} style={{height: '50px'}} />
                     ))}
                 </div>
               </div>

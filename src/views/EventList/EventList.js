@@ -20,11 +20,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import {Link} from 'react-router-dom';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {listEvents} from 'store/actions/events.actions';
+import {verifyEvent} from '../../store/actions/events.actions';
 import axios from 'axios';
 import api from 'api';
 import baseUrl from 'api/baseUrl';
@@ -46,6 +47,7 @@ export default function EventList() {
   const [deleteEventSuccess, setDeleteEventSuccess] = useState(false);
   const [deleteEventError, setDeleteEventError] = useState('');
   const [error, setError] = useState();
+  const [verifiedError, setVerifiedError] = useState(false);
 
   const {
     eventListSuccess,
@@ -53,6 +55,7 @@ export default function EventList() {
     eventListLoading,
     eventList,
     eventCount,
+    verifyEventError,
   } = useSelector((state) => state.events);
 
   const handleDeleteEvent = async (id) => {
@@ -73,9 +76,11 @@ export default function EventList() {
       setDeleteEventError(err);
     }
   };
+  const handleVerifyEvent = (id) => {
+    dispatch(verifyEvent(id, eventList));
+  };
 
   const [currentPage, setCurrentPage] = useState(0);
-  const [total_data, setTotal_data] = useState(0);
 
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
@@ -86,7 +91,6 @@ export default function EventList() {
     // if (!eventListSuccess) {
     //   setMount(true);
     // }
-    setTotal_data(eventCount);
   }, [currentPage]);
 
   const changeStatus = (id, status) => {
@@ -114,12 +118,14 @@ export default function EventList() {
                 <TableHead>
                   <TableRow>
                     {/* <TableCell>id </TableCell> */}
+                    <TableCell align="center">Verify</TableCell>
                     <TableCell align="center">Name</TableCell>
                     <TableCell align="right">Status</TableCell>
                     <TableCell align="center">Type</TableCell>
                     <TableCell align="center">City</TableCell>
                     <TableCell align="center">Fund Amount</TableCell>
                     <TableCell align="center">Updated At</TableCell>
+                    <TableCell align="center">Volunter Participate</TableCell>
                     <TableCell align="right">Edit</TableCell>
                     <TableCell align="right">Delete</TableCell>
                   </TableRow>
@@ -147,6 +153,16 @@ export default function EventList() {
                         {/* <TableCell component="th" scope="row">
                           {row._id}
                         </TableCell> */}
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          onClick={() => handleVerifyEvent(row._id)}
+                          style={{
+                            color: row.isVerified ? 'green' : 'red',
+                            cursor: 'pointer',
+                          }}>
+                          <VerifiedUserIcon />
+                        </TableCell>
                         <TableCell align="center">{row.name}</TableCell>
                         <TableCell align="center">
                           <span
@@ -163,6 +179,13 @@ export default function EventList() {
                         <TableCell align="center">{row.balance}</TableCell>
                         <TableCell align="center">
                           {row.updatedAt.slice(0, 10)}
+                        </TableCell>
+                        <TableCell align="center">
+                          <Link
+                            to={`/admin/events/${row._id}/volunteers`}
+                            style={{cursor: 'pointer'}}>
+                            List Volunteers
+                          </Link>
                         </TableCell>
                         <TableCell align="right">
                           {
@@ -184,6 +207,9 @@ export default function EventList() {
                   ) : (
                     ''
                   )}
+                  {verifyEventError && (
+                    <div style={{color: 'red'}}>Verification Error</div>
+                  )}
 
                   {deleteEventSuccess ? (
                     <Alert severity="success">
@@ -198,7 +224,7 @@ export default function EventList() {
               </Table>
               <TablePagination
                 component="div"
-                count={total_data}
+                count={eventCount}
                 page={currentPage}
                 onPageChange={handleChangePage}
                 rowsPerPage={10}

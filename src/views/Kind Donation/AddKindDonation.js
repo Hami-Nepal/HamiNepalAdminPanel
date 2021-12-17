@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react';
-// @material-ui/core components
 import {useHistory} from 'react-router-dom';
+// @material-ui/core components
+
 import {useDropzone} from 'react-dropzone';
 import {makeStyles} from '@material-ui/core/styles';
 import GridItem from 'components/Grid/GridItem.js';
@@ -25,9 +26,6 @@ const styles = {
     paddingLeft: '25%',
     marginBottom: '40px',
     position: 'relative',
-  },
-  formControl: {
-    minWidth: 120,
   },
   note: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -62,7 +60,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function TransparencyPage() {
+export default function KindDonation() {
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
 
@@ -76,24 +74,28 @@ export default function TransparencyPage() {
 
   const classes = useStyles();
 
-  const [name, setName] = useState('');
+  const [donerType, setDonerType] = useState('');
 
-  const [type, setType] = useState('');
+  const [donerFullName, setDonerFullName] = useState('');
+  const [donerEmail, setDonerEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [category, setCategory] = useState('');
   const [cause, setCause] = useState('');
   const [event, setEvent] = useState('');
+  const [causeTypes, setCauseTypes] = useState([]);
+  const [eventTypes, setEventTypes] = useState([]);
   const [currentName, setCurrentName] = useState('');
-
-  const [amount, setAmount] = useState('');
-  const [description, setDescription] = useState('');
+  const [causeEventsNames, setCauseEventsNames] = useState([]);
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [country, setCountry] = useState('');
+  const [donatedItem, setDonatedItem] = useState('');
+  const [itemWorth, setItemWorth] = useState();
+  const [quantity, setQuantity] = useState(0);
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState([]);
-  const [causeTypes, setCauseTypes] = useState([]);
-  const [eventTypes, setEventTypes] = useState([]);
-  // const [causeNames, setCauseNames] = useState([]);
-  // const [eventNames, setEventNames] = useState([]);
-  const [causeEventsNames, setCauseEventsNames] = useState([]);
 
   useEffect(async () => {
     const cause_types = await axios.get(baseURL + 'cause_type');
@@ -108,21 +110,14 @@ export default function TransparencyPage() {
   }, []);
 
   useEffect(async () => {
-    if (type === 'cause') {
+    if (category === 'cause') {
       const {data} = await axios.get(baseURL + 'causes?cause_type=' + cause);
       setCauseEventsNames(data.data);
-    } else if (type === 'event') {
+    } else if (category === 'event') {
       const {data} = await axios.get(baseURL + 'events?type=' + event);
       setCauseEventsNames(data.data);
     }
-  }, [type, cause, event]);
-
-  // const handleFile = (e)=>{
-  //   console.log(e.target.files)
-  //   e.preventDefault();
-  //   let file = e.target.files[0];
-  //   setSelectedFile(file)
-  // }
+  }, [category, cause, event]);
 
   const history = useHistory();
 
@@ -132,23 +127,29 @@ export default function TransparencyPage() {
     const token = JSON.parse(localStorage.getItem('userInfo')).token;
 
     const formData = new FormData();
-    formData.append('name', name);
+    formData.append('donerType', donerType);
     selectedFile?.map((file) => formData.append('photos', file));
-    formData.append('type', type);
-    formData.append('amount', amount);
-    formData.append('description', description);
-
-    type === 'event'
+    formData.append('donerFullName', donerFullName);
+    formData.append('phoneNumber', phoneNumber);
+    formData.append('city', city);
+    formData.append('state', state);
+    formData.append('country', country);
+    formData.append('donatedItem', donatedItem);
+    formData.append('itemWorth', itemWorth);
+    formData.append('quantity', quantity);
+    formData.append('category', category);
+    formData.append('donerEmail', donerEmail);
+    category === 'event'
       ? formData.append('event', event)
       : formData.append('cause', cause);
 
-    currentName && type === 'event'
+    currentName && category === 'event'
       ? formData.append('event_name', currentName)
       : formData.append('cause_name', currentName);
 
     axios({
       method: 'POST',
-      url: baseURL + 'transparency',
+      url: baseURL + 'kinddonation',
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -157,13 +158,11 @@ export default function TransparencyPage() {
     })
       .then(function (response) {
         //handle success
-        // console.log(response);
-        alert('file uploaded successfully');
+        alert('Kind Donation added successfully');
         setSubmissionLoading(false);
-        history.push('/admin/transparency');
+        history.push('/admin/kinddonations');
       })
       .catch(function (response) {
-        //handle error
         setError(response.message);
         setSubmissionLoading(false);
       });
@@ -172,9 +171,9 @@ export default function TransparencyPage() {
   return (
     <Card>
       <CardHeader color="danger">
-        <h4 className={classes.cardTitleWhite}>Transparency CMS Screen</h4>
+        <h4 className={classes.cardTitleWhite}>Add News Screen</h4>
         <p className={classes.cardCategoryWhite}>
-          For billing and files upload for transparency page
+          For adding the kid Donation to Hami Nepal
         </p>
         <p className={classes.cardCategoryWhite}>
           Please check the information properly before submitting as it cannot
@@ -183,35 +182,41 @@ export default function TransparencyPage() {
       </CardHeader>
       <CardBody>
         <form onSubmit={handleUpload}>
-          <GridItem xs={12} sm={12} md={4}>
-            <TextField
-              id="standard-basic"
-              label="Name"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-              required
-              style={{width: '500px', margin: '30px 0'}}
-            />
-          </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={12}>
             <FormControl style={{width: '50%'}} className={classes.formControl}>
-              <InputLabel id="demo-simple-select-label">Bill Type</InputLabel>
+              <InputLabel id="demo-simple-select-label">Donor Type</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={type}
+                value={donerType}
                 onChange={(e) => {
-                  setType(e.target.value);
-                  setCauseEventsNames([]);
+                  setDonerType(e.target.value);
                 }}>
-                <MenuItem value={'cause'}>Cause</MenuItem>
-                <MenuItem value={'event'}>Events</MenuItem>
+                <MenuItem value={'Organization'}>Organization</MenuItem>
+                <MenuItem value={'Individual'}>Individual</MenuItem>
               </Select>
             </FormControl>
           </GridItem>
-          {type === 'cause' ? (
+          <GridItem xs={12} sm={12} md={12}>
+            <FormControl style={{width: '50%'}} className={classes.formControl}>
+              <InputLabel id="demo-simple-select-label">
+                Donation Type
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={category}
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                  setCauseEventsNames([]);
+                }}>
+                <MenuItem value={'cause'}>Cause</MenuItem>
+                <MenuItem value={'event'}>Event</MenuItem>
+              </Select>
+            </FormControl>
+          </GridItem>
+
+          {category === 'cause' ? (
             <GridItem xs={12} sm={12} md={12}>
               <FormControl
                 style={{
@@ -304,7 +309,6 @@ export default function TransparencyPage() {
               </FormControl>
             </GridItem>
           )}
-
           {causeEventsNames.length && (
             <GridItem xs={12} sm={12} md={12}>
               <FormControl
@@ -319,8 +323,8 @@ export default function TransparencyPage() {
                 className={classes.formControl}>
                 <div style={{width: '100%'}}>
                   <InputLabel id="demo-simple-select-label">
-                    {type[0].toUpperCase()}
-                    {type.slice(1)} names
+                    {category[0].toUpperCase()}
+                    {category.slice(1)} names
                   </InputLabel>
                   <Select
                     style={{width: '100%'}}
@@ -353,52 +357,118 @@ export default function TransparencyPage() {
               </FormControl>
             </GridItem>
           )}
-
           <GridItem xs={12} sm={12} md={4}>
             <TextField
               id="standard-basic"
-              label="Balance"
-              type="number"
-              value={amount}
+              label="Donor Full Name"
+              value={donerFullName}
               onChange={(e) => {
-                setAmount(e.target.value);
+                setDonerFullName(e.target.value);
               }}
               required
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
-            <TextareaAutosize
-              aria-label="minimum height"
-              rowsMin={5}
-              placeholder="Enter the description"
-              value={description}
+            <TextField
+              id="standard-basic"
+              label="Donor Email"
+              value={donerEmail}
               onChange={(e) => {
-                setDescription(e.target.value);
+                setDonerEmail(e.target.value);
+              }}
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="Donor Phone Number"
+              type="number"
+              value={phoneNumber}
+              onChange={(e) => {
+                setPhoneNumber(e.target.value);
+              }}
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="Country"
+              value={country}
+              onChange={(e) => {
+                setCountry(e.target.value);
               }}
               required
-              style={{
-                width: '500px',
-                margin: '30px 0',
-                padding: '20px',
-                fontSize: '16px',
-                fontFamily: 'Roboto',
-                color: '#c0c1c2',
-                fontWeight: '390',
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="State"
+              value={state}
+              onChange={(e) => {
+                setState(e.target.value);
               }}
+              required
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="City Name"
+              value={city}
+              onChange={(e) => {
+                setCity(e.target.value);
+              }}
+              required
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="Donated Item Name"
+              value={donatedItem}
+              onChange={(e) => {
+                setDonatedItem(e.target.value);
+              }}
+              required
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="Item Worth Amount"
+              type="number"
+              value={itemWorth}
+              onChange={(e) => {
+                setItemWorth(e.target.value);
+              }}
+              required
+              style={{width: '500px', margin: '30px 0'}}
+            />
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <TextField
+              id="standard-basic"
+              label="Items Quantity"
+              type="number"
+              value={quantity}
+              onChange={(e) => {
+                setQuantity(e.target.value);
+              }}
+              required
+              style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
 
-          <div>
-            {/* <AsyncSelect
-              cacheOptions
-              loadOptions={loadOptions}
-              defaultOptions
-              onInputChange={handleInputChange}
-            /> */}
-          </div>
           <GridItem xs={12} sm={12} md={12}>
-            <h5>Please upload the bill photos</h5>
+            <h5>Please upload the the Donation item photos</h5>
             <div
               {...getRootProps()}
               // required
@@ -410,9 +480,9 @@ export default function TransparencyPage() {
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (
-                <p>Drop the bills here or...</p>
+                <p>Drop the photos here or...</p>
               ) : (
-                <p>Drag 'n' drop bills here, or click to select photos</p>
+                <p>Drag 'n' drop here, or click to select photos</p>
               )}
               <div style={{display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
                 {uploadedUrl.length &&
@@ -436,7 +506,7 @@ export default function TransparencyPage() {
               <CircularProgress />
             ) : (
               <Button color="danger" type="submit">
-                Submit
+                Upload
               </Button>
             )}
           </GridItem>

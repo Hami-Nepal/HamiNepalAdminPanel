@@ -105,6 +105,7 @@ export default function NewssList() {
                 <TableHead>
                   <TableRow>
                     {/* <TableCell>id </TableCell> */}
+                    <TableCell align="center">Type</TableCell>
                     <TableCell align="center">Title</TableCell>
                     <TableCell align="center">Image</TableCell>
                     <TableCell align="center">Updated At</TableCell>
@@ -137,6 +138,7 @@ export default function NewssList() {
                             {/* <TableCell component="th" scope="row">
                               {row._id}
                             </TableCell> */}
+                            <TableCell align="center">{row.newsType}</TableCell>
                             <TableCell align="center">{row.title}</TableCell>
                             <TableCell align="center">
                               <img src={row.photo} width={50} />
