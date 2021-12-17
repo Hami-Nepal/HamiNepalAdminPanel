@@ -1,1 +1,1 @@
-export default 'https://api.haminepal.org/api/v1/';
+export default 'https://haminepal-api.herokuapp.com/api/v1/';
