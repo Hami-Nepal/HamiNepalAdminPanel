@@ -58,9 +58,6 @@ export default function Index() {
   } = useSelector((state) => state.volunteers);
 
   const handleVerifyVolunteer = (id) => {
-    if (verifyVolunteerError != '') {
-      alert(verifyVolunteerError);
-    }
     dispatch(verifyVolunteer(id, volunteerList));
   };
 
