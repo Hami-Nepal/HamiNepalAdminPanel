@@ -1,6 +1,5 @@
-let baseURL = 'http://localhost:5000/api/v1/';
-
+let baseURL = 'https://haminepal-api.herokuapp.com/api/v1/';
 if (process.env.NODE_ENV === 'production')
-  baseURL = 'https://api.haminepal.org/api/v1/';
+  baseURL = 'https://haminepal-api.herokuapp.com/api/v1/';
 
 export default baseURL;
