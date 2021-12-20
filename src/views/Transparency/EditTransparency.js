@@ -215,6 +215,7 @@ export default function TransparencyPage(props) {
                 }}>
                 <MenuItem value={'cause'}>Cause</MenuItem>
                 <MenuItem value={'event'}>Events</MenuItem>
+                <MenuItem value={'actofkindness'}>Act Of Kindness</MenuItem>
               </Select>
             </FormControl>
           </GridItem>
@@ -264,7 +265,7 @@ export default function TransparencyPage(props) {
                   }}></div>
               </FormControl>
             </GridItem>
-          ) : (
+          ) : type === 'cause' ? (
             <GridItem xs={12} sm={12} md={12}>
               <FormControl
                 style={{
@@ -310,6 +311,8 @@ export default function TransparencyPage(props) {
                   }}></div>
               </FormControl>
             </GridItem>
+          ) : (
+            ''
           )}
 
           {causeEventsNames.length && (

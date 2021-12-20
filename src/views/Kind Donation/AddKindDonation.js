@@ -310,7 +310,7 @@ export default function KindDonation() {
               </FormControl>
             </GridItem>
           ) : (
-            <div style={{display: 'flex', margin: '20px'}}></div>
+            ''
           )}
           {causeEventsNames.length && (
             <GridItem xs={12} sm={12} md={12}>

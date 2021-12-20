@@ -307,7 +307,7 @@ export default function TransparencyPage() {
               </FormControl>
             </GridItem>
           ) : (
-            <div style={{marginBottom: '20px'}}></div>
+            ''
           )}
 
           {causeEventsNames.length && (
