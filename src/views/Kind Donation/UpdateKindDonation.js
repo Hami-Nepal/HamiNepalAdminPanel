@@ -95,7 +95,6 @@ export default function KindDonation() {
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState([]);
-  const [kindness, setKindnessNames] = useState([]);
 
   useEffect(async () => {
     const cause_types = await axios.get(baseURL + 'cause_type');
@@ -117,8 +116,8 @@ export default function KindDonation() {
       const {data} = await axios.get(baseURL + 'events?type=' + event);
       setCauseEventsNames(data.data);
     } else if (category === 'actofkindness') {
-      const data = await axios.get(baseURL + 'kindness');
-      setKindnessNames(data.data.data);
+      const {data} = await axios.get(baseURL + 'kindness');
+      setCauseEventsNames(data.data);
     }
   }, [category, cause, event]);
 
@@ -374,7 +373,7 @@ export default function KindDonation() {
                           display: 'flex',
                           justifyContent: 'space-between',
                         }}>
-                        {obj.name}
+                        {obj.name}!!{obj.title}
                       </MenuItem>
                     ))}
                   </Select>
