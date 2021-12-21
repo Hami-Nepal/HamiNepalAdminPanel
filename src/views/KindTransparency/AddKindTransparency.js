@@ -95,6 +95,7 @@ export default function TransparencyPage() {
   // const [causeNames, setCauseNames] = useState([]);
   // const [eventNames, setEventNames] = useState([]);
   const [causeEventsNames, setCauseEventsNames] = useState([]);
+  console.log(causeEventsNames);
 
   useEffect(async () => {
     const cause_types = await axios.get(baseURL + 'cause_type');
@@ -114,6 +115,9 @@ export default function TransparencyPage() {
       setCauseEventsNames(data.data);
     } else if (type === 'event') {
       const {data} = await axios.get(baseURL + 'events?type=' + event);
+      setCauseEventsNames(data.data);
+    } else if (type === 'actofkindness') {
+      const {data} = await axios.get(baseURL + 'kindness');
       setCauseEventsNames(data.data);
     }
   }, [type, cause, event]);
@@ -343,7 +347,7 @@ export default function TransparencyPage() {
                           display: 'flex',
                           justifyContent: 'space-between',
                         }}>
-                        {obj.name}
+                        {obj.title}!!{obj.name}
                       </MenuItem>
                     ))}
                   </Select>

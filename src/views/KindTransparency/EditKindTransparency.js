@@ -115,6 +115,9 @@ export default function TransparencyPage(props) {
     } else if (type === 'event') {
       const {data} = await axios.get(baseUrl + 'events?type=' + event);
       setCauseEventsNames(data.data);
+    } else if (type === 'actofkindness') {
+      const {data} = await axios.get(baseUrl + 'kindness');
+      setCauseEventsNames(data.data);
     }
   }, [type, cause, event]);
 
@@ -352,7 +355,7 @@ export default function TransparencyPage(props) {
                           display: 'flex',
                           justifyContent: 'space-between',
                         }}>
-                        {obj.name}
+                        {obj.name}!!{obj.title}
                       </MenuItem>
                     ))}
                   </Select>
