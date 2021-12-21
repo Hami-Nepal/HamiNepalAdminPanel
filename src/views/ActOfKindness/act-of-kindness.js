@@ -138,6 +138,7 @@ export default function CauseList() {
                     <TableCell align="center">Featured</TableCell>
                     <TableCell align="center">Featured Ranking</TableCell>
                     <TableCell align="center">Image</TableCell>
+                    <TableCell align="center">Verify volunteers</TableCell>
                     <TableCell align="center">Updated At</TableCell>
                     <TableCell align="center ">Edit</TableCell>
                     <TableCell align="center ">Delete</TableCell>
@@ -186,6 +187,13 @@ export default function CauseList() {
                             </TableCell>
                             <TableCell align="center">
                               <img src={row.photos[0]} width={50} />
+                            </TableCell>
+                            <TableCell align="center">
+                              <Link
+                                to={`/admin/act-of-kindness/${row._id}/volunteers`}
+                                style={{cursor: 'pointer'}}>
+                                List Volunteers
+                              </Link>
                             </TableCell>
                             <TableCell align="center">
                               {new Date(row.updatedAt).getUTCFullYear()}
