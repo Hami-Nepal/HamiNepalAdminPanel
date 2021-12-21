@@ -212,6 +212,7 @@ export default function KindDonation() {
                 }}>
                 <MenuItem value={'cause'}>Cause</MenuItem>
                 <MenuItem value={'event'}>Event</MenuItem>
+                <MenuItem value={'actofkindness'}>Act Of Kindness</MenuItem>
               </Select>
             </FormControl>
           </GridItem>
@@ -262,7 +263,7 @@ export default function KindDonation() {
                   }}></div>
               </FormControl>
             </GridItem>
-          ) : (
+          ) : category === 'event' ? (
             <GridItem xs={12} sm={12} md={12}>
               <FormControl
                 style={{
@@ -308,6 +309,8 @@ export default function KindDonation() {
                   }}></div>
               </FormControl>
             </GridItem>
+          ) : (
+            ''
           )}
           {causeEventsNames.length && (
             <GridItem xs={12} sm={12} md={12}>
