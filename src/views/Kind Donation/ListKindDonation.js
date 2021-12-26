@@ -58,12 +58,14 @@ export default function Donations() {
   const fetchDataFromApi = async (page) => {
     setDonationsListLoading(true);
     try {
-      await axios.get(baseURL + 'kinddonation?page=' + page).then((resp) => {
-        setDonationsList(resp.data.data);
-        setDonationsCount(resp.data.total_data);
-        setDonationsListLoading(false);
-        setDonationsListSuccess(true);
-      });
+      await axios
+        .get(baseURL + 'kinddonation?page=' + page + '&limit=9')
+        .then((resp) => {
+          setDonationsList(resp.data.data);
+          setDonationsCount(resp.data.total_data);
+          setDonationsListLoading(false);
+          setDonationsListSuccess(true);
+        });
     } catch (error) {
       console.log(error);
       setDonationsListLoading(false);
@@ -79,10 +81,13 @@ export default function Donations() {
   return (
     <>
       <Link to="/admin/kinddonation/create">
-        <Button color="danger" type="submit" style={{marginBottom: '2rem'}}>
+        <Button color="danger" type="submit">
           Add a new Kind Donation
         </Button>
       </Link>
+      <h5>
+        Showing Data: {donationsList.length} of {donationsCount}
+      </h5>
       {donationsListError ? (
         <Alert severity="error">
           <AlertTitle>Error</AlertTitle>
@@ -160,7 +165,9 @@ export default function Donations() {
                       <Typography variant="body2" style={{color: 'black'}}>
                         {donation.category === 'cause'
                           ? `CAUSE: ${donation.cause_name} (${donation.cause})`
-                          : `EVENT: ${donation.event_name} (${donation.event})`}
+                          : donation.category === 'event'
+                          ? `EVENT: ${donation.event_name} (${donation.event})`
+                          : `KINDNESS:${donation.kindness}`}
                       </Typography>
                       <div style={{borderBottom: '1px solid #D3D3D3'}}></div>
                       <Typography variant="body2" style={{color: 'black'}}>
@@ -185,8 +192,7 @@ export default function Donations() {
               ))}
             </Grid>
           )}
-          <Stack spacing={2} style={{alignItems: 'center', marginTop: '5rem'}}>
-            <Typography>Page: {page}</Typography>
+          <Stack spacing={2} style={{alignItems: 'center', marginTop: '1rem'}}>
             <Pagination
               count={Math.ceil(donationsCount / 10)}
               page={page}

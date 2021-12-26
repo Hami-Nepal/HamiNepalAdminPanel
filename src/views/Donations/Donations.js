@@ -4,7 +4,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import {useTheme} from '@material-ui/core/styles';
 
 import GridItem from 'components/Grid/GridItem.js';
-import Primary from 'components/Typography/Primary.js';
 import Card from 'components/Card/Card.js';
 import CardHeader from 'components/Card/CardHeader.js';
 import CardIcon from 'components/Card/CardIcon.js';
@@ -17,16 +16,17 @@ import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import Switch from '@material-ui/core/Switch';
+
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import Info from '@material-ui/icons/Info';
-import styles from './styles';
 
-import ESEWA from 'assets/img/payment_types/esewa1.png';
-import KHALTI from 'assets/img/payment_types/khalti.png';
-import GOFUNDME from 'assets/img/payment_types/gofundme.png';
-import PAYPAL from 'assets/img/payment_types/paypal.jpg';
+import styles from './styles';
+import {Link} from 'react-router-dom';
+
+// import ESEWA from 'assets/img/payment_types/esewa1.png';
+// import KHALTI from 'assets/img/payment_types/khalti.png';
+// import GOFUNDME from 'assets/img/payment_types/gofundme.png';
+// import PAYPAL from 'assets/img/payment_types/paypal.jpg';
 
 const useStyles = makeStyles(styles);
 
@@ -36,7 +36,7 @@ import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-import {Button} from '@material-ui/core';
+import Button from 'components/CustomButtons/Button.js';
 import GridContainer from 'components/Grid/GridContainer';
 import baseURL from 'api/baseUrl';
 
@@ -79,7 +79,7 @@ const MenuProps = {
 export default function Donations() {
   const classes = useStyles();
 
-  const payment_types_images = {ESEWA, KHALTI, GOFUNDME, PAYPAL};
+  // const payment_types_images = {ESEWA, KHALTI, GOFUNDME, PAYPAL};
 
   const dispatch = useDispatch();
 
@@ -133,6 +133,11 @@ export default function Donations() {
   };
   return (
     <>
+      <Link to="/admin/donation/create">
+        <Button color="danger" type="submit">
+          Add Cash Donation
+        </Button>
+      </Link>
       {donationsListError ? (
         <Alert severity="error">
           <AlertTitle>Error</AlertTitle>
@@ -248,28 +253,37 @@ export default function Donations() {
                 {donationsList.map((donation) => (
                   <GridItem xs={12} sm={6} md={4} key={donation._id}>
                     <Card style={{height: '85%'}}>
-                      <CardHeader
-                        style={{height: '100%'}}
-                        color="success"
-                        stats
-                        icon>
+                      <CardHeader style={{height: '100%'}} color="success" icon>
                         <CardIcon color="success">
-                          <img
-                            height="20"
-                            src={payment_types_images[donation.payment_type]}
-                            alt={donation.payment_type}
-                          />
+                          <Typography>{donation.payment_type}</Typography>
                         </CardIcon>
-                        <p className={classes.cardCategory}>{donation.type}</p>
+                        <p className={classes.cardCategory}>
+                          {donation.category}
+                        </p>
+                        {donation.category === 'cause' ? (
+                          <p className={classes.cardCategory}>
+                            {donation.cause?.name}
+                          </p>
+                        ) : donation.category === 'event' ? (
+                          <p className={classes.cardCategory}>
+                            {donation.event?.name}
+                          </p>
+                        ) : donation.category === 'kindness' ? (
+                          <p className={classes.cardCategory}>
+                            {donation.kindness.title}
+                          </p>
+                        ) : (
+                          ''
+                        )}
                         {donation.is_anonymous ? (
                           <>
                             <Typography variant="h5" color="primary">
-                              anonymous donor
+                              Anonymous Donor
                             </Typography>
                           </>
                         ) : (
                           <>
-                            <Typography variant="h5" color="primary">
+                            <Typography variant="h6" color="primary">
                               {donation.first_name} {donation.last_name}
                             </Typography>
                             <Typography variant="body1" color="textSecondary">
@@ -279,34 +293,26 @@ export default function Donations() {
                               {donation.phone_number}
                             </Typography>
                             <Typography variant="body2" color="textSecondary">
-                              {donation.street_address}, {donation.city} (
-                              {donation.country})
+                              {donation.city ? donation.city : ''}
+                              {donation.country ? `(${donation.state})` : ''}
                             </Typography>
                             <Typography variant="body2" color="textSecondary">
-                              {donation.state}
+                              {donation.country}
                             </Typography>
-                            {/* <Typography variant="button" color="textSecondary">
-                              {donation.email}
-                            </Typography> */}
                           </>
                         )}
-                        <h3 className={classes.cardTitle}>
+                        <h4 className={classes.cardTitle}>
                           {donation.donation_amount} <small>NPR</small>
-                        </h3>
-                        <Typography color="textSecondary" variant="body2">
-                          {donation.donation_message}
-                        </Typography>
+                        </h4>
                       </CardHeader>
-                      {/* <CardFooter stats>
+
+                      <CardFooter stats>
                         <div className={classes.stats}>
-                          <Primary>
-                            <Info />
-                          </Primary>
-                          <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                            View More
-                          </a>
+                          <Typography color="textSecondary" variant="body2">
+                            {donation.donation_message}
+                          </Typography>
                         </div>
-                      </CardFooter> */}
+                      </CardFooter>
                     </Card>
                   </GridItem>
                 ))}

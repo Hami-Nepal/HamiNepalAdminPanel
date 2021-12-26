@@ -97,23 +97,30 @@ export default function TransparencyPage(props) {
   const [causeEventsNames, setCauseEventsNames] = useState([]);
 
   useEffect(async () => {
-    const cause_types = await axios.get(baseUrl + 'cause_type');
+    const cause_types = await axios.get(baseUrl + 'cause_type' + '&limit=1000');
 
     setCauseTypes(cause_types.data.data);
   }, []);
 
   useEffect(async () => {
-    const event_types = await axios.get(baseUrl + 'event_type');
+    const event_types = await axios.get(baseUrl + 'event_type' + '&limit=1000');
 
     setEventTypes(event_types.data.data);
   }, []);
 
   useEffect(async () => {
     if (type === 'cause') {
-      const {data} = await axios.get(baseUrl + 'causes?cause_type=' + cause);
+      const {data} = await axios.get(
+        baseUrl + 'causes?cause_type=' + cause + '&limit=10000',
+      );
       setCauseEventsNames(data.data);
     } else if (type === 'event') {
-      const {data} = await axios.get(baseUrl + 'events?type=' + event);
+      const {data} = await axios.get(
+        baseUrl + 'events?type=' + event + '&limit=10000',
+      );
+      setCauseEventsNames(data.data);
+    } else if (type === 'kindness') {
+      const {data} = await axios.get(baseUrl + 'kindness?limit=10000');
       setCauseEventsNames(data.data);
     }
   }, [type, cause, event]);
@@ -121,7 +128,7 @@ export default function TransparencyPage(props) {
   useEffect(async () => {
     let result = await fetch(baseUrl + 'kindtransparency/' + id);
     result = await result.json();
-    console.log(result);
+
     setName(result.data.kindtransparency.name);
     setType(result.data.kindtransparency.type);
     setAmount(result.data.kindtransparency.amount);
@@ -132,7 +139,9 @@ export default function TransparencyPage(props) {
     setQuantity(result.data.kindtransparency.quantity);
     currentName && type === 'event'
       ? setCurrentName(result.data.kindtransparency.event_name)
-      : setCurrentName(result.data.kindtransparency.cause_name);
+      : currentName && type === 'cause'
+      ? setCurrentName(result.data.kindtransparency.cause_name)
+      : setCurrentName(result.data.kindtransparency.kindness);
     setUploadedUrl(result.data.kindtransparency.photos);
   }, []);
 
@@ -152,11 +161,15 @@ export default function TransparencyPage(props) {
 
     type === 'event'
       ? formData.append('event', event)
-      : formData.append('cause', cause);
+      : type === 'cause'
+      ? formData.append('cause', cause)
+      : '';
 
     currentName && type === 'event'
       ? formData.append('event_name', currentName)
-      : formData.append('cause_name', currentName);
+      : type === 'cause'
+      ? formData.append('cause_name', currentName)
+      : formData.append('kindness', currentName);
 
     axios({
       method: 'PUT',
@@ -183,7 +196,9 @@ export default function TransparencyPage(props) {
   return (
     <Card>
       <CardHeader color="danger">
-        <h4 className={classes.cardTitleWhite}>Transparency CMS Screen</h4>
+        <h4 className={classes.cardTitleWhite}>
+          Kind Transparency Update Screen
+        </h4>
         <p className={classes.cardCategoryWhite}>
           For billing and files upload for transparency page
         </p>
@@ -219,6 +234,7 @@ export default function TransparencyPage(props) {
                 }}>
                 <MenuItem value={'cause'}>Cause</MenuItem>
                 <MenuItem value={'event'}>Events</MenuItem>
+                <MenuItem value={'kindness'}>Act of Kindness</MenuItem>
               </Select>
             </FormControl>
           </GridItem>
@@ -268,7 +284,7 @@ export default function TransparencyPage(props) {
                   }}></div>
               </FormControl>
             </GridItem>
-          ) : (
+          ) : type === 'event' ? (
             <GridItem xs={12} sm={12} md={12}>
               <FormControl
                 style={{
@@ -314,6 +330,8 @@ export default function TransparencyPage(props) {
                   }}></div>
               </FormControl>
             </GridItem>
+          ) : (
+            ''
           )}
 
           {causeEventsNames.length && (
@@ -344,12 +362,12 @@ export default function TransparencyPage(props) {
                     {causeEventsNames.map((obj) => (
                       <MenuItem
                         key={obj._id}
-                        value={obj.name}
+                        value={type === 'kindness' ? obj.title : obj.name}
                         style={{
                           display: 'flex',
                           justifyContent: 'space-between',
                         }}>
-                        {obj.name}
+                        {type === 'kindness' ? obj.title : obj.name}
                       </MenuItem>
                     ))}
                   </Select>

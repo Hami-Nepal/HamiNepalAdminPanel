@@ -97,23 +97,30 @@ export default function KindDonation() {
   const [uploadedUrl, setUploadedUrl] = useState([]);
 
   useEffect(async () => {
-    const cause_types = await axios.get(baseURL + 'cause_type');
+    const cause_types = await axios.get(baseURL + 'cause_type' + '&limit=1000');
 
     setCauseTypes(cause_types.data.data);
   }, []);
 
   useEffect(async () => {
-    const event_types = await axios.get(baseURL + 'event_type');
+    const event_types = await axios.get(baseURL + 'event_type' + '&limit=1000');
 
     setEventTypes(event_types.data.data);
   }, []);
 
   useEffect(async () => {
     if (category === 'cause') {
-      const {data} = await axios.get(baseURL + 'causes?cause_type=' + cause);
+      const {data} = await axios.get(
+        baseURL + 'causes?cause_type=' + cause + '&limit=10000',
+      );
       setCauseEventsNames(data.data);
     } else if (category === 'event') {
-      const {data} = await axios.get(baseURL + 'events?type=' + event);
+      const {data} = await axios.get(
+        baseURL + 'events?type=' + event + '&limit=10000',
+      );
+      setCauseEventsNames(data.data);
+    } else if (category === 'kindness') {
+      const {data} = await axios.get(baseURL + 'kindness?limit=10000');
       setCauseEventsNames(data.data);
     }
   }, [category, cause, event]);
@@ -124,16 +131,18 @@ export default function KindDonation() {
     result = await result.json();
 
     setDonerType(result.data.Kdonation.donerType);
-    // setCategory(result.data.Kdonation.category);
+    setCategory(result.data.Kdonation.category);
     setDonerFullName(result.data.Kdonation.donerFullName);
     setDonerEmail(result.data.Kdonation.donerEmail);
     setPhoneNumber(result.data.Kdonation.phoneNumber);
-    // category === 'cause'
-    //   ? setCause(result.data.Kdonation.cause)
-    //   : setEvent(result.data.Kdonation.event);
-    // currentName && category === 'event'
-    //   ? setCurrentName(result.data.Kdonation.event_name)
-    //   : setCurrentName(result.data.Kdonation.cause_name);
+    setCause(result.data.Kdonation.cause);
+    setEvent(result.data.Kdonation.event);
+
+    result.data.Kdonation.category === 'cause'
+      ? setCurrentName(result.data.Kdonation.cause_name)
+      : result.data.Kdonation.category === 'event'
+      ? setCurrentName(result.data.Kdonation.event_name)
+      : setCurrentName(result.data.Kdonation.kindness);
     setDonatedItem(result.data.Kdonation.donatedItem);
     setState(result.data.Kdonation.state);
     setCity(result.data.Kdonation.city);
@@ -165,12 +174,15 @@ export default function KindDonation() {
     formData.append('donerEmail', donerEmail);
     category === 'event'
       ? formData.append('event', event)
-      : formData.append('cause', cause);
+      : category === 'cause'
+      ? formData.append('cause', cause)
+      : '';
 
     currentName && category === 'event'
       ? formData.append('event_name', currentName)
-      : formData.append('cause_name', currentName);
-    console.log(formData);
+      : category === 'cause'
+      ? formData.append('cause_name', currentName)
+      : formData.append('kindness', currentName);
 
     axios({
       method: 'PUT',
@@ -196,9 +208,9 @@ export default function KindDonation() {
   return (
     <Card>
       <CardHeader color="danger">
-        <h4 className={classes.cardTitleWhite}>Add News Screen</h4>
+        <h4 className={classes.cardTitleWhite}>Update Kind Donation</h4>
         <p className={classes.cardCategoryWhite}>
-          For adding the kid Donation to Hami Nepal
+          For adding the kind Donation to Hami Nepal
         </p>
         <p className={classes.cardCategoryWhite}>
           Please check the information properly before submitting as it cannot
@@ -237,6 +249,7 @@ export default function KindDonation() {
                 }}>
                 <MenuItem value={'cause'}>Cause</MenuItem>
                 <MenuItem value={'event'}>Event</MenuItem>
+                <MenuItem value={'kindness'}>Act Of Kindness</MenuItem>
               </Select>
             </FormControl>
           </GridItem>
@@ -287,7 +300,7 @@ export default function KindDonation() {
                   }}></div>
               </FormControl>
             </GridItem>
-          ) : (
+          ) : category === 'event' ? (
             <GridItem xs={12} sm={12} md={12}>
               <FormControl
                 style={{
@@ -333,6 +346,8 @@ export default function KindDonation() {
                   }}></div>
               </FormControl>
             </GridItem>
+          ) : (
+            ''
           )}
           {causeEventsNames.length && (
             <GridItem xs={12} sm={12} md={12}>
@@ -362,12 +377,12 @@ export default function KindDonation() {
                     {causeEventsNames.map((obj) => (
                       <MenuItem
                         key={obj._id}
-                        value={obj.name}
+                        value={category === 'kindness' ? obj.title : obj.name}
                         style={{
                           display: 'flex',
                           justifyContent: 'space-between',
                         }}>
-                        {obj.name}
+                        {category === 'kindness' ? obj.title : obj.name}
                       </MenuItem>
                     ))}
                   </Select>

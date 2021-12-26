@@ -98,7 +98,7 @@ export default function NewssList() {
               CIvil Rights Moments List
             </h4>
             <p className={classes.cardCategoryWhite}>
-              Showing all the CIvil Rights Moments
+              Showing all the Civil Rights Moments
             </p>
           </CardHeader>
           <CardBody>

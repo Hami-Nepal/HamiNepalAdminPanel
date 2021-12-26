@@ -98,23 +98,30 @@ export default function KindDonation() {
   const [uploadedUrl, setUploadedUrl] = useState([]);
 
   useEffect(async () => {
-    const cause_types = await axios.get(baseURL + 'cause_type');
+    const cause_types = await axios.get(baseURL + 'cause_type' + '&limit=1000');
 
     setCauseTypes(cause_types.data.data);
   }, []);
 
   useEffect(async () => {
-    const event_types = await axios.get(baseURL + 'event_type');
+    const event_types = await axios.get(baseURL + 'event_type' + '&limit=1000');
 
     setEventTypes(event_types.data.data);
   }, []);
 
   useEffect(async () => {
     if (category === 'cause') {
-      const {data} = await axios.get(baseURL + 'causes?cause_type=' + cause);
+      const {data} = await axios.get(
+        baseURL + 'causes?cause_type=' + cause + '&limit=10000',
+      );
       setCauseEventsNames(data.data);
     } else if (category === 'event') {
-      const {data} = await axios.get(baseURL + 'events?type=' + event);
+      const {data} = await axios.get(
+        baseURL + 'events?type=' + event + '&limit=10000',
+      );
+      setCauseEventsNames(data.data);
+    } else if (category === 'kindness') {
+      const {data} = await axios.get(baseURL + 'kindness?limit=10000');
       setCauseEventsNames(data.data);
     }
   }, [category, cause, event]);
@@ -141,11 +148,15 @@ export default function KindDonation() {
     formData.append('donerEmail', donerEmail);
     category === 'event'
       ? formData.append('event', event)
-      : formData.append('cause', cause);
+      : category === 'cause'
+      ? formData.append('cause', cause)
+      : '';
 
     currentName && category === 'event'
       ? formData.append('event_name', currentName)
-      : formData.append('cause_name', currentName);
+      : category === 'cause'
+      ? formData.append('cause_name', currentName)
+      : formData.append('kindness', currentName);
 
     axios({
       method: 'POST',
@@ -212,6 +223,7 @@ export default function KindDonation() {
                 }}>
                 <MenuItem value={'cause'}>Cause</MenuItem>
                 <MenuItem value={'event'}>Event</MenuItem>
+                <MenuItem value={'kindness'}>Act of Kindness</MenuItem>
               </Select>
             </FormControl>
           </GridItem>
@@ -262,7 +274,7 @@ export default function KindDonation() {
                   }}></div>
               </FormControl>
             </GridItem>
-          ) : (
+          ) : category === 'event' ? (
             <GridItem xs={12} sm={12} md={12}>
               <FormControl
                 style={{
@@ -308,6 +320,8 @@ export default function KindDonation() {
                   }}></div>
               </FormControl>
             </GridItem>
+          ) : (
+            ''
           )}
           {causeEventsNames.length && (
             <GridItem xs={12} sm={12} md={12}>
@@ -337,12 +351,12 @@ export default function KindDonation() {
                     {causeEventsNames.map((obj) => (
                       <MenuItem
                         key={obj._id}
-                        value={obj.name}
+                        value={category === 'kindness' ? obj.title : obj.name}
                         style={{
                           display: 'flex',
                           justifyContent: 'space-between',
                         }}>
-                        {obj.name}
+                        {category === 'kindness' ? obj.title : obj.name}
                       </MenuItem>
                     ))}
                   </Select>
