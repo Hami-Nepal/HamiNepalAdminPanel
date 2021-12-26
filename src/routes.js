@@ -53,6 +53,7 @@ import AddKindTransparency from 'views/KindTransparency/AddKindTransparency';
 import EditKindTransparency from 'views/KindTransparency/EditKindTransparency';
 import EventVolunteer from 'views/EventVolunteer/volunteerList';
 import CauseVolunteer from 'views/CauseVolunteer/volunteerList';
+import KindnessVolunteer from './views/KindnessVolunteers/KindnessVolunteers';
 
 import UserPage from './views/Users/user';
 import CivilMoment from './views/civilrightMoment/ListCivilRights';
@@ -190,6 +191,13 @@ export const demoRoutes = [
     name: 'Edit a Act of kindness',
     icon: Unarchive,
     component: EditActOfKindness,
+    layout: '/admin',
+  },
+  {
+    path: '/act-of-kindness/:kindnessId/volunteers',
+    name: 'Act of kindness list volunteers',
+    icon: KindnessIcon,
+    component: KindnessVolunteer,
     layout: '/admin',
   },
   {
