@@ -182,9 +182,9 @@ export default function KindDonation() {
   return (
     <Card>
       <CardHeader color="danger">
-        <h4 className={classes.cardTitleWhite}>Add News Screen</h4>
+        <h4 className={classes.cardTitleWhite}>Add Kind Donation</h4>
         <p className={classes.cardCategoryWhite}>
-          For adding the kid Donation to Hami Nepal
+          For adding the kind Donation to Hami Nepal
         </p>
         <p className={classes.cardCategoryWhite}>
           Please check the information properly before submitting as it cannot

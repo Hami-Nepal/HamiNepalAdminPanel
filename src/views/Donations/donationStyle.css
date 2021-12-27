@@ -1,0 +1,15 @@
+.modal {
+  overflow: scroll;
+  margin-left: 350px;
+}
+
+@media (max-width: 720px) {
+  .modal {
+    margin-left: 45px;
+  }
+}
+@media only screen and (min-width: 720px) {
+  .modal {
+    margin-left: 400px;
+  }
+}

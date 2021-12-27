@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useTheme} from '@material-ui/core/styles';
+import './donationStyle.css';
 
 import GridItem from 'components/Grid/GridItem.js';
 import Card from 'components/Card/Card.js';
@@ -12,16 +13,13 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 import styles from './styles';
-import {Link} from 'react-router-dom';
+import DonationForm from './DonationForm';
 
 // import ESEWA from 'assets/img/payment_types/esewa1.png';
 // import KHALTI from 'assets/img/payment_types/khalti.png';
@@ -38,20 +36,13 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import Button from 'components/CustomButtons/Button.js';
 import GridContainer from 'components/Grid/GridContainer';
-import baseURL from 'api/baseUrl';
+
+import Modal from '@mui/material/Modal';
 
 function getStyles(column, name, theme) {
   return {
     fontWeight:
       name.indexOf(column) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
-function getLimitByStyles(column, name, theme) {
-  return {
-    fontWeight:
-      name === column
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };
@@ -78,8 +69,6 @@ const MenuProps = {
 
 export default function Donations() {
   const classes = useStyles();
-
-  // const payment_types_images = {ESEWA, KHALTI, GOFUNDME, PAYPAL};
 
   const dispatch = useDispatch();
 
@@ -131,13 +120,18 @@ export default function Donations() {
 
     fetchDataFromApi();
   };
+  //Modal
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
+
   return (
     <>
-      <Link to="/admin/donation/create">
-        <Button color="danger" type="submit">
-          Add Cash Donation
-        </Button>
-      </Link>
+      <Button color="danger" type="submit" onClick={handleOpen}>
+        Add Cash Donation
+      </Button>
       {donationsListError ? (
         <Alert severity="error">
           <AlertTitle>Error</AlertTitle>
@@ -260,6 +254,31 @@ export default function Donations() {
                         <p className={classes.cardCategory}>
                           {donation.category}
                         </p>
+
+                        {donation.category === 'volunteer' ? (
+                          <div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '1rem',
+                            }}>
+                            <img
+                              src={donation.volunteer.photo}
+                              alt="vol"
+                              style={{
+                                height: '50px',
+                                width: '50px',
+                                borderRadius: '50%',
+                                marginTop: '0.7rem',
+                              }}
+                            />
+                            <p className={classes.cardCategory}>
+                              {`${donation.volunteer.first_name} ${donation.volunteer.last_name}`}
+                            </p>
+                          </div>
+                        ) : (
+                          ''
+                        )}
                         {donation.category === 'cause' ? (
                           <p className={classes.cardCategory}>
                             {donation.cause?.name}
@@ -323,6 +342,14 @@ export default function Donations() {
       ) : (
         ''
       )}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        className="modal">
+        <DonationForm />
+      </Modal>
     </>
   );
 }
