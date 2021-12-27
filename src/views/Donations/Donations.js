@@ -263,7 +263,7 @@ export default function Donations() {
                               gap: '1rem',
                             }}>
                             <img
-                              src={donation.volunteer.photo}
+                              src={donation.volunteer?.photo}
                               alt="vol"
                               style={{
                                 height: '50px',
@@ -273,7 +273,7 @@ export default function Donations() {
                               }}
                             />
                             <p className={classes.cardCategory}>
-                              {`${donation.volunteer.first_name} ${donation.volunteer.last_name}`}
+                              {`${donation.volunteer?.first_name} ${donation.volunteer?.last_name}`}
                             </p>
                           </div>
                         ) : (
@@ -289,7 +289,7 @@ export default function Donations() {
                           </p>
                         ) : donation.category === 'kindness' ? (
                           <p className={classes.cardCategory}>
-                            {donation.kindness.title}
+                            {donation.kindness?.title}
                           </p>
                         ) : (
                           ''
