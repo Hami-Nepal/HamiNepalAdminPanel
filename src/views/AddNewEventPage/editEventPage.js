@@ -80,7 +80,6 @@ export default function AddNewEventPage({match}) {
   const classes = useStyles();
 
   const [uploadedUrl, setUploadedUrl] = useState([]);
-  const [ckEditor, setCkEditor] = useState(null);
 
   const [name, setName] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
@@ -124,7 +123,7 @@ export default function AddNewEventPage({match}) {
   }, []);
 
   useEffect(async () => {
-    const event_types = await axios.get(baseUrl + 'event_type');
+    const event_types = await axios.get(baseUrl + 'event_type?limit=1000');
 
     setEventTypes(event_types.data.data);
   }, []);
@@ -287,6 +286,8 @@ export default function AddNewEventPage({match}) {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
+                  border: '1px solid',
+                  color: 'black',
                 }}
               />
             </GridItem>
@@ -359,28 +360,6 @@ export default function AddNewEventPage({match}) {
                 style={{width: '50%', margin: '30px 0'}}
               />
             </GridItem>
-            {/* <GridItem xs={12} sm={12} md={12}>
-              <InputLabel id="demo-simple-select-label">
-                Difficulties
-              </InputLabel>
-              <TextareaAutosize
-                aria-label="minimum height"
-                rowsMin={5}
-                placeholder="Enter the difficulties about the event not exceeding 250 character"
-                value={difficulties}
-                onChange={(e) => {
-                  setDifficulties(e.target.value);
-                }}
-                // required
-                style={{
-                  width: '95.8%',
-                  margin: '30px 0',
-                  padding: '20px',
-                  fontSize: '16px',
-                  fontFamily: 'Roboto',
-                }}
-              />
-            </GridItem> */}
             <GridItem xs={12} sm={12} md={12}>
               <InputLabel id="demo-simple-select-label">Challenges</InputLabel>
               <TextareaAutosize
@@ -398,6 +377,8 @@ export default function AddNewEventPage({match}) {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
+                  border: '1px solid',
+                  color: 'black',
                 }}
               />
             </GridItem>
@@ -418,6 +399,8 @@ export default function AddNewEventPage({match}) {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
+                  border: '1px solid',
+                  color: 'black',
                 }}
               />
             </GridItem>
@@ -432,6 +415,7 @@ export default function AddNewEventPage({match}) {
                   border: '1px solid gray',
                   padding: '20px',
                   marginBottom: '20px',
+                  borderRadius: '12px',
                 }}>
                 <input {...getInputProps()} />
                 {isDragActive ? (

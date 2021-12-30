@@ -150,7 +150,6 @@ export default function AddCauseEvent() {
   //list table cause states
   const [deleteCauseSuccess, setDeleteCauseSuccess] = useState(false);
   const [deleteCauseError, setDeleteCauseError] = useState('');
-  const [causeListSuccess, setCauseListSuccess] = useState(null);
   const [causeListError, setCauseListError] = useState(null);
   const [causeListLoading, setCauseListLoading] = useState(null);
   const [causeList, setCauseList] = useState([]);
@@ -162,17 +161,23 @@ export default function AddCauseEvent() {
   };
 
   const fetchCauseData = async () => {
-    const {data: response} = await axios.get(
-      baseUrl + 'cause_type?page=' + (causePage + 1),
-    );
-    setCauseList(response.data);
-    setTotal_data_C(response.total_data);
+    try {
+      setCauseListLoading(true);
+      const {data: response} = await axios.get(
+        baseUrl + 'cause_type?page=' + (causePage + 1),
+      );
+      setCauseList(response.data);
+      setTotal_data_C(response.total_data);
+      setCauseListLoading(false);
+    } catch (error) {
+      setCauseListError(error);
+      setCauseListLoading(false);
+    }
   };
 
   useEffect(fetchCauseData, [causePage]);
 
   //list table event states
-  const [deleteEventSuccess, setDeleteEventSuccess] = useState(false);
   const [deleteEventError, setDeleteEventError] = useState('');
   const [eventListSuccess, setEventListSuccess] = useState(null);
   const [eventListError, setEventListError] = useState(null);

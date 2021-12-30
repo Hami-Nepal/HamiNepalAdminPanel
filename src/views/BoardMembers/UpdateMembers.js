@@ -12,16 +12,11 @@ import CardBody from 'components/Card/CardBody.js';
 import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import baseUrl from '../../api/baseUrl';
-
-import AsyncSelect from 'react-select/async';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const styles = {
   typo: {
@@ -61,10 +56,6 @@ const styles = {
 };
 
 const useStyles = makeStyles(styles);
-
-const loadOptions = (inputValue, callback) => {
-  // console.log(inputValue);
-};
 
 export default function EditMember({match}) {
   const id = match.params.id;
@@ -204,7 +195,8 @@ export default function EditMember({match}) {
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem> */}
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={12}>
+            <InputLabel id="demo-simple-select-label">Message</InputLabel>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
@@ -215,13 +207,14 @@ export default function EditMember({match}) {
               }}
               required
               style={{
-                width: '500px',
-                margin: '30px 0',
+                width: '95.8%',
+                margin: '10px 0',
                 padding: '20px',
                 fontSize: '16px',
                 fontFamily: 'Roboto',
                 color: 'black',
                 fontWeight: '400',
+                border: '1px solid',
               }}
             />
           </GridItem>
@@ -288,7 +281,8 @@ export default function EditMember({match}) {
                 border: '1px solid gray',
                 padding: '20px',
                 marginBottom: '20px',
-                minHeight: '200px',
+                minHeight: '100px',
+                borderRadius: '12px',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (

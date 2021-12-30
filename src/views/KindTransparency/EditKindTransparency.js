@@ -97,13 +97,13 @@ export default function TransparencyPage(props) {
   const [causeEventsNames, setCauseEventsNames] = useState([]);
 
   useEffect(async () => {
-    const cause_types = await axios.get(baseUrl + 'cause_type' + '&limit=1000');
+    const cause_types = await axios.get(baseUrl + 'cause_type' + '?limit=1000');
 
     setCauseTypes(cause_types.data.data);
   }, []);
 
   useEffect(async () => {
-    const event_types = await axios.get(baseUrl + 'event_type' + '&limit=1000');
+    const event_types = await axios.get(baseUrl + 'event_type' + '?limit=1000');
 
     setEventTypes(event_types.data.data);
   }, []);
@@ -137,11 +137,13 @@ export default function TransparencyPage(props) {
     setEvent(result.data.kindtransparency.event);
 
     setQuantity(result.data.kindtransparency.quantity);
-    currentName && type === 'event'
+
+    result.data.kindtransparency.type === 'event'
       ? setCurrentName(result.data.kindtransparency.event_name)
-      : currentName && type === 'cause'
+      : result.data.kindtransparency.type === 'cause'
       ? setCurrentName(result.data.kindtransparency.cause_name)
       : setCurrentName(result.data.kindtransparency.kindness);
+
     setUploadedUrl(result.data.kindtransparency.photos);
   }, []);
 
@@ -424,8 +426,9 @@ export default function TransparencyPage(props) {
                 margin: '30px 0',
                 padding: '20px',
                 fontSize: '16px',
+                border: '1px solid',
+                color: 'black',
                 fontFamily: 'Roboto',
-                color: '#c0c1c2',
                 fontWeight: '390',
               }}
             />
@@ -448,6 +451,7 @@ export default function TransparencyPage(props) {
                 cursor: 'pointer',
                 border: '1px solid gray',
                 padding: '20px',
+                borderRadius: '12px',
                 marginBottom: '20px',
               }}>
               <input {...getInputProps()} />

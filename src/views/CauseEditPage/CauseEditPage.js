@@ -98,7 +98,7 @@ export default function AddNewCausePage({match}) {
   const [causeTypes, setCauseTypes] = useState([]);
 
   useEffect(async () => {
-    const cause_types = await axios.get(baseURL + 'cause_type');
+    const cause_types = await axios.get(baseURL + 'cause_type?limit=1000');
     setCauseTypes(cause_types.data.data);
   }, []);
 
@@ -261,6 +261,8 @@ export default function AddNewCausePage({match}) {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
+                  border: '1px solid',
+                  color: 'black',
                 }}
               />
             </GridItem>

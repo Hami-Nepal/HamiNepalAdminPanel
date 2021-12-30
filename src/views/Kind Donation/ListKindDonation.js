@@ -67,7 +67,6 @@ export default function Donations() {
           setDonationsListSuccess(true);
         });
     } catch (error) {
-      console.log(error);
       setDonationsListLoading(false);
       setDonationsListSuccess(false);
       setDonationsListError(true);

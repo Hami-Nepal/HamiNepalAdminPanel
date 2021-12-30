@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useCallback} from 'react';
 import {useHistory} from 'react-router-dom';
 // @material-ui/core components
 
@@ -12,16 +12,10 @@ import CardBody from 'components/Card/CardBody.js';
 import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import baseUrl from '../../api/baseUrl';
-
-import AsyncSelect from 'react-select/async';
 
 const styles = {
   typo: {
@@ -62,15 +56,8 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-const loadOptions = (inputValue, callback) => {};
-
 export default function AddMember() {
   const onDrop = useCallback((acceptedFiles) => {
-    // Do something with the files
-
-    // const reader = new FileReader();
-    // reader.readAsArrayBuffer(acceptedFiles[0])
-    // console.log(reader,acceptedFiles[0]);
     setSelectedFile(acceptedFiles[0]);
     setUploadedUrl(URL.createObjectURL(acceptedFiles[0]));
   }, []);
@@ -92,13 +79,6 @@ export default function AddMember() {
   const [uploadedUrl, setUploadedUrl] = useState('');
 
   const history = useHistory();
-
-  // const handleFile = (e)=>{
-  //   console.log(e.target.files)
-  //   e.preventDefault();
-  //   let file = e.target.files[0];
-  //   setSelectedFile(file)
-  // }
 
   const handleUpload = (e) => {
     e.preventDefault();
@@ -175,19 +155,7 @@ export default function AddMember() {
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
-          {/* <GridItem xs={12} sm={12} md={4}>
-            <TextField
-              id="standard-basic"
-              label="Bill Type"
-              value={type}
-              onChange={(e) => {
-                setType(e.target.value);
-              }}
-              required
-              style={{width: '500px', margin: '30px 0'}}
-            />
-          </GridItem> */}
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={12}>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
@@ -198,13 +166,14 @@ export default function AddMember() {
               }}
               required
               style={{
-                width: '500px',
+                width: '95.8%',
                 margin: '30px 0',
                 padding: '20px',
                 fontSize: '16px',
                 fontFamily: 'Roboto',
                 color: 'black',
                 fontWeight: '400',
+                border: '1px solid',
               }}
             />
           </GridItem>
@@ -271,7 +240,8 @@ export default function AddMember() {
                 border: '1px solid gray',
                 padding: '20px',
                 marginBottom: '20px',
-                minHeight: '200px',
+                minHeight: '100px',
+                borderRadius: '12px',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (

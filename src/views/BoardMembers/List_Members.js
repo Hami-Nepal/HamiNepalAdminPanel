@@ -41,10 +41,8 @@ export default function MemberList() {
 
   const [deleteMemberSuccess, setDeleteMemberSuccess] = useState(false);
   const [deleteMemberError, setDeleteMemberError] = useState('');
-  const [error, setError] = useState();
-  const [newsListSuccess, setNewsListSuccess] = useState(null);
-  const [memberListError, setNewsListError] = useState(null);
-  const [memberListLoading, setNewsListLoading] = useState(null);
+  const [memberListError, setMemberListError] = useState(null);
+  const [memberListLoading, setMemberListLoading] = useState(null);
   const [memberList, setMemberList] = useState([]);
 
   const handleDeleteBoard = async (id) => {
@@ -61,7 +59,6 @@ export default function MemberList() {
       setDeleteMemberSuccess(true);
       setMemberList(memberList.filter(({_id}) => _id !== id));
     } catch (err) {
-      setError(err);
       setDeleteMemberError(true);
     }
   };
@@ -74,12 +71,17 @@ export default function MemberList() {
   };
 
   const fetchData = async () => {
-    const {data: response} = await axios.get(
-      baseURL + 'boardmembers?page=' + (page + 1),
-    );
-    setMemberList(response.data);
-    // setTotal_data(response.total_data)
-    setTotal_data(response.total_data);
+    setMemberListLoading(true);
+    try {
+      const {data: response} = await axios.get(
+        baseURL + 'boardmembers?page=' + (page + 1),
+      );
+      setMemberList(response.data);
+      setTotal_data(response.total_data);
+      setMemberListLoading(false);
+    } catch (error) {
+      setMemberListError(error);
+    }
   };
 
   useEffect(fetchData, [page]);

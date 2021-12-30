@@ -97,13 +97,13 @@ export default function KindDonation() {
   const [uploadedUrl, setUploadedUrl] = useState([]);
 
   useEffect(async () => {
-    const cause_types = await axios.get(baseURL + 'cause_type' + '&limit=1000');
+    const cause_types = await axios.get(baseURL + 'cause_type' + '?limit=1000');
 
     setCauseTypes(cause_types.data.data);
   }, []);
 
   useEffect(async () => {
-    const event_types = await axios.get(baseURL + 'event_type' + '&limit=1000');
+    const event_types = await axios.get(baseURL + 'event_type' + '?limit=1000');
 
     setEventTypes(event_types.data.data);
   }, []);

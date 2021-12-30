@@ -34,8 +34,6 @@ export default function CauseList(props) {
   const [causeData, setCauseData] = useState({});
   const [volunteers, setVolunteers] = useState([]);
 
-  console.log(causeData);
-
   useEffect(() => {
     axios(baseURL + 'kindness/' + params.kindnessId)
       .then(async ({data}) => {

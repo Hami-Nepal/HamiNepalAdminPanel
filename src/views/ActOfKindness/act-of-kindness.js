@@ -10,8 +10,6 @@ import CardHeader from 'components/Card/CardHeader.js';
 import CardBody from 'components/Card/CardBody.js';
 
 import Table from '@material-ui/core/Table';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -24,7 +22,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import DialogueBox from 'components/DialogueBox';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import {Link} from 'react-router-dom';
 import api from 'api';
@@ -41,8 +38,6 @@ export default function CauseList() {
 
   const [deleteKindnessSuccess, setDeleteKindnessSuccess] = useState(false);
   const [deleteKindnessError, setDeleteKindnessError] = useState('');
-  const [error, setError] = useState();
-  const [KindnessListSuccess, setKindnessListSuccess] = useState(null);
   const [KindnessListError, setKindnessListError] = useState(null);
   const [KindnessListLoading, setKindnessListLoading] = useState(null);
   const [KindnessList, setKindnessList] = useState([]);
@@ -61,7 +56,6 @@ export default function CauseList() {
       setDeleteKindnessSuccess(true);
       setKindnessList(KindnessList.filter(({_id}) => _id !== id));
     } catch (err) {
-      setError(err);
       setDeleteKindnessError(true);
     }
   };
@@ -74,12 +68,19 @@ export default function CauseList() {
   };
 
   const fetchData = async () => {
-    const {data: response} = await axios.get(
-      baseURL + 'kindness?page=' + (page + 1),
-    );
-    setKindnessList(response.data);
-    // setTotal_data(response.total_data)
-    setTotal_data(response.total_data);
+    setKindnessListLoading(true);
+    try {
+      const {data: response} = await axios.get(
+        baseURL + 'kindness?page=' + (page + 1),
+      );
+      setKindnessList(response.data);
+      // setTotal_data(response.total_data)
+      setTotal_data(response.total_data);
+      setKindnessListLoading(false);
+    } catch (error) {
+      setKindnessListError(error);
+      setKindnessListLoading(false);
+    }
   };
 
   useEffect(fetchData, [page]);

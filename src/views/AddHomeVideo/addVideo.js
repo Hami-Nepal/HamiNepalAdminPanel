@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useCallback} from 'react';
 // @material-ui/core components
 
 import {useDropzone} from 'react-dropzone';
@@ -10,18 +10,12 @@ import CardHeader from 'components/Card/CardHeader.js';
 import CardBody from 'components/Card/CardBody.js';
 import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import {CKEditor} from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
-import AsyncSelect from 'react-select/async';
 
 import baseUrl from '../../api/baseUrl';
 
@@ -64,15 +58,8 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-const loadOptions = (inputValue, callback) => {};
-
 export default function TransparencyPage() {
   const onDrop = useCallback((acceptedFiles) => {
-    // Do something with the files
-
-    // const reader = new FileReader();
-    // reader.readAsArrayBuffer(acceptedFiles[0])
-    // console.log(reader,acceptedFiles[0]);
     setSelectedFile(acceptedFiles[0]);
     setUploadedUrl(URL.createObjectURL(acceptedFiles[0]));
   }, []);
@@ -86,20 +73,6 @@ export default function TransparencyPage() {
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState('');
-
-  // const handleFile = (e)=>{
-  //   console.log(e.target.files)
-  //   e.preventDefault();
-  //   let file = e.target.files[0];
-  //   setSelectedFile(file)
-  // }
-
-  const [inputValue, setInputValue] = useState();
-
-  const handleInputChange = (newValue) => {
-    let inputValue = newValue.replace(/\W/g, '');
-    setInputValue({inputValue});
-  };
 
   const handleUpload = (e) => {
     e.preventDefault();
@@ -149,27 +122,11 @@ export default function TransparencyPage() {
       </CardHeader>
       <CardBody>
         <form onSubmit={handleUpload}>
-          {/* <GridItem xs={12} sm={12} md={4}>
-            <TextField
-              id="standard-basic"
-              label="Bill Type"
-              value={type}
-              onChange={(e) => {
-                setType(e.target.value);
-              }}
-              required
-              style={{width: '500px', margin: '30px 0'}}
-            />
-          </GridItem> */}
-          <GridItem xs={12} sm={12} md={8}>
+          <GridItem xs={12} sm={12} md={6}>
             <h5>Please add the title</h5>
             <CKEditor
               editor={ClassicEditor}
               data={description}
-              onReady={(editor) => {
-                // You can store the "editor" and use when it is needed.
-                // console.log('Editor is ready to use!', editor);
-              }}
               onChange={(event, editor) => {
                 const data = editor.getData();
 
@@ -202,17 +159,6 @@ export default function TransparencyPage() {
               />
             </div>
           </GridItem>
-          {/* <GridItem xs={12} sm={12} md={6}>
-          </GridItem> */}
-
-          <div>
-            {/* <AsyncSelect
-              cacheOptions
-              loadOptions={loadOptions}
-              defaultOptions
-              onInputChange={handleInputChange}
-            /> */}
-          </div>
           <GridItem xs={12} sm={12} md={6}>
             <h5>Please upload a Home Video</h5>
             <div
@@ -223,6 +169,7 @@ export default function TransparencyPage() {
                 border: '1px solid gray',
                 padding: '20px',
                 marginBottom: '20px',
+                borderRadius: '12px',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (

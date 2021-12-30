@@ -66,15 +66,8 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function AddNewCausePage({match}) {
-  const id = match.params.id;
-
+export default function AddNewCausePage() {
   const onDrop = useCallback((acceptedFiles) => {
-    // Do something with the files
-
-    // const reader = new FileReader();
-    // reader.readAsArrayBuffer(acceptedFiles[0])
-    // console.log(reader,acceptedFiles[0]);
     setSelectedFile(acceptedFiles);
     setUploadedUrl(acceptedFiles.map((file) => URL.createObjectURL(file)));
   }, []);
@@ -150,9 +143,6 @@ export default function AddNewCausePage({match}) {
       <Card>
         <CardHeader color="danger">
           <h4 className={classes.cardTitleWhite}>Add New Cause</h4>
-          {/* <p className={classes.cardCategoryWhite}>
-            For creating and uploading images for new causes
-          </p> */}
           <p className={classes.cardCategoryWhite}>
             Please check the information properly before updating .
           </p>
@@ -229,7 +219,7 @@ export default function AddNewCausePage({match}) {
               />
             </GridItem>
 
-            <GridItem xs={12} sm={12} md={4}>
+            <GridItem xs={12} sm={12} md={12}>
               <InputLabel id="demo-simple-select-label">Summary</InputLabel>
               <TextareaAutosize
                 aria-label="minimum height"
@@ -241,28 +231,33 @@ export default function AddNewCausePage({match}) {
                 }}
                 required
                 style={{
-                  width: '500px',
+                  width: '95.8%',
                   margin: '30px 0',
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
+                  border: '1px solid',
+                  color: 'black',
                 }}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={8}>
+            <GridItem xs={12} sm={12} md={12}>
               <h5>Please add the Description</h5>
               <CKEditor
                 editor={ClassicEditor}
                 data={description}
                 onChange={(event, editor) => {
                   const data = editor.getData();
-
                   setDescription(data);
                 }}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
-              <InputLabel id="demo-simple-select-label">Challenges</InputLabel>
+            <GridItem xs={12} sm={12} md={12}>
+              <InputLabel
+                id="demo-simple-select-label"
+                style={{marginTop: '2rem'}}>
+                Challenges
+              </InputLabel>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
@@ -273,11 +268,13 @@ export default function AddNewCausePage({match}) {
                 }}
                 // required
                 style={{
-                  width: '500px',
+                  width: '95.8%',
                   margin: '30px 0',
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
+                  border: '1px solid',
+                  color: 'black',
                 }}
               />
             </GridItem>
@@ -298,31 +295,11 @@ export default function AddNewCausePage({match}) {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
+                  border: '1px solid',
+                  color: 'black',
                 }}
               />
             </GridItem>
-            {/* <GridItem xs={12} sm={12} md={4}>
-              <InputLabel id="demo-simple-select-label">
-                Difficulties
-              </InputLabel>
-              <TextareaAutosize
-                aria-label="minimum height"
-                rowsMin={5}
-                placeholder="Enter difficulties about the cause"
-                value={difficulties}
-                onChange={(e) => {
-                  setDifficulties(e.target.value);
-                }}
-                // required
-                style={{
-                  width: '500px',
-                  margin: '30px 0',
-                  padding: '20px',
-                  fontSize: '16px',
-                  fontFamily: 'Roboto',
-                }}
-              />
-            </GridItem> */}
             <GridItem xs={12} sm={12} md={12}>
               <h5>Please upload Cause Photo</h5>
               <div
@@ -334,6 +311,7 @@ export default function AddNewCausePage({match}) {
                   minHeight: '200px',
                   padding: '20px',
                   marginBottom: '20px',
+                  borderRadius: '12px',
                 }}>
                 <input {...getInputProps()} />
                 {isDragActive ? (

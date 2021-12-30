@@ -78,7 +78,7 @@ export default function TransparencyPage() {
 
   const [name, setName] = useState('');
 
-  const [type, setType] = useState('');
+  const [type, setType] = useState('cause');
   const [cause, setCause] = useState('');
   const [event, setEvent] = useState('');
   const [currentName, setCurrentName] = useState('');
@@ -97,13 +97,12 @@ export default function TransparencyPage() {
   const [causeEventsNames, setCauseEventsNames] = useState([]);
 
   useEffect(async () => {
-    const cause_types = await axios.get(baseURL + 'cause_type' + '&limit=1000');
-
+    const cause_types = await axios.get(baseURL + 'cause_type' + '?limit=1000');
     setCauseTypes(cause_types.data.data);
   }, []);
 
   useEffect(async () => {
-    const event_types = await axios.get(baseURL + 'event_type' + '&limit=1000');
+    const event_types = await axios.get(baseURL + 'event_type' + '?limit=1000');
 
     setEventTypes(event_types.data.data);
   }, []);
@@ -114,7 +113,6 @@ export default function TransparencyPage() {
         baseURL + 'causes?cause_type=' + cause + '&limit=10000',
       );
       setCauseEventsNames(data.data);
-      console.log(causeEventsNames);
     } else if (type === 'event') {
       const {data} = await axios.get(
         baseURL + 'events?type=' + event + '&limit=10000',
@@ -197,7 +195,7 @@ export default function TransparencyPage() {
       </CardHeader>
       <CardBody>
         <form onSubmit={handleUpload}>
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={4} sm={12} md={4}>
             <TextField
               id="standard-basic"
               label="Name"
@@ -206,7 +204,7 @@ export default function TransparencyPage() {
                 setName(e.target.value);
               }}
               required
-              style={{width: '500px', margin: '30px 0'}}
+              style={{width: '400px', margin: '30px 0'}}
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
@@ -414,7 +412,9 @@ export default function TransparencyPage() {
                 fontSize: '16px',
                 fontFamily: 'Roboto',
                 color: '#c0c1c2',
+                border: '1px solid',
                 fontWeight: '390',
+                color: 'black',
               }}
             />
           </GridItem>
@@ -436,6 +436,7 @@ export default function TransparencyPage() {
                 cursor: 'pointer',
                 border: '1px solid gray',
                 padding: '20px',
+                borderRadius: '12px',
                 marginBottom: '20px',
               }}>
               <input {...getInputProps()} />
