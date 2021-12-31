@@ -86,9 +86,6 @@ export default function EventList() {
 
   useEffect(() => {
     dispatch(listEvents(currentPage + 1));
-    // if (!eventListSuccess) {
-    //   setMount(true);
-    // }
   }, [currentPage]);
 
   const changeStatus = (id, status) => {
