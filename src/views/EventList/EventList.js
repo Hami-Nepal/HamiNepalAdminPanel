@@ -45,7 +45,7 @@ export default function EventList() {
   const [deleteEventSuccess, setDeleteEventSuccess] = useState(false);
   const [deleteEventError, setDeleteEventError] = useState('');
   const [error, setError] = useState();
-  const [verifiedError, setVerifiedError] = useState(false);
+  // const [verifiedError, setVerifiedError] = useState(false);
 
   const {
     eventListSuccess,
