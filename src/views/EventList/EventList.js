@@ -40,8 +40,6 @@ const useStyles = makeStyles({
 export default function EventList() {
   const classes = useStyles();
 
-  const [mount, setMount] = useState(false);
-
   const dispatch = useDispatch();
 
   const [deleteEventSuccess, setDeleteEventSuccess] = useState(false);

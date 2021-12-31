@@ -405,7 +405,6 @@ export default function KindDonation() {
               onChange={(e) => {
                 setDonerFullName(e.target.value);
               }}
-              required
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
@@ -417,7 +416,6 @@ export default function KindDonation() {
               onChange={(e) => {
                 setDonerEmail(e.target.value);
               }}
-              required
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
@@ -430,7 +428,6 @@ export default function KindDonation() {
               onChange={(e) => {
                 setPhoneNumber(e.target.value);
               }}
-              required
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
@@ -454,7 +451,6 @@ export default function KindDonation() {
               onChange={(e) => {
                 setState(e.target.value);
               }}
-              required
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
@@ -466,7 +462,6 @@ export default function KindDonation() {
               onChange={(e) => {
                 setCity(e.target.value);
               }}
-              required
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
@@ -485,7 +480,7 @@ export default function KindDonation() {
           <GridItem xs={12} sm={12} md={4}>
             <TextField
               id="standard-basic"
-              label="Item Worth Amount"
+              label="Worth Amount"
               type="number"
               value={itemWorth}
               onChange={(e) => {

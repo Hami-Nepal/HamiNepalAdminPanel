@@ -38,9 +38,7 @@ export default function Dashboard() {
 
   const {
     volunteerListSuccess,
-    volunteerListError,
     volunteerListLoading,
-    volunteerList,
     volunteerCount,
   } = useSelector((state) => state.volunteers);
 

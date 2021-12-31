@@ -266,7 +266,7 @@ export default function AddNewCausePage({match}) {
                 }}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={8}>
+            <GridItem xs={12} sm={12} md={12}>
               <h5>Please add the Description</h5>
               <CKEditor
                 editor={ClassicEditor}
@@ -298,7 +298,7 @@ export default function AddNewCausePage({match}) {
                 }}
               />
             </GridItem> */}
-            <GridItem xs={12} sm={12} md={4}>
+            <GridItem xs={12} sm={12} md={12}>
               <InputLabel id="demo-simple-select-label">Challenges</InputLabel>
               <TextareaAutosize
                 aria-label="minimum height"
@@ -310,11 +310,13 @@ export default function AddNewCausePage({match}) {
                 }}
                 // required
                 style={{
-                  width: '500px',
+                  width: '95.8%',
                   margin: '30px 0',
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
+                  border: '1px solid',
+                  color: 'black',
                 }}
               />
             </GridItem>
@@ -335,6 +337,8 @@ export default function AddNewCausePage({match}) {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
+                  border: '1px solid',
+                  color: 'black',
                 }}
               />
             </GridItem>
@@ -371,6 +375,7 @@ export default function AddNewCausePage({match}) {
                   minHeight: '200px',
                   padding: '20px',
                   marginBottom: '20px',
+                  borderRadius: '12px',
                 }}>
                 <input {...getInputProps()} />
                 {isDragActive ? (

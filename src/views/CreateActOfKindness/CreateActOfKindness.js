@@ -17,40 +17,35 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+// import MenuItem from '@material-ui/core/MenuItem';
+// import Select from '@material-ui/core/Select';
 
 import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import {CKEditor} from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import MyCustomUploadAdapterPlugin from 'utils/UploadAdapter';
 
-import Checkbox from '@material-ui/core/Checkbox';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+// import Checkbox from '@material-ui/core/Checkbox';
+// import ListItemIcon from '@material-ui/core/ListItemIcon';
+// import ListItemText from '@material-ui/core/ListItemText';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-  getContentAnchorEl: null,
-  anchorOrigin: {
-    vertical: 'bottom',
-    horizontal: 'center',
-  },
-  transformOrigin: {
-    vertical: 'top',
-    horizontal: 'center',
-  },
-  variant: 'menu',
-};
+// const MenuProps = {
+//   PaperProps: {
+//     style: {
+//       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+//       width: 250,
+//     },
+//   },
+//   getContentAnchorEl: null,
+//   anchorOrigin: {
+//     vertical: 'bottom',
+//     horizontal: 'center',
+//   },
+//   transformOrigin: {
+//     vertical: 'top',
+//     horizontal: 'center',
+//   },
+//   variant: 'menu',
+// };
 
 const styles = {
   typo: {
@@ -108,12 +103,6 @@ export default function CreateActOfKindness() {
 
   const classes = useStyles();
 
-  const [ckEditor, setCkEditor] = useState(null);
-
-  const [name, setName] = useState('');
-
-  const [balance, setBalance] = useState('');
-  const [description, setDescription] = useState('');
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
 
@@ -128,14 +117,12 @@ export default function CreateActOfKindness() {
   const [selectedFile, setSelectedFile] = useState(null); // photos to be uploaded in server
   // input fields state end
 
-  const [inputValue, setInputValue] = useState();
   const [open, setOpen] = React.useState(false);
   const [severity, setSeverity] = React.useState('info');
   const [message, setMessage] = React.useState('This is a success message!');
 
   const [volunteersList, setVolunteersList] = useState([]);
   const [selectedVolunteers, setSelectedVolunteers] = useState([]);
-  const [volunteersId, setVolunteersId] = useState([]);
 
   useEffect(async () => {
     const {data: res} = await axios.get(baseUrl + 'volunteers');
@@ -145,73 +132,19 @@ export default function CreateActOfKindness() {
   const handleClose = () => {
     setOpen(false);
   };
-  const [imageKeys, setImageKeys] = useState([]);
 
-  const handleTypeChange = (event) => {
-    setType(event.target.value);
-  };
-
-  const handleChange = (event) => {
-    const value = event.target.value;
-    if (value[value.length - 1] === 'all') {
-      setSelected(
-        selectedVolunteers.length === volunteersList.length
-          ? []
-          : volunteersList,
-      );
-      return;
-    }
-    setSelectedVolunteers(value);
-  };
-
-  // useEffect(() => {
-  //   if (ckEditor) {
-  //     let currentImageKeys = Array.from(
-  //       new DOMParser()
-  //         .parseFromString(ckEditor.getData(), 'text/html')
-  //         .querySelectorAll('img'),
-  //     ).map((img) => img.getAttribute('src'));
-
-  //     if (currentImageKeys.length < imageKeys.length) {
-  //       // find the missing key
-  //       let difference = imageKeys.filter((x) => !currentImageKeys.includes(x));
-
-  //       if (difference[0]) {
-  //         const key = difference[0].substring(
-  //           difference[0].indexOf('/images/') + 8,
-  //         );
-  //         axios
-  //           .get(`${baseUrl}+uploads/image/delete`, {
-  //             params: {
-  //               key,
-  //             },
-  //             headers: {
-  //               Authorization: `Bearer ${
-  //                 JSON.parse(localStorage.getItem('userInfo')).token
-  //               }`,
-  //             },
-  //           })
-  //           .then((resp) => {
-  //             setSeverity('success');
-  //             setMessage('Successfully deleted the image to the server.');
-  //             setOpen(true);
-  //           })
-  //           .catch((err) => {
-  //             setSeverity('error');
-
-  //             setMessage('Could not delete the file from the server.');
-
-  //             setOpen(true);
-
-  //             ckEditor.execute('undo');
-  //             console.error(err);
-  //           });
-  //         // push to /uploads/delete?key=key
-  //       }
-  //     }
-  //     setImageKeys(currentImageKeys);
+  // const handleChange = (event) => {
+  //   const value = event.target.value;
+  //   if (value[value.length - 1] === 'all') {
+  //     setSelected(
+  //       selectedVolunteers.length === volunteersList.length
+  //         ? []
+  //         : volunteersList,
+  //     );
+  //     return;
   //   }
-  // }, [description]);
+  //   setSelectedVolunteers(value);
+  // };
 
   const handleEventSubmit = (e) => {
     e.preventDefault();
@@ -258,10 +191,10 @@ export default function CreateActOfKindness() {
         </Alert>
       </Snackbar>
       <Card>
-        <CardHeader color="primary">
+        <CardHeader color="danger">
           <h4 className={classes.cardTitleWhite}>Add a New Act of kindness</h4>
           <p className={classes.cardCategoryWhite}>
-            For creating and uploading images for new events
+            For creating and uploading images for Act of kindness
           </p>
           <p className={classes.cardCategoryWhite}>
             Please check the information properly before submitting .
@@ -269,7 +202,7 @@ export default function CreateActOfKindness() {
         </CardHeader>
         <CardBody>
           <form onSubmit={handleEventSubmit}>
-            <GridItem xs={12} sm={12} md={12}>
+            <GridItem xs={12} sm={12} md={6}>
               <TextField
                 id="standard-basic"
                 label="Title"
@@ -282,7 +215,7 @@ export default function CreateActOfKindness() {
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
-              <h5 style={{marginBottom: '-1rem'}}>Challenges</h5>
+              <InputLabel>Challenges</InputLabel>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
@@ -298,31 +231,13 @@ export default function CreateActOfKindness() {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
+                  border: '1px solid',
+                  color: 'black',
                 }}
               />
             </GridItem>
-            {/* <GridItem xs={12} sm={12} md={12}>
-              <h5 style={{marginBottom: '-1rem'}}>Difficulties</h5>
-              <TextareaAutosize
-                aria-label="minimum height"
-                rowsMin={5}
-                placeholder="Tell about the difficulties"
-                value={difficulties}
-                onChange={(e) => {
-                  setDifficulties(e.target.value);
-                }}
-                required
-                style={{
-                  width: '95.8%',
-                  margin: '30px 0',
-                  padding: '20px',
-                  fontSize: '16px',
-                  fontFamily: 'Roboto',
-                }}
-              />
-            </GridItem> */}
             <GridItem xs={12} sm={12} md={12}>
-              <h5 style={{marginBottom: '-1rem'}}>Summary</h5>
+              <InputLabel>Summary</InputLabel>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
@@ -338,11 +253,13 @@ export default function CreateActOfKindness() {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
+                  border: '1px solid',
+                  color: 'black',
                 }}
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
-              <h5 style={{marginBottom: '-1rem'}}>Details</h5>
+              <InputLabel>Details</InputLabel>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
@@ -358,11 +275,13 @@ export default function CreateActOfKindness() {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
+                  border: '1px solid',
+                  color: 'black',
                 }}
               />
             </GridItem>
             <GridItem xs={12} sm={12} md={12}>
-              <h5 style={{marginBottom: '-1rem'}}>Result</h5>
+              <InputLabel>Results</InputLabel>
               <TextareaAutosize
                 aria-label="minimum height"
                 rowsMin={5}
@@ -378,10 +297,12 @@ export default function CreateActOfKindness() {
                   padding: '20px',
                   fontSize: '16px',
                   fontFamily: 'Roboto',
+                  border: '1px solid',
+                  color: 'black',
                 }}
               />
             </GridItem>
-            <GridItem xs={12} sm={12} md={12}>
+            {/* <GridItem xs={12} sm={12} md={12}>
               <InputLabel id="mutiple-select-label">
                 Select Volunteer
               </InputLabel>
@@ -419,65 +340,9 @@ export default function CreateActOfKindness() {
                   );
                 })}
               </Select>
-            </GridItem>
-            {/* <GridItem xs={12} sm={12} md={12}>
-              <h5>Volunteers</h5>
-              <div
-                style={{
-                  border: '1px solid gray',
-                  padding: '1.5rem',
-                  display: 'flex',
-                  gap: '1rem',
-                  flexWrap: 'wrap',
-                }}>
-                {volunteersList.map((user) => (
-                  <div
-                    key={user._id}
-                    style={{
-                      border: '1px solid rgb(207, 207, 207)',
-                      padding: '.5rem .8rem',
-                      borderRadius: '10px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '.8rem',
-                    }}>
-                    <img
-                      src={user.photo}
-                      alt={user.first_name}
-                      style={{width: '40px', borderRadius: '100rem'}}
-                    />
-                    <p style={{margin: '0'}}>
-                      {user.first_name} {user.last_name}
-                    </p>
-                    {selectedVolunteers.includes(user._id) ? (
-                      <Button
-                        color="danger"
-                        type="button"
-                        onClick={() => {
-                          const index = selectedVolunteers.indexOf(user._id);
-                          setSelectedVolunteers((prev) => [
-                            ...prev.slice(0, index),
-                            ...prev.slice(index + 1),
-                          ]);
-                        }}>
-                        Remove
-                      </Button>
-                    ) : (
-                      <Button
-                        color="primary"
-                        type="button"
-                        onClick={() =>
-                          setSelectedVolunteers((prev) => [...prev, user._id])
-                        }>
-                        Add
-                      </Button>
-                    )}
-                  </div>
-                ))}
-              </div>
             </GridItem> */}
             <GridItem xs={12} sm={12} md={12}>
-              <h5>Upload photos of event</h5>
+              <h5>Upload photos of Act Of Kindnes</h5>
               <div
                 {...getRootProps()}
                 required
@@ -486,14 +351,16 @@ export default function CreateActOfKindness() {
                   border: '1px solid gray',
                   padding: '20px',
                   marginBottom: '20px',
+                  minHeight: '200px',
+                  borderRadius: '12px',
                 }}>
                 <input {...getInputProps()} />
                 {isDragActive ? (
-                  <p>Drop the event photo here or...</p>
+                  <p>Drop the act of kindness photo here or...</p>
                 ) : (
                   <p>
-                    Drag 'n' drop a event picture here, or click to select
-                    events photo
+                    Drag 'n' drop act of kindness picture here, or click to
+                    select act of kindness photo
                   </p>
                 )}
                 <div style={{display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
@@ -517,7 +384,7 @@ export default function CreateActOfKindness() {
               {submissionLoading ? (
                 <CircularProgress />
               ) : (
-                <Button color="primary" type="submit">
+                <Button color="danger" type="submit">
                   Submit
                 </Button>
               )}

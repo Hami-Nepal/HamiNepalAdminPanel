@@ -292,14 +292,13 @@ export default function AddNewEventPage({match}) {
               />
             </GridItem>
 
-            <GridItem xs={12} sm={12} md={8}>
+            <GridItem xs={12} sm={12} md={12}>
               <h5>Please add the Description</h5>
               <CKEditor
                 editor={ClassicEditor}
                 data={description}
                 onChange={(event, editor) => {
                   const data = editor.getData();
-
                   setDescription(data);
                 }}
               />

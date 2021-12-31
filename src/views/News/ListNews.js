@@ -74,12 +74,18 @@ export default function NewssList() {
   };
 
   const fetchData = async () => {
-    const {data: response} = await axios.get(
-      baseURL + 'news?page=' + (page + 1),
-    );
-    setNewsList(response.data);
-    // setTotal_data(response.total_data)
-    setTotal_data(response.total_data);
+    setNewsListLoading(true);
+    try {
+      const {data: response} = await axios.get(
+        baseURL + 'news?page=' + (page + 1),
+      );
+      setNewsList(response.data);
+      setTotal_data(response.total_data);
+      setNewsListLoading(false);
+    } catch (error) {
+      setNewsListError(error);
+      setNewsListLoading(false);
+    }
   };
 
   useEffect(fetchData, [page]);

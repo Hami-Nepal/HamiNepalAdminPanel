@@ -195,7 +195,7 @@ export default function TransparencyPage() {
       </CardHeader>
       <CardBody>
         <form onSubmit={handleUpload}>
-          <GridItem xs={4} sm={12} md={4}>
+          <GridItem xs={4} sm={12} md={12}>
             <TextField
               id="standard-basic"
               label="Name"
@@ -204,7 +204,7 @@ export default function TransparencyPage() {
                 setName(e.target.value);
               }}
               required
-              style={{width: '400px', margin: '30px 0'}}
+              style={{width: '45%', margin: '30px 0'}}
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
@@ -236,7 +236,7 @@ export default function TransparencyPage() {
                   margin: '30px 0',
                 }}
                 className={classes.formControl}>
-                <div style={{width: '100%'}}>
+                <div style={{width: '90%'}}>
                   <InputLabel id="demo-simple-select-label">
                     Cause Type
                   </InputLabel>
@@ -287,7 +287,7 @@ export default function TransparencyPage() {
                     Event Type
                   </InputLabel>
                   <Select
-                    style={{width: '100%'}}
+                    style={{width: '90%'}}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={event}
@@ -332,7 +332,7 @@ export default function TransparencyPage() {
                   margin: '30px 0',
                 }}
                 className={classes.formControl}>
-                <div style={{width: '100%'}}>
+                <div style={{width: '90%'}}>
                   <InputLabel id="demo-simple-select-label">
                     {type[0].toUpperCase()}
                     {type.slice(1)} names
@@ -395,7 +395,7 @@ export default function TransparencyPage() {
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={12}>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
@@ -406,7 +406,7 @@ export default function TransparencyPage() {
               }}
               required
               style={{
-                width: '500px',
+                width: '95.8%',
                 margin: '30px 0',
                 padding: '20px',
                 fontSize: '16px',
@@ -438,6 +438,7 @@ export default function TransparencyPage() {
                 padding: '20px',
                 borderRadius: '12px',
                 marginBottom: '20px',
+                minHeight: '200px',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (

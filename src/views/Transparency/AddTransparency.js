@@ -380,7 +380,7 @@ export default function TransparencyPage() {
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={12}>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
@@ -391,13 +391,15 @@ export default function TransparencyPage() {
               }}
               required
               style={{
-                width: '500px',
+                width: '95.8%',
                 margin: '30px 0',
                 padding: '20px',
                 fontSize: '16px',
                 fontFamily: 'Roboto',
                 color: '#c0c1c2',
                 fontWeight: '390',
+                border: '1px solid',
+                color: 'black',
               }}
             />
           </GridItem>
@@ -420,6 +422,8 @@ export default function TransparencyPage() {
                 border: '1px solid gray',
                 padding: '20px',
                 marginBottom: '20px',
+                borderRadius: '12px',
+                minHeight: '200px',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (

@@ -193,7 +193,7 @@ export default function KindDonation() {
       </CardHeader>
       <CardBody>
         <form onSubmit={handleUpload}>
-          <GridItem xs={12} sm={12} md={12}>
+          <GridItem xs={12} sm={12} md={6} style={{marginBottom: '1rem'}}>
             <FormControl style={{width: '50%'}} className={classes.formControl}>
               <InputLabel id="demo-simple-select-label">Donor Type</InputLabel>
               <Select
@@ -208,7 +208,7 @@ export default function KindDonation() {
               </Select>
             </FormControl>
           </GridItem>
-          <GridItem xs={12} sm={12} md={12}>
+          <GridItem xs={12} sm={12} md={6}>
             <FormControl style={{width: '50%'}} className={classes.formControl}>
               <InputLabel id="demo-simple-select-label">
                 Donation Type
@@ -341,7 +341,7 @@ export default function KindDonation() {
                     {category.slice(1)} names
                   </InputLabel>
                   <Select
-                    style={{width: '100%'}}
+                    style={{width: '500px'}}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={currentName}
@@ -380,7 +380,7 @@ export default function KindDonation() {
                 setDonerFullName(e.target.value);
               }}
               required
-              style={{width: '500px', margin: '30px 0'}}
+              style={{width: '500px'}}
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
@@ -403,7 +403,7 @@ export default function KindDonation() {
               onChange={(e) => {
                 setPhoneNumber(e.target.value);
               }}
-              style={{width: '500px', margin: '30px 0'}}
+              style={{width: '500px', margin: '10px 0'}}
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
@@ -491,6 +491,8 @@ export default function KindDonation() {
                 border: '1px solid gray',
                 padding: '20px',
                 marginBottom: '20px',
+                borderRadius: '12px',
+                minHeight: '200px',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (

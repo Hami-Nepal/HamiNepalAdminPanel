@@ -18,7 +18,6 @@ import Select from '@material-ui/core/Select';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-import PropTypes from 'prop-types';
 
 import baseUrl from 'api/baseUrl';
 
@@ -211,7 +210,7 @@ export default function TransparencyPage(props) {
       </CardHeader>
       <CardBody>
         <form onSubmit={handleUpload}>
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={12}>
             <TextField
               id="standard-basic"
               label="Name"
@@ -220,7 +219,7 @@ export default function TransparencyPage(props) {
                 setName(e.target.value);
               }}
               required
-              style={{width: '500px', margin: '30px 0'}}
+              style={{width: '45%', margin: '30px 0'}}
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
@@ -252,7 +251,7 @@ export default function TransparencyPage(props) {
                   margin: '30px 0',
                 }}
                 className={classes.formControl}>
-                <div style={{width: '100%'}}>
+                <div style={{width: '90%'}}>
                   <InputLabel id="demo-simple-select-label">
                     Cause Type
                   </InputLabel>
@@ -298,7 +297,7 @@ export default function TransparencyPage(props) {
                   margin: '30px 0',
                 }}
                 className={classes.formControl}>
-                <div style={{width: '100%'}}>
+                <div style={{width: '90%'}}>
                   <InputLabel id="demo-simple-select-label">
                     Event Type
                   </InputLabel>
@@ -348,7 +347,7 @@ export default function TransparencyPage(props) {
                   margin: '30px 0',
                 }}
                 className={classes.formControl}>
-                <div style={{width: '100%'}}>
+                <div style={{width: '90%'}}>
                   <InputLabel id="demo-simple-select-label">
                     {type[0].toUpperCase()}
                     {type.slice(1)} names
@@ -395,7 +394,7 @@ export default function TransparencyPage(props) {
                 setAmount(e.target.value);
               }}
               required
-              style={{width: '500px', margin: '30px 0'}}
+              style={{width: '500px', margin: '20px 0'}}
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
@@ -411,7 +410,7 @@ export default function TransparencyPage(props) {
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={12}>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
@@ -422,7 +421,7 @@ export default function TransparencyPage(props) {
               }}
               required
               style={{
-                width: '500px',
+                width: '95.8%',
                 margin: '30px 0',
                 padding: '20px',
                 fontSize: '16px',
@@ -453,6 +452,7 @@ export default function TransparencyPage(props) {
                 padding: '20px',
                 borderRadius: '12px',
                 marginBottom: '20px',
+                minHeight: '200px',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (

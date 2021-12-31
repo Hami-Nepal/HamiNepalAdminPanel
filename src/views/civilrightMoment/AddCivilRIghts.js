@@ -119,9 +119,6 @@ export default function AddCivilRIghts() {
         history.push('/admin/civilrights');
       })
       .catch(function (response) {
-        //handle error
-        // console.log(response);
-        // console.log(response.message);
         setError(response.message);
         setSubmissionLoading(false);
       });
@@ -130,7 +127,7 @@ export default function AddCivilRIghts() {
   return (
     <Card>
       <CardHeader color="danger">
-        <h4 className={classes.cardTitleWhite}>Add News Screen</h4>
+        <h4 className={classes.cardTitleWhite}>Add Civil Rights Screen</h4>
         <p className={classes.cardCategoryWhite}>
           For uplaoding civil right moments of Hami Nepal
         </p>
@@ -164,13 +161,15 @@ export default function AddCivilRIghts() {
               }}
               required
               style={{
-                width: '500px',
+                width: '95.8%',
                 margin: '30px 0',
                 padding: '20px',
                 fontSize: '16px',
                 fontFamily: 'Roboto',
                 color: 'black',
                 fontWeight: '400',
+                border: '1px solid',
+                color: 'black',
               }}
             />
           </GridItem>
@@ -185,13 +184,15 @@ export default function AddCivilRIghts() {
               }}
               required
               style={{
-                width: '500px',
+                width: '95.8%',
                 margin: '30px 0',
                 padding: '20px',
                 fontSize: '16px',
                 fontFamily: 'Roboto',
                 color: 'black',
                 fontWeight: '400',
+                border: '1px solid',
+                color: 'black',
               }}
             />
           </GridItem>
@@ -206,13 +207,15 @@ export default function AddCivilRIghts() {
               }}
               required
               style={{
-                width: '500px',
+                width: '95.8%',
                 margin: '30px 0',
                 padding: '20px',
                 fontSize: '16px',
                 fontFamily: 'Roboto',
                 color: 'black',
                 fontWeight: '400',
+                border: '1px solid',
+                color: 'black',
               }}
             />
           </GridItem>
@@ -227,13 +230,15 @@ export default function AddCivilRIghts() {
               }}
               required
               style={{
-                width: '500px',
+                width: '95.8%',
                 margin: '30px 0',
                 padding: '20px',
                 fontSize: '16px',
                 fontFamily: 'Roboto',
                 color: 'black',
                 fontWeight: '400',
+                border: '1px solid',
+                color: 'black',
               }}
             />
           </GridItem>
@@ -249,6 +254,7 @@ export default function AddCivilRIghts() {
                 padding: '20px',
                 marginBottom: '20px',
                 minHeight: '200px',
+                borderRadius: '12px',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (

@@ -95,13 +95,13 @@ export default function TransparencyPage(props) {
   const [causeEventsNames, setCauseEventsNames] = useState([]);
 
   useEffect(async () => {
-    const cause_types = await axios.get(baseUrl + 'cause_type' + '&limit=1000');
+    const cause_types = await axios.get(baseUrl + 'cause_type' + '?limit=1000');
 
     setCauseTypes(cause_types.data.data);
   }, []);
 
   useEffect(async () => {
-    const event_types = await axios.get(baseUrl + 'event_type' + '&limit=1000');
+    const event_types = await axios.get(baseUrl + 'event_type' + '?limit=1000');
 
     setEventTypes(event_types.data.data);
   }, []);
@@ -133,9 +133,9 @@ export default function TransparencyPage(props) {
     setDescription(result.data.transparency.description);
     setCause(result.data.transparency.cause);
     setEvent(result.data.transparency.event);
-    currentName && type === 'event'
+    result.data.transparency.type === 'event'
       ? setCurrentName(result.data.transparency.event_name)
-      : currentName && type === 'cause'
+      : result.data.transparency.type === 'cause'
       ? setCurrentName(result.data.transparency.cause_name)
       : setCurrentName(result.data.transparency.kindness);
 

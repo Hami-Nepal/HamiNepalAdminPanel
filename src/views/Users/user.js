@@ -42,7 +42,6 @@ export default function NewssList() {
   const [deleteUserSuccess, setDeleteUserSuccess] = useState(false);
   const [deleteUserError, setDeleteUserError] = useState('');
   const [error, setError] = useState();
-  const [userListSuccess, setUserListSuccess] = useState(null);
   const [userListError, setUserListError] = useState(null);
   const [userListLoading, setUserListLoading] = useState(null);
   const [userList, setUserList] = useState([]);
@@ -90,20 +89,26 @@ export default function NewssList() {
     setUserList(userList.map((obj) => (obj._id === id ? response.data : obj)));
   };
   const fetchData = async () => {
-    const token = JSON.parse(localStorage.getItem('userInfo')).token;
-    const config = {
-      headers: {
-        // 'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const {data: response} = await axios.get(
-      baseURL + 'users?page=' + (page + 1),
-      config,
-    );
-    setUserList(response.data);
-    setTotal_data(response.total_data);
-    // setTotal_data(response.total_data);
+    try {
+      setUserListLoading(true);
+      const token = JSON.parse(localStorage.getItem('userInfo')).token;
+      const config = {
+        headers: {
+          // 'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const {data: response} = await axios.get(
+        baseURL + 'users?page=' + (page + 1),
+        config,
+      );
+      setUserList(response.data);
+      setTotal_data(response.total_data);
+      setUserListLoading(false);
+    } catch (error) {
+      setUserListError(error);
+      setUserListLoading(false);
+    }
   };
 
   useEffect(fetchData, [page]);

@@ -1,26 +1,14 @@
 import React, {useEffect, useState} from 'react';
 
-import InfiniteScroll from 'react-infinite-scroll-component';
-import {useTheme} from '@material-ui/core/styles';
-
 import GridItem from 'components/Grid/GridItem.js';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Switch from '@material-ui/core/Switch';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import styles from './styles';
 import axios from 'axios';
 import baseURL from 'api/baseUrl';
 
 const useStyles = makeStyles(styles);
 
-import {useDispatch, useSelector} from 'react-redux';
-import {listDonations} from 'store/actions/donation.actions';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
@@ -41,7 +29,6 @@ import {red} from '@mui/material/colors';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import {assertExpressionStatement} from '@babel/types';
 
 export default function Donations() {
   const [page, setPage] = React.useState(1);
@@ -159,26 +146,26 @@ export default function Donations() {
                       <Typography
                         variant="subtitle1"
                         style={{color: 'green', marginBottom: '1rem'}}>
-                        Donated by:{donation.donerFullName}
+                        Donated by: {donation.donerFullName}
                       </Typography>
                       <Typography variant="body2" style={{color: 'black'}}>
                         {donation.category === 'cause'
-                          ? `CAUSE: ${donation.cause_name} (${donation.cause})`
+                          ? `CAUSE:- ${donation.cause_name} (${donation.cause})`
                           : donation.category === 'event'
-                          ? `EVENT: ${donation.event_name} (${donation.event})`
-                          : `KINDNESS:${donation.kindness}`}
+                          ? `EVENT:- ${donation.event_name} (${donation.event})`
+                          : `KINDNESS:-${donation.kindness}`}
                       </Typography>
                       <div style={{borderBottom: '1px solid #D3D3D3'}}></div>
                       <Typography variant="body2" style={{color: 'black'}}>
-                        CONTACT:{donation.phoneNumber}
+                        CONTACT: {donation.phoneNumber}
                       </Typography>
                       <div style={{borderBottom: '1px solid #D3D3D3'}}></div>
                       <Typography variant="body2" style={{color: 'black'}}>
-                        EMAIL:{donation.donerEmail}
+                        EMAIL: {donation.donerEmail}
                       </Typography>
                       <div style={{borderBottom: '1px solid #D3D3D3'}}></div>
                       <Typography variant="body2" style={{color: 'black'}}>
-                        DATE:{donation.createdAt.slice(0, 10)}
+                        DATE: {donation.createdAt.slice(0, 10)}
                       </Typography>
                       <div style={{borderBottom: '1px solid #D3D3D3'}}></div>
                       <Typography variant="body2" style={{color: 'black'}}>

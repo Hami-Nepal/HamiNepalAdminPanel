@@ -16,6 +16,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import baseUrl from '../../api/baseUrl';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const styles = {
   typo: {
@@ -85,7 +86,6 @@ export default function Editnews({match}) {
   useEffect(async () => {
     let result = await fetch(baseUrl + 'civilrights/' + id);
     result = await result.json();
-    console.log(result);
     setTitle(result.data.civilRights.title);
     setIntroduction(result.data.civilRights.introduction);
     setBody1(result.data.civilRights.body1);
@@ -136,7 +136,7 @@ export default function Editnews({match}) {
   return (
     <Card>
       <CardHeader color="danger">
-        <h4 className={classes.cardTitleWhite}>Add News Screen</h4>
+        <h4 className={classes.cardTitleWhite}>Update CIvil Rights Screen</h4>
         <p className={classes.cardCategoryWhite}>
           For uplaoding Published news of Hami Nepal
         </p>
@@ -160,6 +160,7 @@ export default function Editnews({match}) {
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={12}>
+            <InputLabel>Introduction</InputLabel>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
@@ -170,17 +171,20 @@ export default function Editnews({match}) {
               }}
               required
               style={{
-                width: '500px',
+                width: '95.8%',
                 margin: '30px 0',
                 padding: '20px',
                 fontSize: '16px',
                 fontFamily: 'Roboto',
                 color: 'black',
                 fontWeight: '400',
+                border: '1px solid',
+                color: 'black',
               }}
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={12}>
+            <InputLabel>Body 1</InputLabel>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
@@ -191,17 +195,20 @@ export default function Editnews({match}) {
               }}
               required
               style={{
-                width: '500px',
+                width: '95.8%',
                 margin: '30px 0',
                 padding: '20px',
                 fontSize: '16px',
                 fontFamily: 'Roboto',
                 color: 'black',
                 fontWeight: '400',
+                border: '1px solid',
+                color: 'black',
               }}
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={12}>
+            <InputLabel>Body 2</InputLabel>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
@@ -212,17 +219,20 @@ export default function Editnews({match}) {
               }}
               required
               style={{
-                width: '500px',
+                width: '95.8%',
                 margin: '30px 0',
                 padding: '20px',
                 fontSize: '16px',
                 fontFamily: 'Roboto',
                 color: 'black',
                 fontWeight: '400',
+                border: '1px solid',
+                color: 'black',
               }}
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={12}>
+            <InputLabel>Summary</InputLabel>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
@@ -233,19 +243,21 @@ export default function Editnews({match}) {
               }}
               required
               style={{
-                width: '500px',
+                width: '95.8%',
                 margin: '30px 0',
                 padding: '20px',
                 fontSize: '16px',
                 fontFamily: 'Roboto',
                 color: 'black',
                 fontWeight: '400',
+                border: '1px solid',
+                color: 'black',
               }}
             />
           </GridItem>
           <div></div>
           <GridItem xs={12} sm={12} md={12}>
-            <h5>Please upload the content photos (at max 10)</h5>
+            <h5>Please upload the content photos</h5>
             <div
               {...getRootProps()}
               required
@@ -255,6 +267,7 @@ export default function Editnews({match}) {
                 padding: '20px',
                 marginBottom: '20px',
                 minHeight: '200px',
+                borderRadius: '12px',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (

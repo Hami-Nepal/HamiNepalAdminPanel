@@ -99,13 +99,6 @@ export default function Addnews() {
   //   setSelectedFile(file)
   // }
 
-  const [inputValue, setInputValue] = useState();
-
-  const handleInputChange = (newValue) => {
-    let inputValue = newValue.replace(/\W/g, '');
-    setInputValue({inputValue});
-  };
-
   const handleUpload = (e) => {
     e.preventDefault();
     setSubmissionLoading(true);
@@ -207,7 +200,7 @@ export default function Addnews() {
               style={{width: '500px', margin: '30px 0'}}
             />
           </GridItem> */}
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={12}>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
@@ -218,13 +211,15 @@ export default function Addnews() {
               }}
               required
               style={{
-                width: '500px',
+                width: '95.8%',
                 margin: '30px 0',
                 padding: '20px',
                 fontSize: '16px',
                 fontFamily: 'Roboto',
                 color: 'black',
                 fontWeight: '400',
+                border: '1px solid',
+                color: 'black',
               }}
             />
           </GridItem>
@@ -248,6 +243,7 @@ export default function Addnews() {
                 padding: '20px',
                 marginBottom: '20px',
                 minHeight: '200px',
+                borderRadius: '12px',
               }}>
               <input {...getInputProps()} />
               {isDragActive ? (

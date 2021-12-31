@@ -40,7 +40,6 @@ export default function NewssList() {
   const [deleteCivilSuccess, setDeleteCivilSuccess] = useState(false);
   const [deleteCivilError, setDeleteCivilError] = useState('');
   const [error, setError] = useState();
-  const [civilListSuccess, setCivilListSuccess] = useState(null);
   const [civilListError, setCivilListError] = useState(null);
   const [civilListLoading, setCivilListLoading] = useState(null);
   const [civilList, setCivilList] = useState([]);
@@ -59,7 +58,6 @@ export default function NewssList() {
       setDeleteCivilSuccess(true);
       setCivilList(civilList.filter(({_id}) => _id !== id));
     } catch (err) {
-      setError(err);
       setDeleteCivilError(true);
     }
   };
@@ -72,12 +70,18 @@ export default function NewssList() {
   };
 
   const fetchData = async () => {
-    const {data: response} = await axios.get(
-      baseURL + 'civilrights?page=' + (page + 1),
-    );
-    setCivilList(response.data);
-    // setTotal_data(response.total_data)
-    setTotal_data(response.total_data);
+    setCivilListLoading(true);
+    try {
+      const {data: response} = await axios.get(
+        baseURL + 'civilrights?page=' + (page + 1),
+      );
+      setCivilList(response.data);
+      setTotal_data(response.total_data);
+      setCivilListLoading(false);
+    } catch (error) {
+      setCivilListError(error);
+      setCivilListLoading(false);
+    }
   };
 
   useEffect(fetchData, [page]);
