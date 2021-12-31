@@ -41,6 +41,7 @@ export default function Dashboard() {
     volunteerListError,
     volunteerListLoading,
     volunteerList,
+    volunteerCount,
   } = useSelector((state) => state.volunteers);
 
   useEffect(() => {
@@ -129,11 +130,7 @@ export default function Dashboard() {
               </CardIcon>
               <p className={classes.cardCategory}>Total Volunteers</p>
               <h3 className={classes.cardTitle} style={{fontSize: '20px'}}>
-                {volunteerListLoading ? (
-                  <CircularProgress />
-                ) : (
-                  volunteerList.length
-                )}
+                {volunteerListLoading ? <CircularProgress /> : volunteerCount}
               </h3>
             </CardHeader>
             <CardFooter stats>
