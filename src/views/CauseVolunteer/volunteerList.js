@@ -166,7 +166,7 @@ export default function CauseList(props) {
                           <TableCell align="center">
                             <img
                               src={row.photo}
-                              alt={row.photo}
+                              alt={'photo'}
                               style={{width: '150px'}}
                             />
                           </TableCell>

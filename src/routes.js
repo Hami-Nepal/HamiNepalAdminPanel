@@ -1,10 +1,6 @@
 import Dashboard from '@material-ui/icons/Dashboard';
-import Person from '@material-ui/icons/Person';
-import LocationOn from '@material-ui/icons/LocationOn';
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
-import Notifications from '@material-ui/icons/Notifications';
 import Unarchive from '@material-ui/icons/Unarchive';
-import Language from '@material-ui/icons/Language';
 import EventIcon from '@material-ui/icons/Event';
 import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import NewsIcon from '@material-ui/icons/RssFeed';
@@ -13,17 +9,11 @@ import KindnessIcon from '@material-ui/icons/Accessibility';
 // core components/views for Admin layout
 import DashboardPage from 'views/Dashboard/Dashboard.js';
 import DonationsPage from 'views/Donations/Donations.js';
-import MessagesPage from 'views/Messages/Messages.js';
-import UserProfile from 'views/UserProfile/UserProfile.js';
 import AddTransparency from 'views/Transparency/AddTransparency.js';
 import ListTransparency from 'views/Transparency/ListTransparency';
 import EditTransparency from 'views/Transparency/EditTransparency.js';
 
-import Maps from 'views/Maps/Maps.js';
-import NotificationsPage from 'views/Notifications/Notifications.js';
-import UpgradeToPro from 'views/UpgradeToPro/UpgradeToPro.js';
 // core components/views for RTL layout
-import RTLPage from 'views/RTLPage/RTLPage.js';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import EventList from './views/EventList/EventList';
 import CauseList from './views/CauseList/CauseList';
@@ -61,46 +51,6 @@ import AddCivilRights from './views/civilrightMoment/AddCivilRIghts';
 import EditCivilRights from './views/civilrightMoment/EditCivilRights';
 
 export const demoRoutes = [
-  {
-    path: '/user',
-    name: 'User Profile',
-    rtlName: 'ملف تعريفي للمستخدم',
-    icon: Person,
-    component: UserProfile,
-    layout: '/admin',
-  },
-  {
-    path: '/maps',
-    name: 'Maps',
-    rtlName: 'خرائط',
-    icon: LocationOn,
-    component: Maps,
-    layout: '/admin',
-  },
-  {
-    path: '/notifications',
-    name: 'Notifications',
-    rtlName: 'إخطارات',
-    icon: Notifications,
-    component: NotificationsPage,
-    layout: '/admin',
-  },
-  {
-    path: '/rtl-page',
-    name: 'RTL Support',
-    rtlName: 'پشتیبانی از راست به چپ',
-    icon: Language,
-    component: RTLPage,
-    layout: '/rtl',
-  },
-  {
-    path: '/upgrade-to-pro',
-    name: 'Upgrade To PRO',
-    rtlName: 'التطور للاحترافية',
-    icon: Unarchive,
-    component: UpgradeToPro,
-    layout: '/admin',
-  },
   {
     path: '/events/edit/:id',
     name: 'Edit an event',
@@ -245,7 +195,6 @@ export const demoRoutes = [
     component: EditBoardMembers,
     layout: '/admin',
   },
-
   {
     path: '/transparency/edit/:id',
     name: 'Edit Transparency',
@@ -293,14 +242,6 @@ export const dashboardRoutes = [
     component: UserPage,
     layout: '/admin',
   },
-  // {
-  //   path: '/messages',
-  //   name: 'Messages',
-  //   rtlName: 'لوحة القيادة',
-  //   icon: Person,
-  //   component: MessagesPage,
-  //   layout: '/admin',
-  // },
   {
     path: '/transparency',
     name: 'Transparency',
