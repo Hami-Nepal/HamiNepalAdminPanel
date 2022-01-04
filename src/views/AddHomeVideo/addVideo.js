@@ -16,6 +16,7 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import {CKEditor} from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 
 import baseUrl from '../../api/baseUrl';
 
@@ -123,14 +124,25 @@ export default function TransparencyPage() {
       <CardBody>
         <form onSubmit={handleUpload}>
           <GridItem xs={12} sm={12} md={6}>
-            <h5>Please add the title</h5>
-            <CKEditor
-              editor={ClassicEditor}
-              data={description}
-              onChange={(event, editor) => {
-                const data = editor.getData();
-
-                setDescription(data);
+            <InputLabel style={{marginTop: '1rem'}}>Title</InputLabel>
+            <TextareaAutosize
+              aria-label="minimum height"
+              rowsMin={5}
+              placeholder="Enter the Title"
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              style={{
+                width: '95.8%',
+                margin: '30px 0',
+                padding: '20px',
+                fontSize: '16px',
+                fontFamily: 'Roboto',
+                color: 'black',
+                fontWeight: '400',
+                border: '1px solid',
+                color: 'black',
               }}
             />
           </GridItem>
@@ -148,7 +160,6 @@ export default function TransparencyPage() {
                 onChange={(e) => {
                   setColor(e.target.value);
                 }}
-                required
                 style={{width: '100px'}}
               />
               <TextField

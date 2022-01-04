@@ -411,6 +411,7 @@ export default function TransparencyPage(props) {
             />
           </GridItem>
           <GridItem xs={12} sm={12} md={12}>
+            <InputLabel>Description</InputLabel>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}

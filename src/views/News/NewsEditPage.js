@@ -222,6 +222,7 @@ export default function Editnews({match}) {
             />
           </GridItem> */}
           <GridItem xs={12} sm={12} md={12}>
+            <InputLabel>Summary</InputLabel>
             <TextareaAutosize
               aria-label="minimum height"
               rowsMin={5}
