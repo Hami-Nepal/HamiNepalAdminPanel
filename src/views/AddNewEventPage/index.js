@@ -20,12 +20,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 import {CKEditor} from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import MyCustomUploadAdapterPlugin from 'utils/UploadAdapter';
+
 import baseUrl from 'api/baseUrl';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 const styles = {
   typo: {
@@ -82,7 +80,6 @@ export default function AddNewEventPage() {
   const classes = useStyles();
 
   const [uploadedUrl, setUploadedUrl] = useState([]);
-  const [ckEditor, setCkEditor] = useState(null);
 
   const [name, setName] = useState('');
 
@@ -101,13 +98,10 @@ export default function AddNewEventPage() {
   const [error, setError] = useState('');
   const [submissionLoading, setSubmissionLoading] = useState(false);
 
-  const [inputValue, setInputValue] = useState();
-
   const [open, setOpen] = React.useState(false);
   const [severity, setSeverity] = React.useState('info');
   const [message, setMessage] = React.useState('This is a success message!');
 
-  const [addNewEventType, setAddNewEventType] = useState('');
   const [eventTypes, setEventTypes] = useState([]);
 
   useEffect(async () => {
@@ -221,7 +215,7 @@ export default function AddNewEventPage() {
                     onChange={handleTypeChange}>
                     {eventTypes.map((obj) => (
                       <MenuItem
-                        key={obj.event_type}
+                        key={obj._id}
                         value={obj.event_type}
                         style={{
                           display: 'flex',

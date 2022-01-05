@@ -1089,7 +1089,7 @@
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-build-classic/-/ckeditor5-build-classic-23.1.0.tgz#b358bd9c266727cd1504d16fb069ada43694e2e5"
   integrity sha512-wqJZ6yuqm48NoiciRcfs+t73YOfIKovJIiLSHf0yB2I3Mc+bL6iNhwwyJ3b6D/22IgYEXTpc6PiwsYFbGFnq2Q==
 
-"@ckeditor/ckeditor5-react@^3.0.0":
+"@ckeditor/ckeditor5-react@^3.0.3":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-react/-/ckeditor5-react-3.0.3.tgz#7b2d2634bd70a1efcb837dde5a9ac3ed2d839fbc"
   integrity sha512-Zaazd9Brg64v1Q2qQNtbfryWeVLzXWlNbswLsOYwNgvHlxroa8+F7ZE33M2O8zxcL6sQHZ1vCNkQOPRUBG8pqA==

@@ -365,7 +365,7 @@ export default function AddNewEventPage({match}) {
                 aria-label="minimum height"
                 rowsMin={5}
                 placeholder="Enter the challenges about the event not exceeding 250 character"
-                value={summary}
+                value={challenges}
                 onChange={(e) => {
                   setChallenges(e.target.value);
                 }}

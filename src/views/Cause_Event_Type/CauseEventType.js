@@ -178,6 +178,7 @@ export default function AddCauseEvent() {
   useEffect(fetchCauseData, [causePage]);
 
   //list table event states
+  const [deleteEventSuccess, setDeleteEventSuccess] = useState(false);
   const [deleteEventError, setDeleteEventError] = useState('');
   const [eventListSuccess, setEventListSuccess] = useState(null);
   const [eventListError, setEventListError] = useState(null);
@@ -273,7 +274,7 @@ export default function AddCauseEvent() {
               <GridItem xs={12} sm={12} md={4}>
                 <TextField
                   id="standard-basic"
-                  label="Enter the cause Type"
+                  label="Enter the cause Type(should be unique)"
                   value={causeType}
                   onChange={(e) => {
                     setCauseType(e.target.value);
