@@ -110,6 +110,17 @@ export default function CauseList() {
       KindnessList.map((obj) => (obj._id === id ? response.data : obj)),
     );
   };
+  const changeStatus = async (id, type) => {
+    const token = JSON.parse(localStorage.getItem('userInfo')).token;
+    const {data: response} = await axios.put(
+      baseURL + 'kindness/' + id,
+      {type: type == 'ongoing' ? 'past' : 'ongoing'},
+      {headers: {Authorization: 'Bearer ' + token}},
+    );
+    setKindnessList(
+      KindnessList.map((obj) => (obj._id === id ? response.data : obj)),
+    );
+  };
 
   return (
     <GridContainer>
@@ -138,6 +149,7 @@ export default function CauseList() {
                     {/* <TableCell align="center">Type</TableCell> */}
                     <TableCell align="center">Featured</TableCell>
                     <TableCell align="center">Featured Ranking</TableCell>
+                    <TableCell align="center">Status</TableCell>
                     <TableCell align="center">Image</TableCell>
                     <TableCell align="center">Verify volunteers</TableCell>
                     <TableCell align="center">Updated At</TableCell>
@@ -185,6 +197,17 @@ export default function CauseList() {
                             </TableCell>
                             <TableCell align="center">
                               {row.featured_ranking}
+                            </TableCell>
+                            <TableCell>
+                              <span
+                                onClick={() => changeStatus(row._id, row.type)}
+                                style={{
+                                  color:
+                                    row.type === 'ongoing' ? 'green' : 'red',
+                                  cursor: 'pointer',
+                                }}>
+                                {row.type}
+                              </span>
                             </TableCell>
                             <TableCell align="center">
                               <img src={row.photos[0]} width={50} />
