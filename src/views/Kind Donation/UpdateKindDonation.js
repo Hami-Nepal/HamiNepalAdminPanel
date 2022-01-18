@@ -163,7 +163,7 @@ export default function KindDonation() {
     formData.append('donerType', donerType);
     selectedFile?.map((file) => formData.append('photos', file));
     formData.append('donerFullName', donerFullName);
-    formData.append('phoneNumber', phoneNumber);
+    phoneNumber === '' ? '' : formData.append('phoneNumber', phoneNumber);
     formData.append('city', city);
     formData.append('state', state);
     formData.append('country', country);
@@ -171,7 +171,7 @@ export default function KindDonation() {
     formData.append('itemWorth', itemWorth);
     formData.append('quantity', quantity);
     formData.append('category', category);
-    formData.append('donerEmail', donerEmail);
+    donerEmail === '' ? '' : formData.append('donerEmail', donerEmail);
     category === 'event'
       ? formData.append('event', event)
       : category === 'cause'
