@@ -62,20 +62,25 @@ export default function Index() {
   };
 
   const deleteVol = async (id) => {
-    const token = JSON.parse(localStorage.getItem('userInfo')).token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+    const ok = window.confirm(
+      'Please make sure this volunteer is not involved in any project as it will be deleted permanently!!',
+    );
 
-    try {
-      const response = await api.delete(`/volunteers/${id}`, config);
-      setDeleteVolunteerSuccess(true);
-      dispatch(listVolunteers());
-    } catch (err) {
-      setError(err);
-      setDeleteVolunteerError(err);
+    if (ok) {
+      const token = JSON.parse(localStorage.getItem('userInfo')).token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      try {
+        const response = await api.delete(`/volunteers/${id}`, config);
+        setDeleteVolunteerSuccess(true);
+        dispatch(listVolunteers());
+      } catch (err) {
+        setError(err);
+        setDeleteVolunteerError(err);
+      }
     }
   };
   const [page, setPage] = React.useState(0);
