@@ -108,6 +108,7 @@ export default function EditActOfKindness() {
 
   // input fields state start
   const [results, setResults] = useState('');
+  const [balance, setBalance] = useState(0);
   const [details, setDetails] = useState('');
   const [summary, setSummary] = useState('');
   // const [difficulties, setDifficulties] = useState('');
@@ -144,6 +145,7 @@ export default function EditActOfKindness() {
     setSummary(data.summary);
     setDetails(data.details);
     setResults(data.results);
+    setBalance(data.balance);
     setSelectedVolunteers(data.volunteers);
     setUploadedUrl(data.photos);
   }, []);
@@ -179,6 +181,7 @@ export default function EditActOfKindness() {
     formData.append('summary', summary);
     formData.append('details', details);
     formData.append('results', results);
+    formData.append('balance', balance);
     selectedFile?.map((file) => formData.append('photos', file));
     selectedVolunteers?.map((user) => formData.append('volunteers', user));
 
@@ -342,6 +345,19 @@ export default function EditActOfKindness() {
                   border: '1px solid',
                   color: 'black',
                 }}
+              />
+            </GridItem>
+            <GridItem xs={12} sm={12} md={6}>
+              <TextField
+                id="standard-basic"
+                label="Expected Donation Amount"
+                value={balance}
+                onChange={(e) => {
+                  setBalance(e.target.value);
+                }}
+                type="number"
+                required
+                style={{width: '100%', margin: '30px 0'}}
               />
             </GridItem>
             {/* <GridItem xs={12} sm={12} md={12}>
