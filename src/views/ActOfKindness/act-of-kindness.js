@@ -121,6 +121,22 @@ export default function CauseList() {
       KindnessList.map((obj) => (obj._id === id ? response.data : obj)),
     );
   };
+  const handleVerifyKindness = async (id, isVerified) => {
+    const token = JSON.parse(localStorage.getItem('userInfo')).token;
+
+    try {
+      const {data: response} = await axios.put(
+        baseURL + 'kindness/' + id,
+        {isVerified: isVerified === true ? false : true},
+        {headers: {Authorization: 'Bearer ' + token}},
+      );
+      setKindnessList(
+        KindnessList.map((obj) => (obj._id === id ? response.data : obj)),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <GridContainer>
@@ -145,6 +161,7 @@ export default function CauseList() {
                 <TableHead>
                   <TableRow>
                     {/* <TableCell>id </TableCell> */}
+                    <TableCell align="center">Verify</TableCell>
                     <TableCell align="center">Title</TableCell>
                     {/* <TableCell align="center">Type</TableCell> */}
                     <TableCell align="center">Featured</TableCell>
@@ -182,6 +199,18 @@ export default function CauseList() {
                             {/* <TableCell component="th" scope="row">
                               {row._id}
                             </TableCell> */}
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              onClick={() =>
+                                handleVerifyKindness(row._id, row.isVerified)
+                              }
+                              style={{
+                                color: row.isVerified ? 'green' : 'red',
+                                cursor: 'pointer',
+                              }}>
+                              <VerifiedUserIcon />
+                            </TableCell>
                             <TableCell align="center">{row.title}</TableCell>
                             {/* <TableCell align="center">{row.type}</TableCell> */}
                             <TableCell
